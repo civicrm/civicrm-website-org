@@ -2823,87 +2823,256 @@ h3
     z-index:1;
 }
 
-.view-service-providers .views-row{
-    border:5px solid #eae6e5;
-    padding:20px;
-    margin-bottom:20px;
-    position:relative;
+/*service provider*/
+.view-service-providers .views-row {
+	border:5px solid #eae6e5 !important;
+	padding:20px;
+	margin-bottom:20px;
+	position:relative;
 }
-
-.view-service-providers .view-filters{
-    background-color: #F9F8F6;
-    background-image: url("../images/slant-tile.png");
+.view-service-providers .view-filters {
+	background-color: #F9F8F6;
+	background-image: url("../images/slant-tile.png");
 }
-
-.view-service-providers h2{
-    font-size:30px;
-    text-align:center;
-    margin-top:0px;
-    margin-bottom:20px;
+.view-service-providers .display-name h2 {
+	font-size: 19px;
+	line-height: 25px;
+	margin: 0 0 10px;
+	text-align: left;
+	width: 230px !important;
+	word-wrap: break-word;
 }
-.view-service-providers .views-field-display-name
-{
-    border-bottom:2px solid #eae6e5;
+.view-service-providers .name-logo {
+	float: left;
+	padding-right: 20px;
+	width: 230px;
 }
-.view-service-providers .views-field-image-URL,
-.view-service-providers .views-field-services-157,
-.view-service-providers .views-field-php
-{
-    text-align:center;
-    width: 240px;
+.view-service-providers .image {
+	float: left;
+	margin: 0 65px 0 0;
 }
-
-.view-service-providers .views-label{
-    font-weight:bold;
+.view-service-providers .contact-div {
+	float: left;
+	margin: 0 35px 0 0;
+	width: 220px;
 }
-
-.view-service-providers .views-field-nothing
-{
-    height: 200px;
+.view-service-providers .contact-div .contact-info {
+	font-weight: bold;
+	margin-top: 6px;
 }
-.view-service-providers .views-field-php
-{
-    position:absolute;
-    bottom:20px;
+.view-service-providers .civi-image {
+	float: right;
+	margin: 6px 0 0;
+	text-align: right;
+	width: 220px;
 }
-.view-service-providers .views-field-php img
-{
-    padding-left:7px;
-    padding-right:7px;
-    width:90px;
+.view-service-providers .civi-image img {
+	margin-right:10px;
 }
-.view-service-providers .views-field-description-of-services-156,
-.view-service-providers .views-field-image-URL{
-    padding-top:20px;
+.view-service-providers .views-row .views-field-nothing-2 {
+	bottom: -10px;
+	clear: both;
+	cursor: pointer;
+	font-weight: bold;
+	padding-right: 8px;
+	position: absolute;
+	right: 0;
+	text-align: right;
+	z-index: 999;
 }
-
-.view-service-providers .views-field-city,
-.view-service-providers .views-field-country,
-.view-service-providers .views-field-email,
-.view-service-providers .views-field-phone,
-.view-service-providers .views-field-url,
-.view-service-providers .views-field-company-overview-158,
-.view-service-providers .views-field-description-of-services-156
-{
-    width:458px;
-    float:right;
-    padding-left:20px;
-    border-left: 2px solid #eae6e5;
+.view-service-providers .views-label {
+	display: block;
+	font-weight: bold;
+	line-height: 17px;
+	margin-bottom: 1em;
 }
-
-.view-service-providers .views-label-services-158{
-    font-weight: bold;
+.view-service-providers .image img {
+	max-width: 150px;
+	max-height: 150px;
+	margin: 0;
+	margin-bottom: 0;
 }
-
-.view-service-providers .views-field-image-URL{
-    margin-bottom:20px;
+.view-service-providers .view-content p, .view-clone-of-service-providers .view-content p {
+	margin:0 0 1em !important;
 }
-.view-service-providers .views-field-image-URL img{
-    max-width: 240px;
-    max-height: 240px;
-    margin: 0;
-    margin-bottom: 0;
+.view-service-providers .views-field-nothing .image img {
+	max-width: 240px;
+	max-height: 240px;
+	margin: 0;
+	margin-bottom: 0;
 }
+.view-service-providers .views-field-nothing .description, .view-service-providers .views-field-nothing .aboutus, .view-service-providers .views-field-nothing .contact-div, .view-service-providers .views-field-nothing .case-study {
+	float: none;
+	margin: 0;
+	padding-left: 20px;
+	width: auto;
+}
+.view-service-providers .views-field-nothing .case-study, .view-service-providers .views-field-nothing .case-study a, .view-service-providers .views-field-nothing .case-study span {
+	font-size:13px !important;
+	font-family:"Lato", Cantarell, Helvetica, Arial, sans-serif !important;
+}
+.view-service-providers .views-field-nothing .display-name {
+	border-bottom: 2px solid #EAE6E5;
+}
+.view-service-providers .views-field-nothing .display-name h2 {
+	font-size: 30px;
+	line-height: 1.5;
+	margin-bottom: 20px;
+	margin-top: 0;
+	text-align: center;
+	width: auto !important;
+	word-wrap: normal !important;
+}
+.view-service-providers .views-field-nothing .description {
+	padding-top: 20px;
+}
+.view-service-providers .views-field-nothing .image {
+	float: none;
+	margin-bottom: 20px;
+	margin-right: 0;
+	padding-top: 20px;
+	text-align: center;
+	width: 240px;
+}
+.view-service-providers .contact-div .url {
+	padding: 0;
+}
+.view-service-providers .contact-div .url a {
+	color: #056186;
+}
+.view-service-providers .views-field-nothing .civi-image {
+	float: none;
+	margin-bottom: 0;
+	padding-top: 20px;
+	text-align: center;
+	width: auto;
+}
+.view-service-providers .views-field-nothing table, .view-service-providers .views-field-nothing table td, .view-service-providers .views-field-nothing table tbody {
+	border:0;
+	padding:0;
+	vertical-align:top;
+	margin:0;
+}
+.view-service-providers .views-field-nothing table .p-data {
+	border-left:2px solid #EAE6E5;
+	width:458px;
+}
+.view-service-providers .views-field-nothing table .p-civi-img {
+	vertical-align:bottom;
+	width:240px;
+	text-align:center;
+}
+.view-service-providers .views-field-nothing table .p-logo {
+	text-align: center;
+	width: 250px;
+}
+.view-service-providers .views-row .views-field-nothing-2 .view-info {
+	background-image: url("/sites/civicrm.org/files/plus.png");
+	background-position: right top;
+	background-repeat: no-repeat;
+	font-size:0;
+	width:17px;
+	height:17px;
+}
+.view-service-providers .views-row .views-field-nothing-2 .hide-info {
+	background-image: url("/sites/civicrm.org/files/minus.png");
+	background-position: right top;
+	background-repeat: no-repeat;
+	font-size:0;
+	width:17px;
+	height:17px;
+}
+.expand-collapse {
+	font-weight: bold;
+	margin-right: 13px;
+	text-align: right;
+}
+.expand-collapse .expandall {
+	background-image: url("/sites/civicrm.org/files/plus.png");
+	background-position: right top;
+	background-repeat: no-repeat;
+	padding-right:25px;
+	cursor:pointer;
+}
+.expand-collapse .collapseall {
+	background-image: url("/sites/civicrm.org/files/minus.png");
+	background-position: right top;
+	background-repeat: no-repeat;
+	padding-right:25px;
+	cursor:pointer;
+}
+/* service provider detail page */
+.view-clone-of-service-providers .views-field-nothing .display-name {
+	border-bottom: 2px solid #EAE6E5;
+}
+.view-clone-of-service-providers .views-field-nothing .display-name h2 {
+	font-size: 30px;
+	line-height: 1.5;
+	text-align: center;
+}
+.view-clone-of-service-providers .views-field-nothing .description, .view-clone-of-service-providers .views-field-nothing .aboutus, .view-clone-of-service-providers .views-field-nothing .contact-div, .view-clone-of-service-providers .views-field-nothing .case-study {
+	float: none;
+	margin: 0;
+	padding-left: 20px;
+	width: auto;
+}
+.view-clone-of-service-providers .views-field-nothing table, .view-clone-of-service-providers .views-field-nothing table td, .view-clone-of-service-providers .views-field-nothing table tbody {
+	border:0;
+	padding:0;
+	vertical-align:top;
+	margin:0;
+}
+.view-clone-of-service-providers .views-field-nothing .case-study, .view-clone-of-service-providers .views-field-nothing .case-study a, .view-clone-of-service-providers .views-field-nothing .case-study span {
+	font-size:13px !important;
+	font-family:"Lato", Cantarell, Helvetica, Arial, sans-serif !important;
+}
+.view-clone-of-service-providers .views-field-nothing table .p-logo {
+	text-align: center;
+	width: 250px;
+}
+.view-clone-of-service-providers .views-field-nothing table .p-data {
+	border-left: 2px solid #EAE6E5;
+	width: 458px;
+}
+.view-clone-of-service-providers .views-field-nothing table .p-civi-img {
+	text-align: center;
+	vertical-align: bottom;
+	width: 240px;
+}
+.view-clone-of-service-providers .views-field-nothing .civi-image {
+	float: none;
+	margin-bottom: 0;
+	padding-top: 20px;
+	text-align: center;
+	width: auto;
+}
+.view-clone-of-service-providers .views-label {
+	display: block;
+	font-weight: bold;
+	line-height: 17px;
+	margin-bottom: 1em;
+}
+.view-clone-of-service-providers .contact-div .contact-info {
+	font-weight: bold;
+	margin-top: 6px;
+}
+.view-clone-of-service-providers .views-field-nothing .description {
+	padding-top: 20px;
+}
+.view-clone-of-service-providers .views-field-nothing .image {
+	float: none;
+	margin-bottom: 20px;
+	margin-right: 0;
+	padding-top: 20px;
+	text-align: center;
+	width: 240px;
+}
+.view-clone-of-service-providers .views-field-nothing .image img {
+	margin: 0;
+	max-height: 240px;
+	max-width: 240px;
+}
+/*end service provider*/
 
 
 .center-button{

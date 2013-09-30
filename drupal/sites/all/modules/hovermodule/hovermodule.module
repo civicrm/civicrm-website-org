@@ -8,4 +8,49 @@ function hovermodule_init() {
     drupal_add_js(drupal_get_path('module', 'hovermodule') .'/hovertrial.js');
 }
 
+/**
+ * Implements hook_form_alter() to modify country list
+ */
+function hovermodule_form_alter(&$form, $form_state, $form_id) {
+    // define variables
+    $view_name = 'service_providers';
+    $filer_name = 'country';
+
+    // modify country drop down
+    if ($form_id == 'views_exposed_form' && is_object($form_state['view']) && $form_state['view']->name==$view_name && is_array($form[$filer_name])) {
+        civicrm_initialize();
+        // define SQL to fetch nodes that have countries
+        $sql = "
+SELECT DISTINCT contact_address.country_id
+FROM civicrm_address contact_address
+LEFT JOIN civicrm_group_contact contact_group ON contact_address.contact_id = contact_group.contact_id
+LEFT JOIN civicrm_membership contact_membership ON contact_address.contact_id = contact_membership.contact_id
+WHERE contact_group.group_id =131
+OR contact_membership.status_id
+IN (
+'1', '2', '3', '5'
+)
+    ";
+        $row = CRM_Core_DAO::executeQuery( $sql );
+        while ( $row->fetch( ) ) {
+            $countries[] = $row->country_id;
+        }
+   
+        // filter country list
+        foreach($form[$filer_name]['#options'] as $key => $value) {
+     
+            // allow "All"
+            if ($key == 'All') {
+                continue;
+            }
+     
+            elseif (!in_array($key, $countries)) {
+                unset($form[$filer_name]['#options'][$key]);
+            }
+     
+        }
+   
+    }
+}
+
 
