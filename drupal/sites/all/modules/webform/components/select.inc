@@ -20,6 +20,7 @@ function _webform_defaults_select() {
       'items' => '',
       'multiple' => NULL,
       'aslist' => NULL,
+      'empty_option' => '',
       'optrand' => 0,
       'other_option' => NULL,
       'other_text' => t('Other...'),
@@ -176,6 +177,22 @@ function _webform_edit_select($component) {
     '#description' => t('Check this option if you want the select component to be displayed as a select list box instead of radio buttons or checkboxes. Option groups (nested options) are only supported with listbox components.'),
     '#parents' => array('extra', 'aslist'),
   );
+  $form['display']['empty_option'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Empty option'),
+    '#default_value' => $component['extra']['empty_option'],
+    '#size' => 60,
+    '#maxlength' => 255,
+    '#description' => t('The list item to show when no default is provided. Leave blank for "- None -" or "- Select -".'),
+    '#parents' => array('extra', 'empty_option'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="extra[aslist]"]' => array('checked' => TRUE),
+        ':input[name="extra[multiple]"]' => array('checked' => FALSE),
+        ':input[name="value"]' => array('filled' => FALSE),
+      ),
+    ),
+  );
   $form['display']['optrand'] = array(
     '#type' => 'checkbox',
     '#title' => t('Randomize options'),
@@ -297,7 +314,7 @@ function _webform_edit_validate_set_aslist($options, &$form_state) {
 /**
  * Implements _webform_render_component().
  */
-function _webform_render_select($component, $value = NULL, $filter = TRUE) {
+function _webform_render_select($component, $value = NULL, $filter = TRUE, $submission = NULL) {
   $node = isset($component['nid']) ? node_load($component['nid']) : NULL;
 
   $element = array(
@@ -310,6 +327,11 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE) {
     '#pre_render' => array(), // Needed to disable double-wrapping of radios and checkboxes.
     '#translatable' => array('title', 'description', 'options'),
   );
+
+  // Add HTML5 required attribute, if needed and possible (not working on multiple checkboxes).
+  if ($component['required'] && ($component['extra']['aslist'] || !$component['extra']['multiple'])) {
+    $element['#attributes']['required'] = 'required';
+  }
 
   // Convert the user-entered options list into an array.
   $default_value = $filter ? webform_replace_tokens($component['value'], $node) : $component['value'];
@@ -327,49 +349,37 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE) {
   // Drupal 7's adding of the option for us. See @form_process_select().
   if ($component['extra']['aslist'] && !$component['extra']['multiple'] && $default_value === '') {
     $element['#empty_value'] = '';
+    $element['#empty_option'] = $component['extra']['empty_option'];
   }
 
   // Set the component options.
   $element['#options'] = $options;
 
+  // Use the component's default value if the component is currently empty.
+  if (!isset($value)) {
+    // The default for multiple selects is a comma-delimited list, without white-space or empty entries.
+    $value = $component['extra']['multiple'] ? array_filter(array_map('trim', explode(',', $default_value)), 'strlen') : $default_value;
+  }
+
+  // Convert all values into an array; component may now be single but was previously multiple, or vice-versa
+  $value = (array)$value;
+
   // Set the default value. Note: "No choice" is stored as an empty string,
   // which will match a 0 key for radios; NULL is used to avoid unintentional
   // defaulting to the 0 option.
-  if (isset($value)) {
-    if ($component['extra']['multiple']) {
-      // Set the value as an array.
-      $element['#default_value'] = array();
-      foreach ((array) $value as $key => $option_value) {
-        $element['#default_value'][] = $option_value === '' ? NULL : $option_value;
-      }
-    }
-    else {
-      // Set the value as a single string.
-      $element['#default_value'] = '';
-      foreach ((array) $value as $option_value) {
-        $element['#default_value'] = $option_value === '' ? NULL : $option_value;
-      }
-    }
-  }
-  elseif ($default_value !== '') {
-    // Convert default value to a list if necessary.
-    if ($component['extra']['multiple']) {
-      $varray = explode(',', $default_value);
-      foreach ($varray as $key => $v) {
-        $v = trim($v);
-        if ($v !== '') {
-          $element['#default_value'][] = $v;
-        }
-      }
-    }
-    else {
-      $element['#default_value'] = $default_value;
-    }
-  }
-  elseif ($component['extra']['multiple']) {
+  if ($component['extra']['multiple']) {
+    // Set the value as an array.
     $element['#default_value'] = array();
+    foreach ($value as $option_value) {
+      $element['#default_value'][] = $option_value === '' ? NULL : $option_value;
+    }
   }
-
+  else {
+    // Set the value as a single string.
+    $option_value = reset($value);
+    $element['#default_value'] = $option_value === '' ? NULL : $option_value;
+  }
+  
   if ($component['extra']['other_option'] && module_exists('select_or_other')) {
     // Set display as a select_or_other element:
     $element['#type'] = 'select_or_other';
@@ -476,6 +486,10 @@ function webform_expand_select_ids($element) {
  * Implements _webform_display_component().
  */
 function _webform_display_select($component, $value, $format = 'html') {
+  // Sort values by numeric key. These may be in alphabetic order from the database query,
+  // which is not numeric order for keys '10' and higher.
+  $value = (array) $value;
+  ksort($value, SORT_NUMERIC);
   return array(
     '#title' => $component['name'],
     '#title_display' => $component['extra']['title_display'] ? $component['extra']['title_display'] : 'before',
@@ -485,7 +499,7 @@ function _webform_display_select($component, $value, $format = 'html') {
     '#theme_wrappers' => $format == 'html' ? array('webform_element') : array('webform_element_text'),
     '#format' => $format,
     '#options' => _webform_select_options($component, !$component['extra']['aslist']),
-    '#value' => (array) $value,
+    '#value' => $value,
     '#translatable' => array('title', 'options'),
   );
 }
@@ -614,16 +628,21 @@ function theme_webform_display_select($variables) {
 /**
  * Implements _webform_analysis_component().
  */
-function _webform_analysis_select($component, $sids = array(), $single = FALSE) {
+function _webform_analysis_select($component, $sids = array(), $single = FALSE, $join = NULL) {
   $options = _webform_select_options($component, TRUE);
 
   // Create a generic query for the component.
   $query = db_select('webform_submitted_data', 'wsd', array('fetch' => PDO::FETCH_ASSOC))
-    ->condition('nid', $component['nid'])
-    ->condition('cid', $component['cid'])
-    ->condition('data', '', '<>');
+    ->condition('wsd.nid', $component['nid'])
+    ->condition('wsd.cid', $component['cid'])
+    ->condition('wsd.data', '', '<>');
+
   if ($sids) {
-    $query->condition('sid', $sids, 'IN');
+    $query->condition('wsd.sid', $sids, 'IN');
+  }
+
+  if ($join) {
+    $query->innerJoin($join, 'ws2_', 'wsd.sid = ws2_.sid');
   }
 
   // Clone the query for later use, if needed.
@@ -640,11 +659,11 @@ function _webform_analysis_select($component, $sids = array(), $single = FALSE) 
 
   if ($options) {
     // Gather the normal results first (not "other" options).
-    $query->addExpression('COUNT(data)', 'datacount');
+    $query->addExpression('COUNT(wsd.data)', 'datacount');
     $result = $query
-      ->condition('data', array_keys($options), 'IN')
+      ->condition('wsd.data', array_keys($options), 'IN')
       ->fields('wsd', array('data'))
-      ->groupBy('data')
+      ->groupBy('wsd.data')
       ->execute();
     foreach ($result as $data) {
       $display_option = isset($options[$data['data']]) ? $options[$data['data']] : $data['data'];
@@ -672,12 +691,12 @@ function _webform_analysis_select($component, $sids = array(), $single = FALSE) 
 
     // If showing all results, execute the "other" query and append their rows.
     if ($single) {
-      $other_query->addExpression('COUNT(data)', 'datacount');
+      $other_query->addExpression('COUNT(wsd.data)', 'datacount');
       $other_query
         ->fields('wsd', array('data'))
-        ->groupBy('data');
+        ->groupBy('wsd.data');
       if ($options) {
-        $other_query->condition('data', array_keys($options), 'NOT IN');
+        $other_query->condition('wsd.data', array_keys($options), 'NOT IN');
       }
       $other_result = $other_query->execute();
       foreach ($other_result as $data) {
@@ -703,6 +722,7 @@ function _webform_table_select($component, $value) {
   $options = _webform_select_options($component, TRUE);
 
   $value = (array) $value;
+  ksort($value, SORT_NUMERIC);
   $items = array();
   // Set the value as a single string.
   foreach ($value as $option_value) {
