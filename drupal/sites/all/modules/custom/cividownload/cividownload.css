@@ -36,6 +36,14 @@
   margin-left: 344px;
 }
 
+.crm-container .crm-button.crm-icon-button {
+  padding: 0px;
+}
+
+.crm-container .crm-button-icon {
+  background-image: none;
+}
+
 #crm-container.crm-public #crm-submit-buttons input#_qf_Main_upload-bottom {
   cursor: pointer;
   width: 206px;
