@@ -1,0 +1,53 @@
+/* This file will hold styles that are loaded using the same media query as the wide grid. */
+
+h3 {
+	font-size: 1.71em; /* 24px @ 14px */
+}
+
+
+/* banners */
+.has-banner #region-banner-text {
+	top: 2em;
+}
+.has-banner #block-delta-blocks-page-title,
+.has-banner #block-fieldblock-node-page-default-field-banner-text {
+	padding: 1em;
+}
+.front .hp-slide-text div {
+	padding-top: 4em;
+}
+.front .hp-short-text {
+	margin-bottom: 2em;
+}
+.front .hp-slide-btn a {
+	padding: 0.25em 0.5em;
+}
+
+/* blog */
+.view-blog .views-field-field-image {
+	margin: 2.6em 0 1em 1em;
+}
+
+/* download page */
+.context-download h2.page-title {
+	padding-right: 80px;
+}
+.dl-text {
+	padding: 0 20px;
+}
+.dl-option-inner {
+	padding: 0 25px;
+}
+
+/* service providers */
+.view-service-providers .contact-div {
+	width: 660px;
+}
+
+/* HP partners block */
+.view-rotating-partner-logos .partner-text {
+	width: 590px;
+}
+.view-rotating-partner-logos .partner-text .pad {
+	padding: 0 120px;
+}
