@@ -41,18 +41,26 @@ function cividownload_download_list() {
   // build urls for the releases
   $content['download_urls'] = array(
     'drupal' => array(
+	  'cms' => t(drupal),
+	  'cssclass' => t(drupal7),
       'title' => t('Drupal 7.x'),
       'url' => "{$url}drupal",
     ),
     'drupal6' => array(
+	  'cms' => t(drupal),
+	  'cssclass' => t(drupal6),
       'title' => t('Drupal 6.x'),
       'url' => "{$url}drupal6",
     ),
     'joomla' => array(
+	  'cms' => t(joomla),
+	  'cssclass' => t(joomla),
       'title' => t('Joomla 2.5.x / 3.x'),
       'url' => "{$url}joomla",
     ),
     'wordpress' => array(
+	  'cms' => t(wordpress),
+	  'cssclass' => t(wordpress),
       'title' => t('WordPress 3.x / 4.x'),
       'url' => "{$url}wordpress",
     ),
