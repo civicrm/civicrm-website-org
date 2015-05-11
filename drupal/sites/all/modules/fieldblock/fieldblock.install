@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ */
+function fieldblock_uninstall() {
+  // Delete variables.
+  $entities = entity_get_info();
+  // Loop over the entity types.
+  foreach ($entities as $entity_type => $entity_info) {
+    // Loop over each entity type's bundles.
+    foreach ($entity_info['bundles'] as $bundle => $bundle_info) {
+      $view_modes = field_view_mode_settings($entity_type, $bundle);
+      // Treat the default settings as a real view mode with custom settings.
+      $view_modes['default']['custom_settings'] = true;
+      // Loop over the bundle's view modes.
+      foreach ($view_modes as $view_mode => $view_mode_info) {
+        // Delete the variable, if it exists.
+        $variable_name = 'fieldblock-'. $entity_type .'-'. $bundle .'-'. $view_mode;
+        variable_del($variable_name);
+      }
+    }
+  }
+}
+
+/**
+ * Legacy helper function to undo drupal core schema alter.
+ */
+function _fieldblock_db_alter_block_delta_length($length) {
+  // Alter block table.
+  db_drop_unique_key('block', 'tmd');
+  db_change_field('block', 'delta', 'delta',
+    array(
+      'type' => 'varchar',
+      'length' => $length,
+      'not null' => TRUE,
+      'default' => '0',
+      'description' => 'Unique ID for block within a module.',
+    ),
+    array(
+      'unique keys' => array(
+        'tmd' => array('theme', 'module', 'delta'),
+      )
+    )
+  );
+
+  // Alter block_role table.
+  db_drop_primary_key('block_role');
+  db_change_field('block_role', 'delta', 'delta',
+    array(
+      'type' => 'varchar',
+      'length' => $length,
+      'not null' => TRUE,
+      'description' => "The block's unique delta within module, from {block}.delta.",
+    ),
+    array(
+      'primary key' => array('module', 'delta', 'rid'),
+    )
+  );
+
+  // Alter block_node_type table.
+  db_drop_primary_key('block_node_type');
+  db_change_field('block_node_type', 'delta', 'delta',
+    array(
+      'type' => 'varchar',
+      'length' => $length,
+      'not null' => TRUE,
+      'description' => "The block's unique delta within module, from {block}.delta.",
+    ),
+    array(
+      'primary key' => array('module', 'delta', 'type'),
+    )
+  );
+}
+
+/**
+ * Update legacy fieldblock deltas to use md5 identifier.
+ * Reset drupal core block schema.
+ */
+function fieldblock_update_7100() {
+  $blocks = db_query("SELECT bid, delta FROM {block} WHERE module = 'fieldblock'");
+  foreach ($blocks as $block) {
+    db_query("UPDATE {block} SET delta = :new_delta WHERE bid = :bid AND delta = :old_delta AND module = 'fieldblock'", array(':new_delta' => md5($block->delta), ':bid' => $block->bid, ':old_delta' => $block->delta));
+  }
+  _fieldblock_db_alter_block_delta_length(32);
+}
