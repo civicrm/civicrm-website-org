@@ -1,0 +1,221 @@
+<?php
+
+define('MEDIA_RESPONSIVE_DEFAULT_WIDTH', 1220);
+
+/**
+ * Implements hook_menu().
+ */
+function media_responsive_menu() {
+  $items = array();
+
+  $items['admin/config/media/responsive'] = array(
+    'title' => 'Responsive Images',
+    'description' => 'Configure responsive images',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('media_responsive_admin'),
+    'access arguments' => array('access administration pages'),
+  );
+  
+  return $items;
+}
+
+/**
+ * Implements hook_admin().
+ */
+function media_responsive_admin() {
+  $form = array();
+  
+  $form['media_responsive_maximum'] = array(
+      '#type'           => 'textfield',
+      '#title'          => t('Maximum Responsive Area Width'),
+      '#description'    => t('Typically the width of your largest layout'),
+      '#default_value'  => variable_get('media_responsive_maximum', MEDIA_RESPONSIVE_DEFAULT_WIDTH),
+      '#required'       => TRUE,
+  );
+  
+  $form['#submit'][] = 'media_responsive_admin_submit';
+  
+  return system_settings_form($form);
+}
+
+/**
+ * Validates media_responsive_admin() form.
+ */
+function media_responsive_admin_validate($form, &$form_state) {
+  $maximum = (int) $form_state['values']['media_responsive_maximum'];
+  if (!is_int($maximum) || empty($maximum)) {
+    form_set_error('media_responsive_maximum', t('Please enter an integer greater than 0.'));
+  }
+}
+
+/**
+ * Submit handler for media_responsive_admin() form.
+ */
+function media_responsive_admin_submit($form, &$form_state) {
+  $style = image_style_load('media_responsive');
+  image_style_flush($style);
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ *
+ * Add media_responsive view modes to the file entity type.
+ */
+function media_responsive_entity_info_alter(&$entity_info) {
+  $entity_info['file']['view modes']['media_responsive'] = array('label' => t('Responsive'), 'custom settings' => TRUE);
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ *
+ * Lets CTools know which plugin APIs are implemented by this module.
+ */
+function media_responsive_ctools_plugin_api($owner, $api) {
+  static $api_versions = array(
+    'file_entity' => array(
+      'file_default_displays' => 1,
+    ),
+  );
+  if (isset($api_versions[$owner][$api])) {
+    return array('version' => $api_versions[$owner][$api]);
+  }
+}
+
+/**
+ * Implements hook_file_default_displays().
+ *
+ * @see file_entity_schema()
+ */
+function media_responsive_file_default_displays() {
+ return array(
+   'image__media_responsive__file_image' => (object) array(
+      'api_version' => 1,
+      'name' => 'image__media_responsive__file_image',
+      'status' => 1,
+      'settings' => array('image_style' => 'media_responsive_widest'),
+      'weight' => -1,
+    )
+  );
+}
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function media_responsive_image_default_styles() {
+  $styles = array();
+
+  // Exported image style: media_responsive_widest
+  $styles['media_responsive_widest'] = array(
+    'name' => 'media_responsive_widest',
+    'effects' => array(
+      2 => array(
+        'label' => 'Scale',
+        'help' => 'Scaling will maintain the aspect-ratio of the original image. If only a single dimension is specified, the other dimension will be calculated.',
+        'effect callback' => 'image_scale_effect',
+        'dimensions callback' => 'image_scale_dimensions',
+        'form callback' => 'image_scale_form',
+        'summary theme' => 'image_scale_summary',
+        'module' => 'image',
+        'name' => 'image_scale',
+        'data' => array(
+          'width' => variable_get('media_responsive_maximum', MEDIA_RESPONSIVE_DEFAULT_WIDTH),
+          'height' => '',
+          'upscale' => 0,
+        ),
+        'weight' => '1',
+      ),
+    ),
+  );
+
+  return $styles;
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ * Override the theme function used for image styles.
+ */
+function media_responsive_theme_registry_alter(&$theme_registry) {
+  if (isset($theme_registry['image_style']['function'])) {
+    $theme_registry['image_style']['function'] = 'media_responsive_theme_image_style';
+  }
+}
+
+/**
+ * Returns HTML for an image using a specific image style.
+ * As theme_image_style, but also creates a responsive image for
+ * 'media_responsive_widest'.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - style_name: The name of the style to be used to alter the original image.
+ *   - path: The path of the image file relative to the Drupal files directory.
+ *     This function does not work with images outside the files directory nor
+ *     with remotely hosted images.
+ *   - width: The width of the source image (if known).
+ *   - height: The height of the source image (if known).
+ *   - alt: The alternative text for text-based browsers.
+ *   - title: The title text is displayed when the image is hovered in some
+ *     popular browsers.
+ *   - attributes: Associative array of attributes to be placed in the img tag.
+ *
+ * @see theme_image_style
+ */
+function media_responsive_theme_image_style($variables) {
+
+  // Determine the dimensions of the styled image.
+  $dimensions = array(
+    'width' => $variables['width'],
+    'height' => $variables['height'],
+  );
+
+  image_style_transform_dimensions($variables['style_name'], $dimensions);
+  
+  // Determine the url for the styled image.
+  $variables['path'] = image_style_url($variables['style_name'], $variables['path']);
+  
+  if ($variables['style_name'] == 'media_responsive_widest') {
+    $variables['width'] = '100%';
+  
+    if (isset($variables['attributes']['style'])) {
+      // Remove duplicate css/style rules.
+      $styles = explode(';', $variables['attributes']['style']);
+      $style_rules = '';
+      foreach ($styles as $style) {
+        $style_rule = explode(':', $style);
+        if (isset($style_rule[0]) && isset($style_rule[1])) {
+          $property = trim($style_rule[0]);
+          if ($property == 'max-width') {
+            $style_rules .= $property . ':' . $dimensions['width'] . 'px;';
+          }
+          // Remove width as we set that on the image itself.
+          else if ($property != 'width') {
+            $style_rules .= $property . ':' . trim($style_rule[1]) . ';';
+          }
+        }
+        $variables['attributes']['style'] = $style_rules;
+      }
+    }
+    else {
+      $variables['attributes']['style'] = 'max-width:' . $dimensions['width'] . 'px;';
+    }
+    
+    // As theme_image, but removing the height.
+    $attributes = $variables['attributes'];
+    $attributes['src'] = file_create_url($variables['path']);
+
+    foreach (array('width', 'alt', 'title') as $key) {
+      if (isset($variables[$key])) {
+        $attributes[$key] = $variables[$key];
+      }
+    }
+    
+    unset($attributes['height']);
+
+    return '<img' . drupal_attributes($attributes) . ' />';
+  }
+  else {
+    $variables['width'] = $dimensions['width'];
+    $variables['height'] = $dimensions['height'];
+    return theme('image', $variables);
+  }
+}

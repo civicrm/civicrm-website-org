@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function media_responsive_install() {
+  media_variable_set('wysiwyg_default_view_mode', 'media_responsive');
+}
+
+/**
+ * Implement hook_uninstall().
+ */
+function media_responsive_uninstall() {
+  media_variable_del('wysiwyg_default_view_mode');
+}

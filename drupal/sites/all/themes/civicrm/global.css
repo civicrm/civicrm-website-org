@@ -1,0 +1,250 @@
+/* This file will hold styles for the mobile version of your website (mobile first). */
+/* This also can include ANY global CSS that applies site-wide. Unless overwritten by a more specific style rule, CSS declarations in global.css will apply site-wide. */
+body {
+	font-size: 24px;
+	line-height: 1.4;
+	color: #6c696a;
+}
+a {
+	text-decoration: none;
+	color: #5c96ad;
+}
+p {
+	margin: 0.8em 0;
+}
+.align-left {
+	text-align: left;
+}
+.align-right {
+	text-align: right;
+}
+.align-center {
+	text-align: center;
+}
+a.btn-dark,
+.btn-dark a,
+a.btn-grey,
+.btn-grey a {
+	display: inline-block;
+	padding: 0.5em 1em;
+	background-color: #6c696a;
+	color: #fff;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+a.btn-dark,
+.btn-dark a {
+	background-color: #343433;
+}
+h1#page-title,
+h2.align-center {
+	font-size: 2.5em; /* 50px @ 24px */
+}
+h1, h2, h3, h4 {
+	text-transform: uppercase;
+}
+.zone-wrapper {
+	padding: 2em 0;
+}
+#section-header .zone-wrapper {
+	padding: 0;
+}
+#section-header #zone-header-wrapper {
+	background-color: #393536;
+	padding: 1em 0;
+}
+#section-header #zone-breadcrumb-wrapper {
+	background-color: #231f20;
+}
+#block-delta-blocks-breadcrumb ul {
+	padding: 10px 0;
+}
+#block-delta-blocks-breadcrumb li {
+	display: inline-block;
+	line-height: 1;
+	margin-right: 10px;
+	padding-right: 40px;
+	background: url(images/breadcrumb-arrrow.png) no-repeat right center;
+}
+#block-delta-blocks-breadcrumb li a {
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 0.75em; /* 18px @ 24px */
+}
+#block-delta-blocks-breadcrumb li a.active {
+	color: #82c459;
+}
+#zone-header ul#main-menu a,
+#zone-header ul#secondary-menu a {
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 0.83em; /* 20px @ 24px */
+	font-weight: bold;
+}
+#zone-header ul#secondary-menu a {
+	font-size: 0.75em; /* 18px @ 24px */
+	font-weight: normal;
+}
+#zone-header #region-menu {
+	text-align: right;
+}
+#zone-banner-wrapper {
+	padding: 0;
+}
+.has-banner #block-delta-blocks-page-title {
+	padding: 1em;
+}
+.has-banner #block-delta-blocks-page-title,
+.has-banner #block-fieldblock-node-page-default-field-banner-text {
+	padding: 1em;
+	color: #fff;
+	position: relative;
+}
+#block-fieldblock-node-page-default-field-banner-image {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+#zone-blue-wrapper {
+	background-color: #056186;
+	color: #fff;
+}
+#zone-blue a {
+	color: #fff;
+	text-decoration: underline;
+}
+#zone-grey-wrapper {
+	background-color: #deddde;
+}
+
+/* become a parter */
+.partner-option {
+	width: 330px;
+	padding: 30px;
+	float: left;
+}
+.partner-option h4,
+.partner-option p.option-number {
+	text-align: center;
+}
+.partner-option p.option-number em {
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	text-indent: -8765px;
+	background: url(images/civi-sprite.png) no-repeat -5px -4410px;
+}
+.partner-option.option-two p.option-number em {
+	background-position: -5px -4515px;
+}
+.partner-option.option-three p.option-number em {
+	background-position: -110px -4410px;
+}
+.tick-list .content ul {
+	margin-top: 2em;
+}
+.tick-list .content li {
+	background: url("images/tick-list.png") no-repeat scroll 0 5px;
+	margin: 0 0 1em;
+	padding: 0 0 10px 50px;
+}
+
+/* case studies */
+#block-fieldblock-node-ccrm-case-study-default-field-ccrm-cs-modifications {
+	float: right;
+	width: 30%;
+	margin-left: 30px;
+	border-left: 2px solid #6c696a;
+}
+#block-fieldblock-node-ccrm-case-study-default-field-ccrm-cs-modifications .block-inner {
+	padding-left: 30px;
+}
+
+/* blog */
+.view-blog .views-row {
+	padding-bottom: 1em;
+	border-bottom: 1px solid #b7b8b9;
+	margin-bottom: 2em;
+}
+.view-blog .views-field-title,
+.view-blog .views-field-body,
+.view-blog .views-field-view-node {
+	margin-bottom: 1em;
+}
+.view-blog .views-field-title h2 a {
+	color: #6c696a;
+}
+.view-blog .views-field-field-image {
+	margin: 1em 0;
+}
+
+#zone-footer-first-wrapper {
+	background-color: #393536;
+	color: #6c696a;
+}
+#zone-footer-first-wrapper a {
+	color: #6c696a;
+}
+#zone-footer-first .footer-sm {
+	float: left;
+	text-transform: uppercase;
+	font-size: 1.25em; /* 30px @ 24px */
+	font-weight: bold;
+}
+#zone-footer-first .footer-sm p {
+	margin: 0;
+}
+/* all (twitter) */
+#zone-footer-first .footer-sm .content a {
+	width: 50px;
+	height: 50px;
+	display: inline-block;
+	text-indent: -8765px;
+	background: url(images/civi-sprite.png) no-repeat -210px -2040px;
+}
+/* facebook */
+#zone-footer-first .footer-sm .content strong a {
+	background-position: -210px -1875px;
+} 
+/* linkedin */
+#zone-footer-first .footer-sm .content em a {
+	background-position: -210px -1930px;
+} 
+#zone-footer-first #block-search-form {
+	float: right;
+}
+.block-menu-block.footer-menu {
+	clear: both;
+	padding-top: 60px;
+}
+.footer-menu ul.menu {
+	overflow: hidden;
+}
+.footer-menu ul.menu li {
+	float: left;
+	width: 17%;
+	margin-right: 10%;
+	margin-left: 0;
+	padding: 0;
+	list-style: none outside none;
+}
+.footer-menu ul.menu li.last {
+	margin-right: 0;
+}
+.footer-menu ul.menu li a {
+	text-transform: uppercase;
+}
+.footer-menu ul.menu li ul li {
+	float: none;
+	width: auto;
+	margin-right: 0;
+}
+.footer-menu ul.menu li ul li a {
+	text-transform: none;
+}
+.footer-info img {
+	margin-right: 50px;
+}
+.footer-info a {
+	color: #6c696a;
+}

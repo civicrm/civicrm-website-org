@@ -1,0 +1,203 @@
+<?php
+
+/**
+ * @file
+ * Allow fields to be rendered in blocks.
+ */
+
+define('FIELDBLOCK_STORAGE_STATIC', 'fieldblock_storage');
+
+/**
+ * Implements hook_form_alter().
+ * Adds a column to the "display fields" table-form, with a checkbox for each
+ * field.
+ */
+function fieldblock_form_field_ui_display_overview_form_alter(&$form, &$form_state, $form_id) {
+  $entity_type = $form['#entity_type'];
+  $bundle = $form['#bundle'];
+  $view_mode = $form['#view_mode'];
+
+  $variable_name = 'fieldblock-'. $entity_type .'-'. $bundle .'-'. $view_mode;
+  $settings = variable_get($variable_name, array());
+
+  // Add a column header.
+  $form['fields']['#header'][] = t('Display as block');
+
+  // Add checkboxes.
+  $field_names = array_merge($form['#fields'], $form['#extra']);
+  foreach ($field_names as $field_name) {
+    $form['fields'][$field_name]['fieldblock'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => isset($settings[$field_name]) ? true : false,
+      '#title' => '',
+    );
+  }
+
+  // Add a submit handler.
+  $form['#submit'][] = 'fieldblock_field_display_submit';
+}
+
+/**
+ * Form submit handler for field_ui_display_overview_form.
+ * Saves a single variable for each entity + bundle + view mode combination if
+ * a field has been made available as block. Having separate variables makes the
+ * configuration more flexible for exporting with strongarm and features.
+ */
+function fieldblock_field_display_submit($form, &$form_state) {
+  $entity_type = $form['#entity_type'];
+  $bundle = $form['#bundle'];
+  $view_mode = $form['#view_mode'];
+  $variable_name = 'fieldblock-'. $entity_type .'-'. $bundle .'-'. $view_mode;
+  $settings = array();
+
+  foreach ($form_state['values']['fields'] as $field_name => $field) {
+    if (!empty($field['fieldblock'])) {
+      $settings[$field_name] = $form['fields'][$field_name]['human_name']['#markup'];
+    }
+  }
+
+  if (empty($settings)) {
+    // This variable may have existed before, so let's clean up a little.
+    variable_del($variable_name);
+  }
+  else {
+    variable_set($variable_name, $settings);
+    drupal_set_message(t('One or more fields have been made available as block. Do not forget to assign the block(s) to a region.'));
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function fieldblock_block_info() {
+  $blocks = array();
+
+  $fieldblocks = fieldblock_get_block_list();
+  foreach ($fieldblocks as $fieldblock_id => $description) {
+    $blocks[$fieldblock_id] = array(
+      'info' => $description,
+      'cache' => DRUPAL_CACHE_PER_PAGE,
+    );
+  }
+
+  return $blocks;
+}
+
+/**
+ * Helper function for fieldblock_block_info().
+ * Builds a list of fields that have been made available as a block.
+ * @return array
+ *   An array with all fields that are made visible via the display fields UI,
+ *   in the form of [fieldblock identifier] => [block description].
+ */
+function fieldblock_get_block_list() {
+  $fieldblocks = &drupal_static(__FUNCTION__);
+
+  if (!isset($fieldblocks)) {
+    $fieldblocks = array();
+    $entities = entity_get_info();
+    // Loop over the entity types.
+    foreach ($entities as $entity_type => $entity_info) {
+      // Loop over each entity type's bundles.
+      foreach ($entity_info['bundles'] as $bundle => $bundle_info) {
+        $view_modes = field_view_mode_settings($entity_type, $bundle);
+        // Treat the default settings as a real view mode with custom settings.
+        $view_modes['default']['custom_settings'] = true;
+        // Loop over the bundle's view modes.
+        foreach ($view_modes as $view_mode => $view_mode_info) {
+          // Ignore this view mode if its custom settings are not enabled.
+          if (!$view_mode_info['custom_settings']) {
+            continue;
+          }
+          // Get the settings from the stored variable.
+          $variable_name = 'fieldblock-'. $entity_type .'-'. $bundle .'-'. $view_mode;
+          $fieldblock_settings = variable_get($variable_name, array());
+          // Loop over the fields defined in the variable.
+          foreach ($fieldblock_settings as $field_name => $field_label) {
+            // Build the fieldblock info.
+            $fieldblock_id = md5($variable_name .'-'. $field_name);
+            $fieldblocks[$fieldblock_id] = t('@field field (from @type: @bundle: @view_mode)', array(
+              '@field' => $field_label,
+              '@type' => $entity_type,
+              '@bundle' => $bundle_info['label'],
+              '@view_mode' => $view_mode,
+            ));
+          }
+        }
+      }
+    }
+  }
+
+  return $fieldblocks;
+}
+
+/**
+ * Implements hook_block_view().
+ * Retrieves a field, identified by the block delta, from the static cache.
+ */
+function fieldblock_block_view($delta = '') {
+  $block = array();
+
+  $fieldblocks_storage = &drupal_static(FIELDBLOCK_STORAGE_STATIC);
+  if (isset($fieldblocks_storage[$delta])) {
+    // If the field has a label, use it as block title and hide it on the
+    // field itself.
+    $block['subject'] = '';
+    if (isset($fieldblocks_storage[$delta]['#label_display']) && $fieldblocks_storage[$delta]['#label_display'] != 'hidden') {
+      $block['subject'] = $fieldblocks_storage[$delta]['#title'];
+      $fieldblocks_storage[$delta]['#label_display'] = 'hidden';
+    }
+    $block['content'] = $fieldblocks_storage[$delta];
+    $block['fieldblock_name'] = $fieldblocks_storage[$delta]['fieldblock_name'];
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ * Stores fields attached to the current entity in a static cache, to be
+ * retrieved in fieldblock_block_view, and hides the field from the renderable
+ * array.
+ */
+function fieldblock_entity_view_alter(&$build, $type) {
+  // Do nothing if essential information is missing.
+  if (!isset($build['#bundle'], $build['#entity_type'], $build['#view_mode'])) {
+    return;
+  }
+
+  $entity_type = $build['#entity_type'];
+  $bundle = $build['#bundle'];
+  $view_mode = $build['#view_mode'];
+
+  // Check whether the view mode uses custom display settings or the 'default'
+  // mode.
+  $view_mode_settings = field_view_mode_settings($entity_type, $bundle);
+  $actual_mode = (!empty($view_mode_settings[$view_mode]['custom_settings']) ? $view_mode : 'default');
+
+  $fieldblocks_storage = &drupal_static(FIELDBLOCK_STORAGE_STATIC);
+
+  $variable_name = 'fieldblock-'. $entity_type .'-'. $bundle .'-'. $actual_mode;
+  $fieldblock_settings = variable_get($variable_name, array());
+
+  // Loop over the fieldblocks for this entity + bundle + view mode combination
+  // and store the field's render array for later use.
+  foreach ($fieldblock_settings as $field_name => $field_label) {
+    if (isset($build[$field_name])) {
+      $fieldblock_name = $variable_name .'-'. $field_name;
+      $fieldblock_id = md5($fieldblock_name);
+      $fieldblocks_storage[$fieldblock_id] = $build[$field_name];
+      hide($build[$field_name]);
+      $fieldblocks_storage[$fieldblock_id]['fieldblock_name'] = $fieldblock_name;
+    }
+  }
+}
+
+/**
+ * Give fieldblocks a meaningful html id in spite of the hashed block deltas.
+ */
+function fieldblock_preprocess_block(&$variables) {
+  if ($variables['block']->module == 'fieldblock') {
+    $variables['block_html_id'] = drupal_html_id('block-' . $variables['block']->fieldblock_name);
+  }
+}

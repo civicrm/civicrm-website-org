@@ -1,0 +1,15 @@
+name = "Media Responsive"
+description = "Adds a responsive images view mode"
+core = "7.x"
+version = "7.x-1.0"
+package = "Media"
+configure = admin/config/media/responsive
+dependencies[] = "image"
+dependencies[] = "media"
+
+; Information added by drupal.org packaging script on 2012-02-04
+version = "7.x-1.0-alpha1"
+core = "7.x"
+project = "media_responsive"
+datestamp = "1328339747"
+
