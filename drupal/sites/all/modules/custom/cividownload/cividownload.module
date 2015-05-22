@@ -26,13 +26,6 @@ function cividownload_menu() {
 }
 
 function cividownload_download_page() {
-  // check for download mode
-  $download_mode = variable_get('cividownload_mode');
-  if ($download_mode == 2 && arg(1) != 'list' ) { 
-    $campaign_page = variable_get('campaign_page_url', '/campaign46');
-    drupal_goto($campaign_page);
-  }
-
   drupal_add_css(drupal_get_path('module', 'cividownload') . '/cividownload.css', array('weight' => 1000));
 
   $content = cividownload_download_list();
@@ -48,27 +41,31 @@ function cividownload_download_list() {
   // build urls for the releases
   $content['download_urls'] = array(
     'drupal' => array(
+	  'cms' => t(drupal),
+	  'cssclass' => t(drupal7),
       'title' => t('Drupal 7.x'),
       'url' => "{$url}drupal",
-      'filename' => 'drupal.tar.gz',
     ),
     'drupal6' => array(
+	  'cms' => t(drupal),
+	  'cssclass' => t(drupal6),
       'title' => t('Drupal 6.x'),
       'url' => "{$url}drupal6",
-      'filename' => 'drupal6.tar.gz',
     ),
     'joomla' => array(
+	  'cms' => t(joomla),
+	  'cssclass' => t(joomla),
       'title' => t('Joomla 2.5.x / 3.x'),
       'url' => "{$url}joomla",
-      'filename' => 'joomla.zip',
     ),
     'wordpress' => array(
+	  'cms' => t(wordpress),
+	  'cssclass' => t(wordpress),
       'title' => t('WordPress 3.x / 4.x'),
       'url' => "{$url}wordpress",
-      'filename' => 'wordpress.zip',
     ),
   );
-  
+
   return $content;
 }
 
@@ -92,30 +89,6 @@ function getCurrentVersion($releaseType = 'stable') {
 
 function cividownload_settings() {
   $form = array();
-
-  $options = array(
-    1 => t('Regular download page'),
-    2 => t('Campaign page'),
-  );
-
-  $form['cividownload_mode'] = array(
-    '#type' => 'radios',
-    '#title' => t('Download mode'),
-    '#default_value' => variable_get('cividownload_mode', '1'),
-    '#options' => $options,
-    '#description' => t('Select "Campaign page" during fundraising period else "Regular download page"'),
-    '#required' => TRUE,
-  );
-
-  $form['campaign_page_url'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Campaign page url'),
-    '#default_value' => variable_get('campaign_page_url', 'campaign46'),
-    '#size' => 30,
-    '#description' => t('Enter internal node url. For eg: campaign46'),
-    '#element_validate' => array('campaign_page_validate'),
-  );
-
   $form['civicrm_stable_version'] = array(
     '#type' => 'textfield',
     '#title' => t('CiviCRM version that should be available for download'),
@@ -137,12 +110,6 @@ function cividownload_settings() {
   );
 
   return system_settings_form($form);
-}
-
-function campaign_page_validate($element, &$form_state) {
-  if ($form_state['values']['cividownload_mode'] == 2 && empty($element['#value'])) {
-    form_error($element, t('Please set campaign page url.'));
-  }
 }
 
 /**
@@ -184,18 +151,6 @@ function cividownload_civicrm_buildForm($formName, &$form) {
     drupal_add_css(drupal_get_path('module', 'cividownload') . '/cividownload.css', array('weight' => 1000));
     drupal_add_js(drupal_get_path('module', 'cividownload') . '/cividownload.js', array('weight' => 1000));
 
-    // set page title
-    $pageTitle = "Support CiviCRM"; 
-    
-    // get the source from the url
-    $src = CRM_Utils_Request::retrieve('src', 'String', $form);
-    if (!empty($src)) {
-      if (!in_array($src, array('download'))) {
-        CRM_Core_Error::fatal('Invalid src option');
-      }
-      $form->add('hidden', 'source', $src);
-    }
-
     // get the filename from the url
     $cms = CRM_Utils_Request::retrieve('cms', 'String', $form);
 
@@ -204,7 +159,7 @@ function cividownload_civicrm_buildForm($formName, &$form) {
         CRM_Core_Error::fatal('Invalid CMS option');
       }
 
-      // check if it's a lts release
+      // check if it's a lts release 
       $releaseType = CRM_Utils_Request::retrieve('rtype', 'String', $form);
       if (!empty($releaseType) && !in_array($releaseType, array('lts'))) {
         CRM_Core_Error::fatal('Invalid type');
@@ -241,14 +196,7 @@ function cividownload_civicrm_buildForm($formName, &$form) {
 
       $form->assign('downloadURL', "https://download.civicrm.org/{$fileName}?src=donate");
       $pageTitle = "Downloading CiviCRM {$current_version} for {$cmsType} ({$fileName})";
+      $form->assign('pageTitle', $pageTitle);
     }
-    $form->assign('pageTitle', $pageTitle);
   }
-  elseif ($formName == 'CRM_Contribute_Form_Contribution_ThankYou' && $form->_id == 63) {
-    if (!empty($form->_params['source']) && $form->_params['source'] == 'download') {
-      // auto redirection js
-      drupal_add_js(drupal_get_path('module', 'cividownload') . '/cividownload-redirect.js', array('weight' => 1000));
-
-    }
-  } 
 }
