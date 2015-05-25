@@ -68,7 +68,10 @@ function cividownload_download_list() {
       'filename' => 'wordpress.zip',
     ),
   );
-  
+
+  $content['civicrm_version'] = _cividownload_get_current_version('stable');
+  $content['civicrm_lts_version'] = _cividownload_get_current_version('lts');
+
   return $content;
 }
 
@@ -81,12 +84,25 @@ function cividownload_theme($existing, $type, $theme, $path) {
   );
 }
 
-function getCurrentVersion($releaseType = 'stable') {
-  if ($releaseType == 'stable') {
-    return variable_get('civicrm_stable_version', '4.5.3');
+function _cividownload_get_current_version($releaseType = 'stable') {
+  // Get all versions from JSON
+  static $versions;
+  if (!$versions) {
+    $json = file_get_contents('http://latest.civicrm.org/versions.json');
+    $versions = json_decode($json, TRUE);
   }
-  else {
-    return variable_get('civicrm_lts_version', '4.4.10');
+
+  // Sort major versions in reverse, so we can start with the newest.
+  $major_versions = array_keys($versions);
+  usort($major_versions, 'version_compare');
+  $sorted_major_versions = array_reverse($major_versions);
+
+  // Starting with newest major version, find the first one matching $releaseType
+  foreach ($sorted_major_versions as $major_version) {
+    if ($versions[$major_version]['status'] == $releaseType) {
+      // Get the latest release in this version.
+      return _cividownload_get_latest_release($versions[$major_version]['releases']);
+    }
   }
 }
 
@@ -114,26 +130,6 @@ function cividownload_settings() {
     '#size' => 30,
     '#description' => t('Enter internal node url. For eg: campaign46'),
     '#element_validate' => array('campaign_page_validate'),
-  );
-
-  $form['civicrm_stable_version'] = array(
-    '#type' => 'textfield',
-    '#title' => t('CiviCRM version that should be available for download'),
-    '#default_value' => variable_get('civicrm_stable_version', '4.5.3'),
-    '#size' => 10,
-    '#maxlength' => 10,
-    '#description' => t("Please enter current stable version of CiviCRM, for eg: 4.5.3"),
-    '#required' => TRUE,
-  );
-
-  $form['civicrm_lts_version'] = array(
-    '#type' => 'textfield',
-    '#title' => t('CiviCRM LTS version that should be available for download'),
-    '#default_value' => variable_get('civicrm_lts_version', '4.4.10'),
-    '#size' => 10,
-    '#maxlength' => 10,
-    '#description' => t("Please enter current LTS version of CiviCRM, for eg: 4.4.10"),
-    '#required' => TRUE,
   );
 
   return system_settings_form($form);
@@ -213,11 +209,11 @@ function cividownload_civicrm_buildForm($formName, &$form) {
       // if type
       if (!empty($releaseType) && $releaseType == 'lts') {
         //get the current lts version
-        $current_version = getCurrentVersion('lts');
+        $current_version = _cividownload_get_current_version('lts');
       }
       else {
         //get the current stable version
-        $current_version = getCurrentVersion();
+        $current_version = _cividownload_get_current_version();
       }
 
       switch ($cms) {
@@ -251,4 +247,22 @@ function cividownload_civicrm_buildForm($formName, &$form) {
 
     }
   } 
+}
+
+/**
+ * Determine the greatest version number among a given set of releases from
+ * a version in versions.json
+ *
+ * @param Array $releases An array generated from the 'releases' property of
+ *  a version in versions.json
+ * 
+ * @return String
+ */
+function _cividownload_get_latest_release($releases) {
+  $release_versions = array();
+  foreach($releases as $release) {
+    $release_versions[] = $release['version'];
+  }
+  usort($release_versions, 'version_compare');
+  return array_pop($release_versions);
 }
