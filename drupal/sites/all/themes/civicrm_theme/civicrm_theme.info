@@ -1,8 +1,8 @@
 ; $Id: genesis_SUBTHEME.info,v 1.25 2011/01/14 03:12:40 jmburnz Exp $
 
 ; Change the name to match your new subthemes name and modify the description.	
-  name         = CiviCRM website theme
-  description  = The CiviCRM website theme
+  name         = Old CiviCRM theme
+  description  = The CiviCRM theme
   core         = 7.x
   engine       = phptemplate
   screenshot   = civicrm-theme.png
