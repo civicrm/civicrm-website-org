@@ -69,8 +69,8 @@ function cividownload_download_list() {
     ),
   );
 
-  $content['civicrm_version'] = _cividownload_get_current_version('stable');
-  $content['civicrm_lts_version'] = _cividownload_get_current_version('lts');
+  $content['civicrm_version'] = cividownload_get_current_version('stable');
+  $content['civicrm_lts_version'] = cividownload_get_current_version('lts');
 
   return $content;
 }
@@ -84,7 +84,7 @@ function cividownload_theme($existing, $type, $theme, $path) {
   );
 }
 
-function _cividownload_get_current_version($releaseType = 'stable') {
+function cividownload_get_current_version($releaseType = 'stable') {
   // Get all versions from JSON
   static $versions;
   if (!$versions) {
@@ -101,7 +101,7 @@ function _cividownload_get_current_version($releaseType = 'stable') {
   foreach ($sorted_major_versions as $major_version) {
     if ($versions[$major_version]['status'] == $releaseType) {
       // Get the latest release in this version.
-      return _cividownload_get_latest_release($versions[$major_version]['releases']);
+      return cividownload_get_latest_release($versions[$major_version]['releases']);
     }
   }
 }
@@ -209,11 +209,11 @@ function cividownload_civicrm_buildForm($formName, &$form) {
       // if type
       if (!empty($releaseType) && $releaseType == 'lts') {
         //get the current lts version
-        $current_version = _cividownload_get_current_version('lts');
+        $current_version = cividownload_get_current_version('lts');
       }
       else {
         //get the current stable version
-        $current_version = _cividownload_get_current_version();
+        $current_version = cividownload_get_current_version();
       }
 
       switch ($cms) {
@@ -258,7 +258,7 @@ function cividownload_civicrm_buildForm($formName, &$form) {
  * 
  * @return String
  */
-function _cividownload_get_latest_release($releases) {
+function cividownload_get_latest_release($releases) {
   $release_versions = array();
   foreach($releases as $release) {
     $release_versions[] = $release['version'];

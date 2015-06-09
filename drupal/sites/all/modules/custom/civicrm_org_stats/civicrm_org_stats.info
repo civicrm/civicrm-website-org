@@ -1,9 +1,9 @@
 name = Civicrm Statistics Module
-description = "Populate the front end with statistics harvested from pingbacks. Currently only used for extensions."
+description = "Populate the front end with statistics harvested from pingbacks."
 package = civicrm.org custom modules
 core = 7.x
 version = "7.x-1.0"
 project = "civicrm_org_stats"
 project status url = "http://features.rgm.im"
-author = "John Prescott (john@futurefirst.org.uk) & Coleman Watts (coleman@civicrm.org)"
+author = "John Prescott (john@futurefirst.org.uk), Coleman Watts (coleman@civicrm.org), Michael McAndrew (michael@civicrm.org)"
 

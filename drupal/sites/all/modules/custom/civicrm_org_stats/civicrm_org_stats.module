@@ -30,3 +30,90 @@ function civicrm_org_stats_cron() {
     }
   }
 }
+
+function civicrm_org_stats_token_info(){
+  $types['civistats'] = array(
+    'name' => t('CiviCRM community statistics'),
+    'description' => t('Various automatically updating statistics about our community.'),
+  );
+  $tokens['active-sites'] = array(
+    'name' => t('Active sites'),
+    'description' => t('The number of active CiviCRM sites in the world.'),
+  );
+  $tokens['total-contacts'] = array(
+    'name' => t('Total contacts'),
+    'description' => t('The total number of contacts managed by CiviCRM sites around the world.'),
+  );
+  $tokens['total-contributions'] = array(
+    'name' => t('Total contributions'),
+    'description' => t('The total number of contributions managed by CiviCRM sites around the world.'),
+  );
+  $tokens['total-participants'] = array(
+    'name' => t('Total participants'),
+    'description' => t('The total number of participants managed by CiviCRM sites around the world.'),
+  );
+  $tokens['stable-version'] = array(
+    'name' => t('Stable version'),
+    'description' => t('The latest stable version of CiviCRM.'),
+  );
+  $tokens['lts-version'] = array(
+    'name' => t('LTS version'),
+    'description' => t('The latest long-term-support version of CiviCRM.'),
+  );
+  return array(
+    'types' => $types,
+    'tokens' => array(
+      'civistats' => $tokens,
+    ),
+  );
+}
+
+function civicrm_org_stats_tokens($type, $tokens, array $data = array(), array $options = array()) {
+
+    $replacements = array();
+
+    if ($type == 'civistats') {
+        foreach ($tokens as $name => $original) {
+            $cachedObject = cache_get('civistats:'.$name);
+
+            //if this is in the cache and the cache has not yet expired, retrive the cached version
+            if(is_object($cachedObject) AND time() < $cachedObject->expire){
+                $replacements[$original] = $cachedObject->data;
+
+            //else get the answer from somewhere else and store it in the cache
+            } else {
+
+                // update most statistics once a week
+                $cacheTime = 60 * 60 * 24 * 7;
+                switch ($name) {
+                case 'active-sites':
+                case 'total-contacts':
+                case 'total-contributions':
+                case 'total-participants':
+                    $value = civicrm_org_stats_poll('active-sites-stats', $name);
+                    break;
+                // update version details every three hours
+                case 'lts-version':
+                    $value = cividownload_get_current_version('lts');
+                    $cacheTime = 60 * 60 * 3;
+                    break;
+                case 'stable-version':
+                    $value = cividownload_get_current_version('stable');
+                    $cacheTime = 60 * 60 * 3;
+                    break;
+                }
+                $replacements[$original] = $value;
+                cache_set('civistats:'.$name, $value, 'cache', time()+$cacheTime);
+            }
+        }
+    }
+    return $replacements;
+}
+
+function civicrm_org_stats_poll($path, $item){
+    $value = json_decode(file_get_contents("http://stats.civicrm.org/json/{$path}.json"));
+    $item = str_replace('-', '_', $item);
+    return number_format($value[0]->$item);
+    exit;
+
+}
