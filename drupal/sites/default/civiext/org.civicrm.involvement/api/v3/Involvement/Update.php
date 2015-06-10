@@ -29,7 +29,12 @@ function civicrm_api3_involvement_Update($params) {
     $membershipScores = array(
         '1' => '2',
         '2' => '4',
-        '3' => '6');
+        '3' => '6',
+        '12' => '6',
+        '13' => '4',
+        '14' => '2'
+    );
+
 
     $mp = array(
         'contact_id' => $params['contact_id'],
