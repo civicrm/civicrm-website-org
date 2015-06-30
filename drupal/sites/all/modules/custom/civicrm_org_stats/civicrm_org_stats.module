@@ -84,7 +84,7 @@ function civicrm_org_stats_tokens($type, $tokens, array $data = array(), array $
             } else {
 
                 // update most statistics once a week
-                $cacheTime = 60 * 60 * 24 * 7;
+                $cacheTime = 60 * 60 * 24 * 1;
                 switch ($name) {
                 case 'active-sites':
                 case 'total-contacts':
