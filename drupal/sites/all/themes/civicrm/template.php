@@ -10,3 +10,7 @@
  * for your subtheme grows. Please read the README.txt in the /preprocess and /process subfolders
  * for more information on this topic.
  */
+
+function YOURTHEMENAME_preprocess_html(&$variables) {
+    drupal_add_css('http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700', array('type' => 'external'));
+}
