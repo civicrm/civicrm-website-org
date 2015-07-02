@@ -80,10 +80,14 @@ body {
 
 /* HP partners block */
 .view-rotating-partner-logos .partner-text {
-	width: 270px;
+	width: 220px;
 }
 .view-rotating-partner-logos .partner-text .pad {
 	padding: 0 20px;
+}
+.view-rotating-partner-logos .views-slideshow-controls-text-previous a,
+.view-rotating-partner-logos .views-slideshow-controls-text-next a {
+	top: 200px;
 }
 
 /* footer */

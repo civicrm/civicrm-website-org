@@ -46,8 +46,12 @@ h3 {
 
 /* HP partners block */
 .view-rotating-partner-logos .partner-text {
-	width: 590px;
+	width: 540px;
 }
 .view-rotating-partner-logos .partner-text .pad {
-	padding: 0 120px;
+	padding: 0 70px;
+}
+.view-rotating-partner-logos .views-slideshow-controls-text-previous a,
+.view-rotating-partner-logos .views-slideshow-controls-text-next a {
+	top: 175px;
 }
