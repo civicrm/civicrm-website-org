@@ -1,7 +1,8 @@
 /* This file will hold styles for the mobile version of your website (mobile first). */
 /* This also can include ANY global CSS that applies site-wide. Unless overwritten by a more specific style rule, CSS declarations in global.css will apply site-wide. */
 body {
-	font-size: 16px;
+    font-family: 'Source Sans Pro';
+    font-size: 16px;
 	line-height: 1.4;
 	color: #6c696a;
 	text-align: center;
@@ -80,6 +81,7 @@ input.form-submit {
 h1, h2, h3, h4, h5 {
 	text-transform: uppercase;
 	margin-bottom: 0.5em;
+    font-weight: 700;
 }
 h1#page-title,
 h2.align-center,
