@@ -1,0 +1,196 @@
+<?php
+
+/**
+ * @file
+ * Module file for the Google Adwords Path Submodule.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function google_adwords_path_menu() {
+  $items['admin/config/system/google_adwords/path'] = array(
+    'title' => 'Adwords by Path',
+    'page callback' => 'google_adwords_path_admin_page',
+    'access arguments' => array('administer nodes'),
+    'file' => 'google_adwords_path.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 15,
+  );
+  $items['admin/config/system/google_adwords/path/add'] = array(
+    'title' => 'Add conversion code',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('google_adwords_path_code_form'),
+    'access arguments' => array('administer nodes'),
+    'file' => 'google_adwords_path.admin.inc',
+    'type' => MENU_LOCAL_ACTION,
+  );
+  $items['admin/config/system/google_adwords/path/%/edit'] = array(
+    'title' => 'Edit conversion code',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('google_adwords_path_code_form', 5),
+    'access arguments' => array('administer nodes'),
+    'file' => 'google_adwords_path.admin.inc',
+  );
+  $items['admin/config/system/google_adwords/path/%/delete'] = array(
+    'title' => 'Delete conversion code',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('google_adwords_path_code_delete_form', 5),
+    'access arguments' => array('administer nodes'),
+    'file' => 'google_adwords_path.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_help().
+ */
+function google_adwords_path_help($path, $arg) {
+  $output = '';
+  switch ($path) {
+    case 'admin/config/system/google_adwords/path/add':
+      $output = '<p>' . t('Use this form to add a new Google Adwords conversion code.') . '</p>';
+  }
+
+  return $output;
+}
+
+/**
+ * Implements hook_page_build().
+ * 
+ * This adds the tracking code into the page between the body tags.
+ */
+function google_adwords_path_page_build(&$page) {
+  $codes = google_adwords_path_get_path_codes();
+  if (count($codes)) {
+    foreach ($codes as $code) {
+      $markup = theme('google_adwords', $code);
+      $page['page_bottom']['google_adwords_path'] = array(
+        '#weight' => 55,
+        '#markup' => $markup,
+      );
+    }
+  }
+}
+
+/**
+ * Get all Google Adwords unique codes after filtering for the current path.
+ */
+function google_adwords_path_get_path_codes() {
+  $codes = &drupal_static(__FUNCTION__);
+
+  if (!$codes) {
+    $codes = _google_adwords_path_load_codes();
+
+    // Allow other modules to alter the codes.
+    drupal_alter('google_adwords_path', $codes);
+  }
+
+  return $codes;
+}
+
+/**
+ * Save google adword tracking path information to database.
+ */
+function google_adwords_path_save_code($code) {
+  if (isset($code['cid'])) {
+    $cid = $code['cid'];
+    $query = db_update('google_adwords_path')
+      ->fields($code)
+      ->condition('cid', $cid);
+    $query->execute();
+
+    return $query;
+  }
+  else {
+    $query = db_insert('google_adwords_path')
+      ->fields($code)
+      ->execute();
+    return $query;
+  }
+}
+
+/**
+ * Get all Google Adwords unique codes after filtering for the current path.
+ */
+function google_adwords_path_get_all_codes() {
+  $codes = &drupal_static(__FUNCTION__);
+
+  if (!$codes) {
+    $codes = _google_adwords_path_load_codes();
+  }
+
+  return $codes;
+}
+
+/**
+ * Function to load a conversion code by id.
+ */
+function google_adwords_path_load_code_by_cid($cid) {
+  $codes = _google_adwords_path_load_codes($cid);
+
+  if (count($codes)) {
+    return array_shift($codes);
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Function to delete a conversion code by id.
+ */
+function google_adwords_path_delete_code_by_cid($cid) {
+  $result = db_delete('google_adwords_path')
+    ->condition('cid', $cid)
+    ->execute();
+
+  if ($result) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Alter codes to filter for current path.
+ */
+function google_adwords_path_google_adwords_path_alter(&$codes) {
+  foreach ($codes as $index => $code) {
+    $page_match = FALSE;
+    $paths = $code['paths'];
+    $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+    // Compare the lowercase internal and lowercase path alias (if any).
+    $path_match = drupal_match_path($path, $paths);
+    if ($path != $_GET['q']) {
+      $path_match = $path_match || drupal_match_path($_GET['q'], $paths);
+    }
+
+    if (!$path_match) {
+      unset($codes[$index]);
+    }
+  }
+}
+
+/**
+ * Internal function to load all unique codes from the database.
+ */
+function _google_adwords_path_load_codes($cid = NULL) {
+  $codes = array();
+  $result = db_select('google_adwords_path', 'g')
+    ->fields('g');
+
+  if ($cid) {
+    $result->condition('cid', $cid);
+  }
+
+  $result = $result->execute();
+
+  while ($code = $result->fetchAssoc()) {
+    $codes[] = $code;
+  }
+
+  return $codes;
+}

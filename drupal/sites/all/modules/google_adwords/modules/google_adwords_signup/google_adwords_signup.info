@@ -1,0 +1,13 @@
+name = Google AdWords User Conversion
+description = Adds Google AdWords Conversion Tracking javascript code to user registrations.
+core = 7.x
+package = Statistics
+dependencies = google_adwords
+configure = admin/config/system/google_adwords
+
+; Information added by Drupal.org packaging script on 2015-01-07
+version = "7.x-2.0"
+core = "7.x"
+project = "google_adwords"
+datestamp = "1420632389"
+

@@ -1,0 +1,12 @@
+name = Google AdWords Path
+description = Add Google AdWords Conversion code for different paths.
+core = 7.x
+dependencies[] = google_adwords
+package = Statistics
+
+; Information added by Drupal.org packaging script on 2015-01-07
+version = "7.x-2.0"
+core = "7.x"
+project = "google_adwords"
+datestamp = "1420632389"
+

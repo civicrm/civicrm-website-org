@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * @file
+ * Google Adwords User Conversion Tracking SubModule.
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function google_adwords_signup_form_alter(&$form, &$form_state, $form_id) {
+  // Add to Google AdWords form so we can track user registration.
+  if ($form_id == 'google_adwords_admin_settings') {
+    $form['user_conversion'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('User Conversion settings'),
+      '#collapsible' => TRUE,
+    );
+
+    $form['user_conversion']['google_adwords_user_conversion_id'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Conversion ID'),
+      '#default_value' => variable_get('google_adwords_user_conversion_id', ''),
+      '#size' => 15,
+      '#maxlength' => 255,
+      '#required' => TRUE,
+      '#description' => '',
+    );
+    $form['user_conversion']['google_adwords_user_conversion_language'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Conversion Language'),
+      '#default_value' => variable_get('google_adwords_user_conversion_language', 'en'),
+      '#size' => 15,
+      '#maxlength' => 255,
+      '#required' => TRUE,
+      '#description' => '',
+    );
+    $form['user_conversion']['google_adwords_user_conversion_format'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Conversion Format'),
+      '#default_value' => variable_get('google_adwords_user_conversion_format', '2'),
+      '#size' => 15,
+      '#maxlength' => 255,
+      '#required' => TRUE,
+      '#description' => '',
+    );
+    $form['user_conversion']['google_adwords_user_conversion_color'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Conversion Color'),
+      '#default_value' => variable_get('google_adwords_user_conversion_color', 'FFFFFF'),
+      '#size' => 15,
+      '#maxlength' => 255,
+      '#required' => TRUE,
+      '#description' => '',
+    );
+    $form['user_conversion']['google_adwords_user_conversion_label'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Conversion Label'),
+      '#default_value' => variable_get('google_adwords_user_conversion_label', 'User Signup'),
+      '#size' => 15,
+      '#maxlength' => 255,
+      '#required' => TRUE,
+      '#description' => '',
+    );
+  }
+
+  if ($form_id == 'user_register_form') {
+    // Need to add the ability to shut this off with an admin setting.
+    $form['#submit'][] = 'google_adwords_signup_conversion';
+  }
+}
+
+/**
+ * Custom submit handler for the user registration form for conversion tracking.
+ */
+function google_adwords_signup_conversion($form, &$form_state) {
+  $_SESSION['google_adwords_signup_conversion'] = TRUE;
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function google_adwords_signup_preprocess_html($variables) {
+  if (isset($_SESSION['google_adwords_signup_conversion'])) {
+    global $language;
+
+    unset($_SESSION['google_adwords_signup_conversion']);
+    $conversion_values = array(
+      'conversion_id' => variable_get('google_adwords_user_conversion_id', 0),
+      'conversion_langauge' => variable_get('google_adwords_user_conversion_language', $language->language),
+      'conversion_format' => variable_get('google_adwords_user_conversion_format', '2'),
+      'conversion_color' => variable_get('google_adwords_user_conversion_color', 'FFFFFF'),
+      'conversion_label' => variable_get('google_adwords_user_conversion_label', 'User Signup'),
+    );
+
+    drupal_add_js(
+      '/* <![CDATA[ */
+        var google_conversion_id = ' . $conversion_values['conversion_id'] . ';
+        var google_conversion_language = "' . $conversion_values['conversion_langauge'] . '";
+        var google_conversion_format = "' . $conversion_values['conversion_format'] . '";
+        var google_conversion_color = "' . $conversion_values['conversion_color'] . '";
+        var google_conversion_label = "' . $conversion_values['conversion_label'] . '";
+     /* ]]> */', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+
+    drupal_add_js(variable_get('google_adwords_external_script', 'https://www.googleadservices.com/pagead/conversion.js'), array(
+      'type' => 'external',
+      'scope' => 'footer',
+      'weight' => 6,
+      )
+    );
+  }
+}

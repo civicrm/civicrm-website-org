@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Google Adwords Path module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function google_adwords_path_schema() {
+  $schema['google_adwords_path'] = array(
+    'description' => 'Stores unique Google Adwords Conversion Code per path.',
+    'fields' => array(
+      'cid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique Conversion Code ID.',
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The name of the conversion ID.',
+      ),
+      'conversion_id' => array(
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The conversion id.',
+      ),
+      'conversion_language' => array(
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The conversion language.',
+      ),
+      'conversion_format' => array(
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The conversion format.',
+      ),
+      'conversion_color' => array(
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The conversion color.',
+      ),
+      'conversion_label' => array(
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The conversion label.',
+      ),
+      'paths' => array(
+        'type' => 'text',
+        'description' => 'A list of paths to include the conversion code in.',
+      ),
+    ),
+    'primary key' => array('cid'),
+    'indexes' => array(
+      'list' => array(
+        'conversion_id',
+        'conversion_language',
+        'conversion_format',
+        'conversion_color',
+        'conversion_label',
+      ),
+    ),
+  );
+
+  return $schema;
+}
