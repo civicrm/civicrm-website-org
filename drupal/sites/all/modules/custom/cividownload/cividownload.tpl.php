@@ -14,7 +14,7 @@
         }
         ?>
         <a class="download-link" href="<?php echo $url;?>">Download</a>
-        &nbsp;CiviCRM <?php echo $content['civicrm_version']; ?> <?php echo 'for ' . $values['title']; ?>
+        &nbsp;CiviCRM <?php echo $content['civicrm_version']; ?> <?php echo $values['title']; ?>
       </div>
       <br/>
     <?php } ?>
@@ -37,7 +37,7 @@ $url = "https://download.civicrm.org/civicrm-{$content['civicrm_lts_version']}-"
 }
 ?>
       <a class="download-link" href="<?php echo $url;?>&rtype=lts">Download</a>
-      &nbsp;CiviCRM <?php echo $content['civicrm_lts_version']; ?> <?php echo 'for ' . $values['title']; ?>
+      &nbsp;CiviCRM <?php echo $content['civicrm_lts_version']; ?> <?php echo $values['title']; ?>
     </div>
     <br/>
   <?php } ?>
