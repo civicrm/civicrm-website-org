@@ -1,0 +1,31 @@
+AntiSpam 7.x-1.x-dev, xxxx-xx-xx
+--------------------------------
+#1484068 by tike012: update the Drupal version.
+#1361410 by mgifford: Fix typo.
+#1506684 by Dmitriy.trt: antispam_comment_delete deletes wrong data.
+#1143888 by tim.plunkett: Stop adding "anonymous" to comment author name and
+  add simpletest for fix.
+#1551350 by tim.plunkett | NitroPye: Fixed Signature gets removed from users.
+#1551256 by tim.plunkett, NitroPye: Fixed 'Anonymous (Not Verified)' in place of
+  all user names on admin pages.
+By tim.plunkett: Fix file permissions.
+#1483796 by Dmitriy.trt, tim.plunkett, joey1911: Fixed AntiSpam fatal error when
+  posting comments.
+#1854558 by tim.plunkett: Remove the hardcoded dependencies on comment.module.
+By DamienMcKenna: Added a CHANGELOG.txt file.
+#1062624 by DamienMcKenna, andrewadams2099: Correct settings path in info file.
+#2204421 by DamienMcKenna: Cleaned up the info file.
+#1349574 by mgifford, DamienMcKenna: Wealth of small fixes to match the Drupal
+  coding standards.
+#2194633 by Growiel, DamienMcKenna: Update node revision when node updated.
+#2108131 by Nitebreed, DamienMcKenna: antispam_prepare_comment_data requires an
+  object, so antispam_api_cmd_spam_check must pass it an object.
+#1787068 by DamienMcKenna, Chris Maissan: Webform integration.
+#2213801 by DamienMcKenna: Fixed hook_requirements so it doesn't fail during
+  installation.
+#1787068 by DamienMcKenna: Follow-up for incorrect function name.
+
+
+AntiSpam 7.x-1.5, 2012-07-09
+----------------------------
+#1676278 by Everett Zufelt: Added core directive to antispam.info.

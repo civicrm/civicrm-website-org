@@ -1,4 +1,68 @@
 <?php
+/**
+ * @file
+ * Requirements, schema and related hooks for the Antispam module.
+ */
+
+/**
+ * Implements hook_requirement().
+ */
+function antispam_requirements($phase) {
+  $t = get_t();
+
+  if ($phase == 'runtime') {
+    $provider = antispam_get_service_provider();
+
+    if ($provider == AKISMET_SERVICE) {
+      if (variable_get('antispam_wpapikey', '') == '') {
+        $requirements['antispam_key'] = array(
+          'title' => t('Akismet API key'),
+          'value' => t('Not present'),
+          'description' => t("Akismet spam protection service requires a <a href='!wpapikey'>Akismet API key</a> to function. Obtain a key by signing up for a free account at <a href='!akismet-com'>Akismet.com</a>, then enter the key on the <a href='!antispam-settings'>AntiSpam settings page</a>.",
+          array(
+            '!wpapikey' => url('http://akismet.com/signup/'),
+            '!akismet-com' => url('http://akismet.com'),
+            '!antispam-settings' => url('admin/config/spamprevention/antispam'),
+          )),
+          'severity' => REQUIREMENT_ERROR,
+        );
+        return $requirements;
+      }
+    }
+    elseif ($provider == TYPEPAD_SERVICE) {
+      if (variable_get('antispam_tpapikey', '') == '') {
+        $requirements['antispam_key'] = array(
+          'title' => t('TypePad AntiSpam API key'),
+          'value' => t('Not present'),
+          'description' => t("TypePad AntiSpam service requires a <a href='!tpapikey'>TypePad.com AntiSpam API key</a> to function. Obtain a key by signing up for a free account at <a href='!typepad-com'>Typepad.com</a>. Once you get a free account, visit the <a href='!tpapikey'>TypePad AntiSpam Service</a> and get your free TypePad AntiSpam API Key there, then enter the key on the <a href='!antispam-settings'>AntiSpam settings page</a>.",
+          array(
+            '!tpapikey' => url('http://antispam.typepad.com/info/get-api-key.html'),
+            '!typepad-com' => url('http://typepad.com/connect/register'),
+            '!antispam-settings' => url('admin/config/spamprevention/antispam'),
+          )),
+          'severity' => REQUIREMENT_ERROR,
+        );
+        return $requirements;
+      }
+    }
+    elseif ($provider == DEFENSIO_SERVICE) {
+      if (variable_get('antispam_deapikey', '') == '') {
+        $requirements['antispam_key'] = array(
+          'title' => t('Defensio AntiSpam API key'),
+          'value' => t('Not present'),
+          '#description' => t("Defensio spam protection service requires a <a href='!defensio-com'>Defensio API key</a> to function. Obtain a key by signing up for a free account at <a href='!defensio-key'>Defensio.com</a> and get your free Defensio API key there, then enter the key on the <a href='!antispam-settings'>AntiSpam settings page</a>.",
+          array(
+            '!defensio-com' => url('http://defensio.com/'),
+            '!defensio-key' => url('http://defensio.com/signup/'),
+            '!antispam-settings' => url('admin/config/spamprevention/antispam'),
+          )),
+          'severity' => REQUIREMENT_ERROR,
+        );
+        return $requirements;
+      }
+    }
+  }
+}
 
 /**
  * Implements hook_schema().
@@ -136,8 +200,8 @@ function antispam_schema() {
 /**
  * Implements hook_install().
  */
-function antispam_install() {
-}
+//function antispam_install() {
+//}
 
 /**
  * Implements hook_uninstall().

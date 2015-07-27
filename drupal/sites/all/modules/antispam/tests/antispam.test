@@ -1,0 +1,222 @@
+<?php
+
+/**
+ * @file
+ * Tests for antispam.module.
+ */
+
+/**
+ * Provides a base class for Antispam tests.
+ */
+class AntispamTestBase extends DrupalWebTestCase {
+
+  protected $profile = 'testing';
+
+  protected function setUp() {
+    $modules = func_get_args();
+    if (isset($modules[0]) && is_array($modules[0])) {
+      $modules = $modules[0];
+    }
+    $modules[] = 'antispam';
+    parent::setUp($modules);
+
+    // Set basic variables.
+    variable_set('antispam_check_nodetypes', array('page' => 'page'));
+    variable_set('antispam_antispambot_rules', array('ip' => FALSE, 'mail' => FALSE, 'body' => FALSE));
+  }
+
+}
+
+/**
+ * Tests antispam functionality for nodes.
+ */
+class AntispamNodeTest extends AntispamTestBase {
+
+  /**
+   * An admin user.
+   *
+   * @var \stdClass
+   */
+  protected $adminUser;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Node antispam',
+      'description' => 'Tests antispam functionality for nodes.',
+      'group' => 'Antispam',
+    );
+  }
+
+  protected function setUp() {
+    parent::setUp(array('node'));
+
+    $this->drupalCreateContentType(array('type' => 'page'));
+
+    $this->adminUser = $this->drupalCreateUser(array('administer antispam settings', 'administer site configuration', 'administer nodes', 'bypass node access', 'access administration pages', 'access content overview'));
+  }
+
+  /**
+   * Tests antispam functionality for moderating comments.
+   */
+  protected function testNodeModeration() {
+    variable_set('antispam_node_publish_links', TRUE);
+    variable_set('antispam_node_spam_links', TRUE);
+    $langcode = LANGUAGE_NONE;
+
+    // Post a node as the admin user.
+    $this->drupalLogin($this->adminUser);
+    $edit = array(
+      'title' => $this->randomName(),
+    );
+    $this->drupalPost('node/add/page', $edit, t('Save'));
+    $node = $this->drupalGetNodeByTitle($edit['title']);
+
+    $this->drupalGet('admin/content/antispam/nodes/published');
+    $this->assertResponse(200);
+
+    $this->assertText($edit['title'], 'Published node found.');
+
+    $this->drupalGet('node/' . $node->nid);
+    $this->clickLink(t('Submit spam'));
+
+    $this->drupalGet('admin/content/antispam/nodes/spam');
+    $this->assertResponse(200);
+  }
+
+}
+
+/**
+ * Tests antispam functionality for comments.
+ */
+class AntispamCommentTest extends AntispamTestBase {
+
+  /**
+   * An admin user.
+   *
+   * @var \stdClass
+   */
+  protected $adminUser;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Comment antispam',
+      'description' => 'Tests antispam functionality for comments.',
+      'group' => 'Antispam',
+    );
+  }
+
+  protected function setUp() {
+    parent::setUp(array('node', 'comment'));
+
+    $this->drupalCreateContentType(array('type' => 'page'));
+    $this->adminUser = $this->drupalCreateUser(array('administer antispam settings', 'administer site configuration', 'administer comments', 'post comments', 'skip comment approval'));
+  }
+
+  /**
+   * Tests antispam functionality for moderating comments.
+   */
+  protected function testCommentModeration() {
+    // Post a comment as the admin user.
+    $this->drupalLogin($this->adminUser);
+    $edit = array(
+      'comment_body[' . LANGUAGE_NONE . '][0][value]' => $this->randomName(),
+      'subject' => $this->randomName(),
+    );
+    $node = $this->drupalCreateNode();
+    $this->drupalGet('comment/reply/' . $node->nid);
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    $this->drupalGet('admin/content/antispam/comments/published');
+
+    $this->assertNoText(variable_get('anonymous', t('Anonymous')), 'The anonymous user name was not found.');
+    $this->assertText($this->adminUser->name, 'The admin user name was found.');
+  }
+
+  /**
+   * Tests antispam functionality for anonymously posted comments.
+   */
+  protected function testAnonymousComments() {
+    // Allow anonymous users to post comments.
+    user_role_change_permissions(DRUPAL_ANONYMOUS_RID, array(
+      'access comments' => TRUE,
+      'post comments' => TRUE,
+      'skip comment approval' => FALSE,
+    ));
+
+
+    // Post a comment with a name.
+    $edit = array(
+      'comment_body[' . LANGUAGE_NONE . '][0][value]' => $this->randomName(),
+      'subject' => $this->randomName(),
+      'name' => $this->randomName(),
+    );
+    $node = $this->drupalCreateNode();
+    $this->drupalGet('comment/reply/' . $node->nid);
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    // Log in as an admin user and view the node.
+    $this->drupalLogin($this->adminUser);
+    $this->drupalGet('node/' . $node->nid);
+
+    $this->assertText($edit['name'], 'The submitted name of the anonymous user was found.');
+    $this->drupalLogout();
+
+    // Post a comment without a name.
+    $edit = array(
+      'comment_body[' . LANGUAGE_NONE . '][0][value]' => $this->randomName(),
+      'subject' => $this->randomName(),
+    );
+    $node = $this->drupalCreateNode();
+    $this->drupalGet('comment/reply/' . $node->nid);
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    // Log in as an admin user and view the node.
+    $this->drupalLogin($this->adminUser);
+    $this->drupalGet('node/' . $node->nid);
+
+    $this->assertText(variable_get('anonymous', t('Anonymous')), 'The anonymous user name was found.');
+  }
+
+  /**
+   * Tests that user signatures are unaffected by antispam.
+   */
+  protected function testCommentUserSignatures() {
+    variable_set('user_signatures', TRUE);
+    $this->drupalLogin($this->adminUser);
+    $signature_text = $this->randomName();
+    $edit = array(
+      'signature[value]' => $signature_text,
+    );
+    $this->drupalPost('user/' . $this->adminUser->uid . '/edit', $edit, t('Save'));
+
+    $edit = array(
+      'comment_body[' . LANGUAGE_NONE . '][0][value]' => $this->randomName(),
+      'subject' => $this->randomName(),
+    );
+    $node = $this->drupalCreateNode();
+    $this->drupalGet('comment/reply/' . $node->nid);
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    $this->assertText($signature_text, 'The user signature was found on the comment.');
+  }
+
+  /**
+   * Tests the anti-spambot options.
+   */
+  protected function testSpambotOptions() {
+    // Post a comment while existing spam content is used to determine spambots.
+    variable_set('antispam_antispambot_rules', array('ip' => FALSE, 'mail' => FALSE, 'body' => 'body'));
+    $this->drupalLogin($this->adminUser);
+
+    $edit = array(
+      'comment_body[' . LANGUAGE_NONE . '][0][value]' => $this->randomName(),
+      'subject' => $this->randomName(),
+    );
+    $node = $this->drupalCreateNode();
+    $this->drupalGet('comment/reply/' . $node->nid);
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    $this->assertText(t('Your comment has been posted'));
+  }
+
+}

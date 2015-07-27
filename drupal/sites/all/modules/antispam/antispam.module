@@ -1,32 +1,36 @@
 <?php
+/**
+ * @file
+ * Primary hook implementations for the Antispam module.
+ */
 
 /**
-* AntiSpam Drupal and Module versions.
-*/
-define('ANTISPAM_DRUPAL_VERSION', '6');
+ * AntiSpam Drupal and Module versions.
+ */
+define('ANTISPAM_DRUPAL_VERSION', '7');
 define('ANTISPAM_MODULE_VERSION', '1.0');
 define('ANTISPAM_MODULE_HOMEURL', 'http://www.drupal.org/project/antispam');
-define('ANTISPAM_MODULE_USERAGENT', 'Drupal/'. ANTISPAM_DRUPAL_VERSION .' | antispam.module/'. ANTISPAM_MODULE_VERSION);
+define('ANTISPAM_MODULE_USERAGENT', 'Drupal/' . ANTISPAM_DRUPAL_VERSION . ' | antispam.module/' . ANTISPAM_MODULE_VERSION);
 
 
 /**
-* AntiSpam API constants.
-*/
+ * AntiSpam API constants.
+ */
 define('AKISMET_API_HOST', 'rest.akismet.com');
 define('TYPEPAD_API_HOST', 'api.antispam.typepad.com');
 define('DEFENSIO_API_HOST', 'api.defensio.com');
 define('ANTISPAM_API_PORT', 80);
 define('AKISMET_API_VERSION', '1.1');
 define('DEFENSIO_API_VERSION', '1.2');
-define('ANTISPAM_API_USERAGENT', 'Drupal/'. ANTISPAM_DRUPAL_VERSION .' | antispam.module/'. ANTISPAM_MODULE_VERSION);
+define('ANTISPAM_API_USERAGENT', 'Drupal/' . ANTISPAM_DRUPAL_VERSION . ' | antispam.module/' . ANTISPAM_MODULE_VERSION);
 define('ANTISPAM_API_RESULT_ERROR', -1);
 define('ANTISPAM_API_RESULT_SUCCESS', 0);
 define('ANTISPAM_API_RESULT_IS_SPAM', 1);
 define('ANTISPAM_API_RESULT_IS_HAM', 2);
 
 /**
-* Service provider constants.
-*/
+ * Service provider constants.
+ */
 define('AKISMET_SERVICE', 0);
 define('TYPEPAD_SERVICE', 1);
 define('DEFENSIO_SERVICE', 2);
@@ -38,11 +42,10 @@ define('ANTISPAM_COUNT_FALSE_NEGATIVE', 3);
 define('ANTISPAM_COUNT_FALSE_POSITIVE', 4);
 
 /**
- * Debug function
+ * Debug function.
  */
-function antispam_debug($str)
-{
-  if(is_array($str) || is_object($str)) {
+function antispam_debug($str) {
+  if (is_array($str) || is_object($str)) {
     error_log(print_r($str, TRUE) . "\r\n", 3, "/tmp/antispam.txt");
   }
   else {
@@ -51,32 +54,31 @@ function antispam_debug($str)
 }
 
 /**
-* Implements hook_help().
-*/
+ * Implements hook_help().
+ */
 function antispam_help($path, $arg) {
   switch ($path) {
     case 'admin/help#antispam':
       $output = t('<p>In order to use the AntiSpam, you need a API key for the selected antispam service. If you don\'t have one already, you can get it by simply signing up for a free account at the following sites.</p>
 <ul>
-<li><a href="!akismet">akismet.com</a> for Akismet service
-<li><a href="!typepad">typepad.com</a> for TypePad AntiSpam service
-<li><a href="!defensio">defensio.com</a> for Defensio service
+  <li><a href="!akismet">akismet.com</a> for Akismet service
+  <li><a href="!typepad">typepad.com</a> for TypePad AntiSpam service
+  <li><a href="!defensio">defensio.com</a> for Defensio service
 </ul>
 <p>The <em>antispam module</em> may automatically check for spam posted in content (nodes and/or comments) by any user, except node or comment administrators respectively. It is also possible, from the <a href="!permission">Permission</a> panel, to grant <em>%no-check-perm</em> permission to <em>user roles</em> of your choice.</p>
 <p>Content marked as <em>spam</em> is still saved into database so it can be reviewed by content administrators. There is <a href="!antispam-settings">an option</a> that allows you to specify how long this information will be kept in the database. <em>Spam</em> older than a specified age will be automatically removed. Requires crontab.</p>
-<p>Automatic spam detection can be enabled or disabled by content type and/or comments. In addition to this, the antspam service makes it easy for <em>content administrators</em> to manually <em>publish</em>/<em>unpublish</em> content and <em>mark</em>/<em>unmark</em> content as spam, from links available at the bottom of content.</p>
-<p></p>',
+<p>Automatic spam detection can be enabled or disabled by content type and/or comments. In addition to this, the antspam service makes it easy for <em>content administrators</em> to manually <em>publish</em>/<em>unpublish</em> content and <em>mark</em>/<em>unmark</em> content as spam, from links available at the bottom of content.</p>',
       array(
         '!akismet' => url('http://akismet.com'),
         '!typepad' => url('http://antispam.typepad.com'),
         '!defensio' => url('http://defensio.com'),
-        '!antispam-settings' => url('admin/config/antispam'),
+        '!antispam-settings' => url('admin/config/spamprevention/antispam'),
         '!permission' => url('admin/people/permissions'),
         '%no-check-perm' => t('post with no antispam checking')
       ));
       return $output;
     case 'admin/help/antispam':
-    case 'admin/config/antispam':
+    case 'admin/config/spamprevention/antispam':
       $output = t('<p>The <a href="!antispam-module-home">AntiSpam module</a> for <a href="!drupal">Drupal</a> allows you to use either one of the <a href="!akismet">Akismet</a>, <a href="!typepad">TypePad AntiSpam</a> or <a href="!defensio">Defensio</a> service to protect your site from being spammed.</p>',
       array(
         '!antispam-module-home' => url(ANTISPAM_MODULE_HOMEURL),
@@ -89,97 +91,38 @@ function antispam_help($path, $arg) {
       return $output;
     case 'admin/content/antispam/nodes/unpublished':
       $output = t('Below is the list of <strong>unpublished nodes</strong> awaiting for moderation.');
-      $output .= ' '. t('Click on the titles to see the content of the nodes or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the nodes upon your needs.');
+      $output .= ' ' . t('Click on the titles to see the content of the nodes or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the nodes upon your needs.');
       break;
     case 'admin/content/antispam/nodes/published':
       $output = t('Below is the list of <strong>published nodes</strong>.');
-      $output .= ' '. t('Click on the titles to see the content of the nodes or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the nodes upon your needs.');
+      $output .= ' ' . t('Click on the titles to see the content of the nodes or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the nodes upon your needs.');
       break;
     case 'admin/content/antispam/nodes': // spam
       $output = t('Below is the list of <strong>nodes marked as spam</strong> awaiting for moderation.');
-      $output .= ' '. t('Click on the titles to see the content of the nodes or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the nodes upon your needs.');
+      $output .= ' ' . t('Click on the titles to see the content of the nodes or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the nodes upon your needs.');
       break;
     case 'admin/content/antispam/comments/unpublished':
       $output = t('Below is the list of <strong>unpublished comments</strong> awaiting for moderation.');
-      $output .= ' '. t('Click on the subjects to see the comments or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the comments upon your needs.');
+      $output .= ' ' . t('Click on the subjects to see the comments or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the comments upon your needs.');
       break;
     case 'admin/content/antispam/comments/published':
       $output = t('Below is the list of <strong>published comments</strong>.');
-      $output .= ' '. t('Click on the subjects to see the comments or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the comments upon your needs.');
+      $output .= ' ' . t('Click on the subjects to see the comments or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the comments upon your needs.');
       break;
     case 'admin/content/antispam/comments': // spam
       $output = t('Below is the list of <strong>comments marked as spam</strong> awaiting for moderation.');
-      $output .= ' '. t('Click on the subjects to see the comments or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the comments upon your needs.');
+      $output .= ' ' . t('Click on the subjects to see the comments or the author\'s name to view the author\'s user information. You may also wish to click on the headers to order the comments upon your needs.');
       break;
   }
   if (arg(0) == 'admin' && arg(1) == 'content '&& arg(2) == 'antispam' && !isset($_POST) && !empty($output)) {
-    $output .= '<br />'. t('<strong>Note:</strong> To interact fully with the antispam service, you really should try putting data back into the system as well as just taking it out. If it is at all possible, please use the submit <em>ham</em> operation rather than simply publishing content that was identified as spam (false positives). This is necessary in order to let the antispam service learn from its mistakes. Thank you.');
+    $output .= '<br />';
+    $output .= t('<strong>Note:</strong> To interact fully with the antispam service, you really should try putting data back into the system as well as just taking it out. If it is at all possible, please use the submit <em>ham</em> operation rather than simply publishing content that was identified as spam (false positives). This is necessary in order to let the antispam service learn from its mistakes. Thank you.');
   }
 }
 
 /**
-* Implements hook_requirement().
-*/
-function antispam_requirements($phase) {
-  $t = get_t();
-
-  $provider = antispam_get_service_provider();
-
-  if ($phase == 'runtime') {
-    if ($provider == AKISMET_SERVICE) {
-      if (variable_get('antispam_wpapikey', '') == '') {
-        $requirements['antispam_key'] = array(
-          'title' => t('Akismet API key'),
-          'value' => t('Not present'),
-          'description' => t("Akismet spam protection service requires a <a href='!wpapikey'>Akismet API key</a> to function. Obtain a key by signing up for a free account at <a href='!akismet-com'>Akismet.com</a>, then enter the key on the <a href='!antispam-settings'>AntiSpam settings page</a>.",
-          array(
-            '!wpapikey' => url('http://akismet.com/signup/'),
-            '!akismet-com' => url('http://akismet.com'),
-            '!antispam-settings' => url('admin/config/antispam'),
-          )),
-          'severity' => REQUIREMENT_ERROR,
-        );
-        return $requirements;
-      }
-    }
-    else if ($provider == TYPEPAD_SERVICE) {
-      if (variable_get('antispam_tpapikey', '') == '') {
-        $requirements['antispam_key'] = array(
-          'title' => t('TypePad AntiSpam API key'),
-          'value' => t('Not present'),
-          'description' => t("TypePad AntiSpam service requires a <a href='!tpapikey'>TypePad.com AntiSpam API key</a> to function. Obtain a key by signing up for a free account at <a href='!typepad-com'>Typepad.com</a>. Once you get a free account, visit the <a href='!tpapikey'>TypePad AntiSpam Service</a> and get your free TypePad AntiSpam API Key there, then enter the key on the <a href='!antispam-settings'>AntiSpam settings page</a>.",
-          array(
-            '!tpapikey' => url('http://antispam.typepad.com/info/get-api-key.html'),
-            '!typepad-com' => url('http://typepad.com/connect/register'),
-            '!antispam-settings' => url('admin/config/antispam'),
-          )),
-          'severity' => REQUIREMENT_ERROR,
-        );
-        return $requirements;
-      }
-    }
-    else if ($provider == DEFENSIO_SERVICE) {
-      if (variable_get('antispam_deapikey', '') == '') {
-        $requirements['antispam_key'] = array(
-          'title' => t('Defensio AntiSpam API key'),
-          'value' => t('Not present'),
-          '#description' => t("Defensio spam protection service requires a <a href='!defensio-com'>Defensio API key</a> to function. Obtain a key by signing up for a free account at <a href='!defensio-key'>Defensio.com</a> and get your free Defensio API key there, then enter the key on the <a href='!antispam-settings'>AntiSpam settings page</a>.",
-          array(
-            '!defensio-com' => url('http://defensio.com/'),
-            '!defensio-key' => url('http://defensio.com/signup/'),
-            '!antispam-settings' => url('admin/config/antispam'),
-          )),
-          'severity' => REQUIREMENT_ERROR,
-        );
-        return $requirements;
-      }
-    }
-  }
-}
-
-/**
-* Implements hook_permission().
-*/
+ * Implements hook_permission().
+ */
 function antispam_permission() {
   $permissions = array(
     'administer antispam settings' => array(
@@ -202,14 +145,14 @@ function antispam_permission() {
   );
   $permissions['post with no antispam checking'] = array(
       'title' => t('Post with no spam checking'),
-      'description' => 'Allow to post nodes/comments without being checked by AntiSpam module.',
+      'description' => 'Allow to post nodes/comments without being checked by AntiSpam module. ',
   );
   return $permissions;
 }
 
 /**
-* Implements hook_cron().
-*/
+ * Implements hook_cron().
+ */
 function antispam_cron() {
   module_load_include('inc', 'antispam', 'antispam.cron');
   module_load_include('inc', 'comment', 'comment.admin'); 
@@ -217,15 +160,15 @@ function antispam_cron() {
 }
 
 /**
-* Obtain current service provider
-*/
+ * Obtain current service provider.
+ */
 function antispam_get_service_provider() {
   return (variable_get('antispam_service_provider', 0));
 }
 
 /**
-* Obtain service provider name
-*/
+ * Obtain service provider name.
+ */
 function antispam_get_provider_name($provider, $with_link = FALSE) {
   switch ($provider) {
     case AKISMET_SERVICE:
@@ -240,8 +183,8 @@ function antispam_get_provider_name($provider, $with_link = FALSE) {
 }
 
 /**
-* Obtain API HOST name for the specified service provider
-*/
+ * Obtain API HOST name for the specified service provider.
+ */
 function antispam_get_api_host($provider) {
   switch ($provider) {
     case AKISMET_SERVICE:
@@ -258,8 +201,8 @@ function antispam_get_api_host($provider) {
 }
 
 /**
-* Obtain API key for the specified service provider
-*/
+ * Obtain API key for the specified service provider.
+ */
 function antispam_get_api_key($provider) {
   switch ($provider) {
     case AKISMET_SERVICE:
@@ -276,8 +219,8 @@ function antispam_get_api_key($provider) {
 }
 
 /**
-* Get max counter value for the specified counter type
-*/
+ * Get max counter value for the specified counter type.
+ */
 function antispam_get_max_counter($counter_type = '') {
   $rec = db_query("SELECT MAX(spam_detected) AS max_spam, MAX(ham_detected) AS max_ham, MAX(false_negative) AS max_fnegative, MAX(false_positive) AS max_fpositive FROM {antispam_counter}")->fetchObject();
   if ($rec->max_spam == '') $rec->max_spam = 0;
@@ -285,7 +228,8 @@ function antispam_get_max_counter($counter_type = '') {
   if ($rec->max_fnegative == '') $rec->max_fnegative = 0;
   if ($rec->max_fpositive == '') $rec->max_fpositive = 0;
 
-  if (empty($counter_type)) { // returns an array of all totals
+  // Returns an array of all totals.
+  if (empty($counter_type)) {
     return array('max_spam' => $rec->max_spam, 'max_ham' => $rec->max_ham, 'max_fnegative' => $rec->max_fnegative, 'max_fpositive' => $rec->max_fpositive);
   }
   switch ($counter_type) {
@@ -299,14 +243,16 @@ function antispam_get_max_counter($counter_type = '') {
       return $rec->max_fnegative;
     case ANTISPAM_COUNT_FALSE_POSITIVE:
       return $rec->max_fpositive;
+
+    // Just in case.
     default:
-      return 0; // just in case
+      return 0;
   }
 }
 
 /**
-* Get total counter value for the specified counter type
-*/
+ * Get total counter value for the specified counter type.
+ */
 function antispam_get_total_counter($counter_type = '') {
   $rec = db_query("SELECT SUM(spam_detected) AS total_spam, SUM(ham_detected) AS total_ham, SUM(false_negative) AS total_fnegative, SUM(false_positive) AS total_fpositive FROM {antispam_counter}")->fetchObject();
   if ($rec->total_spam == '') $rec->total_spam = 0;
@@ -314,7 +260,8 @@ function antispam_get_total_counter($counter_type = '') {
   if ($rec->total_fnegative == '') $rec->total_fnegative = 0;
   if ($rec->total_fpositive == '') $rec->total_fpositive = 0;
 
-  if (empty($counter_type)) { // returns an array of all totals
+  // Returns an array of all totals.
+  if (empty($counter_type)) {
     return array('total_spam' => $rec->total_spam, 'total_ham' => $rec->total_ham, 'total_fnegative' => $rec->total_fnegative, 'total_fpositive' => $rec->total_fpositive);
   }
   switch ($counter_type) {
@@ -328,18 +275,22 @@ function antispam_get_total_counter($counter_type = '') {
       return $rec->total_fnegative;
     case ANTISPAM_COUNT_FALSE_POSITIVE:
       return $rec->total_fpositive;
+
+    // Just in case.
     default:
-      return 0; // just in case
+      return 0;
   }
 }
 
 /**
-* Get today's counter value for the specified counter type
+* Get today's counter value for the specified counter type.
 */
-function antispam_get_counter($counter_type) { // for today
+function antispam_get_counter($counter_type) {
   $rec = db_query("SELECT * FROM {antispam_counter} WHERE date=:date", array(':date' => mktime(0, 0, 0, date("m"), date("d"), date("Y"))))->fetchObject();
-  if (!$rec) {
-    return 0; // no counter record for today
+
+  // No counter record for today.
+  if (empty($rec)) {
+    return 0;
   }
   switch ($counter_type) {
     case ANTISPAM_COUNT_ALL:
@@ -352,15 +303,17 @@ function antispam_get_counter($counter_type) { // for today
       return $rec->false_negative;
     case ANTISPAM_COUNT_FALSE_POSITIVE:
       return $rec->false_positive;
+
+    // Just in case.
     default:
-      return 0; // just in case
+      return 0;
   }
 }
 
 /**
-* Set today's counter value for the specified counter type
-*/
-function antispam_set_counter($counter_type, $count) { // for today
+ * Set today's counter value for the specified counter type.
+ */
+function antispam_set_counter($counter_type, $count) {
   switch ($counter_type) {
     case ANTISPAM_COUNT_ALL:
       return;
@@ -382,7 +335,7 @@ function antispam_set_counter($counter_type, $count) { // for today
   $today = mktime(0, 0, 0, date("m"), date("d"), date("Y"));
   $result = db_query("SELECT * FROM {antispam_counter} WHERE date=:date", array(':date' => $today));
   if ($result->rowCount()) {
-    // update
+    // Update.
     db_update('antispam_counter')
       ->fields(array(
         $field => $count
@@ -391,28 +344,28 @@ function antispam_set_counter($counter_type, $count) { // for today
       ->execute();
   }
   else {
-    // insert
+    // Insert.
     $provider = antispam_get_service_provider();
     db_insert('antispam_counter')
       ->fields(array(
         'date' => strtotime(date('Y-m-d 00:00:00')),
-	    'provider' => $provider,
-	    $field => $count,
+        'provider' => $provider,
+        $field => $count,
       ))
       ->execute();  
   }
 }
 
 /**
-* Increase today's counter value for the specified counter type by 1
-*/
+ * Increase today's counter value for the specified counter type by 1.
+ */
 function antispam_increase_counter($counter_type) {
   antispam_set_counter($counter_type, antispam_get_counter($counter_type) + 1);
 }
 
 /**
-*
-*/
+ *
+ */
 function _antispam_moderator_types_count($types = array()) {
   if (empty($types)) {
     $types = antispam_get_moderator_types();
@@ -421,13 +374,16 @@ function _antispam_moderator_types_count($types = array()) {
 }
 
 /**
-*
-*/
+ *
+ */
 function _antispam_is_moderator($moderator_types = array(), $type = '') {
   global $user;
+
+  // Admin.
   if ($user->uid == 1) {
-    return TRUE;  // admin
+    return TRUE;
   }
+
   if (empty($moderator_types)) {
     $moderator_types = antispam_get_moderator_types();
   }
@@ -444,9 +400,12 @@ function _antispam_is_moderator($moderator_types = array(), $type = '') {
 */
 function _antispam_is_node_moderator($moderator_types = array()) {
   global $user;
+
+  // Admin.
   if ($user->uid == 1) {
-    return TRUE;  // admin
+    return TRUE;
   }
+
   if (empty($moderator_types)) {
     $moderator_types = antispam_get_moderator_types();
   }
@@ -459,8 +418,8 @@ function _antispam_is_node_moderator($moderator_types = array()) {
 }
 
 /**
-*
-*/
+ *
+ */
 function _antispam_is_moderator_type($type, $types = array()) {
   if (empty($types)) {
     $types = antispam_get_moderator_types();
@@ -474,40 +433,43 @@ function _antispam_is_moderator_type($type, $types = array()) {
 }
 
 /**
-* Implements hook_menu().
-*/
+ * Implements hook_menu().
+ */
 function antispam_menu() {
   $items = array();
   $moderator_types = antispam_get_moderator_types();
 
-  $items['admin/config/antispam'] = array(
+  // New menu block.
+  $items['admin/config/spamprevention'] = array(
+    'title' => 'AntiSpam',
+    'description' => 'Use the anti-spam service to protect your site from spam.', 
+    'position' => 'right',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  // A menu item for the menu block.
+  $items['admin/config/spamprevention/antispam'] = array(
     'title' => t('AntiSpam'),
     'description' => t('Use the anti-spam service to protect your site from spam.'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('antispam_settings_form'),
     'access arguments' => array('administer antispam settings'),
     'file' => 'antispam.admin.inc',
-    'type' => MENU_LOCAL_TASK,
+    // Needs to be normal to show up.
+    'type' => MENU_NORMAL_ITEM,
   );
 
-  $items['admin/content/antispam'] = array(
-    'title' => t('AntiSpam moderation queue'),
-    'description' => t('Manage the AntiSpam spam queue, appropving or deleting content in need of moderation.'),
-    'page callback' => 'antispam_callback_queue',
-    'access callback' => '_antispam_is_moderator',
-    'access arguments' => array($moderator_types),
-    'file' => 'antispam.admin.inc',
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 10,
-  );
   $items['admin/content/antispam/overview'] = array(
-    'title' => t('Overview'),
+    'title' => 'Overview',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 0,
     'file' => 'antispam.admin.inc',
   );
   $items['admin/content/antispam/nodes'] = array(
-    'title' => t('Nodes'),
+    'title' => 'Nodes',
     'page callback' => 'antispam_callback_queue',
     'page arguments' => array('nodes'),
     'access callback' => '_antispam_is_node_moderator',
@@ -517,7 +479,7 @@ function antispam_menu() {
     'file' => 'antispam.admin.inc',
   );
   $items['admin/content/antispam/nodes/spam'] = array(
-    'title' => t('Spam'),
+    'title' => 'Spam',
     'page callback' => 'antispam_callback_queue',
     'page arguments' => array('nodes'),
     'access callback' => '_antispam_is_node_moderator',
@@ -527,7 +489,7 @@ function antispam_menu() {
     'file' => 'antispam.admin.inc',
   );
   $items['admin/content/antispam/nodes/unpublished'] = array(
-    'title' => t('Unpublished nodes'),
+    'title' => 'Unpublished nodes',
     'page callback' => 'antispam_callback_queue',
     'page arguments' => array('nodes', 'unpublished'),
     'access callback' => '_antispam_is_node_moderator',
@@ -537,7 +499,7 @@ function antispam_menu() {
     'file' => 'antispam.admin.inc',
   );
   $items['admin/content/antispam/nodes/published'] = array(
-    'title' => t('Published nodes'),
+    'title' => 'Published nodes',
     'page callback' => 'antispam_callback_queue',
     'page arguments' => array('nodes', 'published'),
     'access callback' => '_antispam_is_node_moderator',
@@ -546,48 +508,50 @@ function antispam_menu() {
     'weight' => 2,
     'file' => 'antispam.admin.inc',
   );
-  $items['admin/content/antispam/comments'] = array(
-    'title' => t('Comments'),
-    'page callback' => 'antispam_callback_queue',
-    'page arguments' => array('comments'),
-    'access callback' => '_antispam_is_moderator',
-    'access arguments' => array($moderator_types, 'comments'),
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 2,
-    'file' => 'antispam.admin.inc',
-  );
-  $items['admin/content/antispam/comments/spam'] = array(
-    'title' => t('Spam'),
-    'page callback' => 'antispam_callback_queue',
-    'page arguments' => array('comments'),
-    'access callback' => '_antispam_is_moderator',
-    'access arguments' => array($moderator_types, 'comments'),
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-    'weight' => 0,
-    'file' => 'antispam.admin.inc',
-  );
-  $items['admin/content/antispam/comments/unpublished'] = array(
-    'title' => t('Unpublished comments'),
-    'page callback' => 'antispam_callback_queue',
-    'page arguments' => array('comments', 'unpublished'),
-    'access callback' => '_antispam_is_moderator',
-    'access arguments' => array($moderator_types, 'comments'),
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 1,
-    'file' => 'antispam.admin.inc',
-  );
-  $items['admin/content/antispam/comments/published'] = array(
-    'title' => t('Published comments'),
-    'page callback' => 'antispam_callback_queue',
-    'page arguments' => array('comments', 'published'),
-    'access callback' => '_antispam_is_moderator',
-    'access arguments' => array($moderator_types, 'comments'),
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 2,
-    'file' => 'antispam.admin.inc',
-  );
+  if (module_exists('comment')) {
+    $items['admin/content/antispam/comments'] = array(
+      'title' => 'Comments',
+      'page callback' => 'antispam_callback_queue',
+      'page arguments' => array('comments'),
+      'access callback' => '_antispam_is_moderator',
+      'access arguments' => array($moderator_types, 'comments'),
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 2,
+      'file' => 'antispam.admin.inc',
+    );
+    $items['admin/content/antispam/comments/spam'] = array(
+      'title' => 'Spam',
+      'page callback' => 'antispam_callback_queue',
+      'page arguments' => array('comments'),
+      'access callback' => '_antispam_is_moderator',
+      'access arguments' => array($moderator_types, 'comments'),
+      'type' => MENU_DEFAULT_LOCAL_TASK,
+      'weight' => 0,
+      'file' => 'antispam.admin.inc',
+    );
+    $items['admin/content/antispam/comments/unpublished'] = array(
+      'title' => 'Unpublished comments',
+      'page callback' => 'antispam_callback_queue',
+      'page arguments' => array('comments', 'unpublished'),
+      'access callback' => '_antispam_is_moderator',
+      'access arguments' => array($moderator_types, 'comments'),
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 1,
+      'file' => 'antispam.admin.inc',
+    );
+    $items['admin/content/antispam/comments/published'] = array(
+      'title' => 'Published comments',
+      'page callback' => 'antispam_callback_queue',
+      'page arguments' => array('comments', 'published'),
+      'access callback' => '_antispam_is_moderator',
+      'access arguments' => array($moderator_types, 'comments'),
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 2,
+      'file' => 'antispam.admin.inc',
+    );
+  }
   $items['admin/content/antispam/statistics'] = array(
-    'title' => t('Statistics'),
+    'title' => 'Statistics',
     'page callback' => 'antispam_callback_queue',
     'page arguments' => array('statistics'),
     'access callback' => '_antispam_is_moderator',
@@ -605,13 +569,15 @@ function antispam_menu() {
     'access arguments' => array(0, 1, 2, 3),
   );
   foreach (array('publish', 'unpublish', 'submit-spam', 'submit-ham') as $op) {
-    $items['antispam/%antispam/%/'. $op] = $item;
+    $items['antispam/%antispam/%/' . $op] = $item;
   }
   return $items;
 }
 
+/**
+ * Implements hook_load().
+ */
 function antispam_load($arg, &$map, $index) {
-
   if (!is_numeric($map[2])) {
     // Node and comment ids are always numeric!
     return FALSE;
@@ -631,14 +597,16 @@ function antispam_load($arg, &$map, $index) {
   if ($op == 'publish' || $op == 'unpublish') {
     $map[0] = 'antispam_callback_set_published_status';
   }
-  else if ($op == 'submit-spam' || $op == 'submit-ham') {
+  elseif ($op == 'submit-spam' || $op == 'submit-ham') {
     $map[0] = 'antispam_callback_set_spam_status';
   }
   return $map[$index];
 }
 
+/**
+ *
+ */
 function antispam_access_callback($callback, $content_type, $object, $op) {
-
   if ($content_type == 'node' && !node_access('update', $object)) {
     return FALSE;
   }
@@ -646,16 +614,20 @@ function antispam_access_callback($callback, $content_type, $object, $op) {
   if ($content_type == 'node') {
     $content_id = $object->nid;
   }
-  else if($content_type == 'comment') {
+  elseif ($content_type == 'comment') {
     $content_id = $object->cid;
   }
   if (function_exists($callback && !antispam_is_spam_moderator(antispam_content_get_moderator_type($content_type, $content_id)))) {
     return FALSE;
   }
-  // Is there a comment access check we need to run? If yes, then do the same as above.
+  // Is there a comment access check we need to run? If yes, then do the same
+  // as above.
   return TRUE;
 }
 
+/**
+ * Menu callback to build a page for a specific module callback.
+ */
 function antispam_page($callback, $content_type, $object, $op) {
   if (function_exists($callback)) {
     return $callback($content_type, $object, $op);
@@ -665,20 +637,25 @@ function antispam_page($callback, $content_type, $object, $op) {
 
 
 /**
-* Menu callback; publish/unpublish content.
-*
-* @param string Content type; it can be 'node' or 'comment'.
-* @param integer Content ID; can be either a nid or a cid.
-* @param string Operation; it can be 'publish' or 'unpublish'.
-*/
+ * Menu callback; publish/unpublish content.
+ *
+ * @param string $content_type
+ *   Can be 'node' or 'comment'.
+ * @param object $object
+ *   Can be either a nid or a cid.
+ * @param string $op
+ *   The operation being performed, can be 'publish' or 'unpublish'.
+ */
 function antispam_callback_set_published_status($content_type, $object, $op) {
-  // TODO: Should we be passing the object around or just the ID, or should we have antispam_content_load at all?
+  // TODO: Should we be passing the object around or just the ID, or should we
+  // have antispam_content_load at all?
   if ($content_type == 'node') {
     // Load the content (existence has been checked in hook_menu).
     $content = antispam_content_load($content_type, $object->nid);
     $is_published = ($content->status ? TRUE : FALSE);
   }
-  else { // comment
+  // Comment.
+  else {
     // Load the content (existence has been checked in hook_menu).
     $content = antispam_content_load($content_type, $object->cid);
     $is_published = ($content->status == COMMENT_PUBLISHED ? TRUE : FALSE);
@@ -687,27 +664,28 @@ function antispam_callback_set_published_status($content_type, $object, $op) {
   if ($op == 'publish' && !$is_published) {
     antispam_content_publish_operation($content_type, $content, 'publish');
   }
-  else if ($op == 'unpublish' && $is_published) {
+  elseif ($op == 'unpublish' && $is_published) {
     antispam_content_publish_operation($content_type, $content, 'unpublish');
   }
 
   if ($content_type == 'node') {
-    drupal_goto('node/'. $content->nid);
+    drupal_goto('node/' . $content->nid);
   }
   else { // comment
-    drupal_goto('node/'. $content->nid, array('fragment' => 'comment-'. $content->cid));
+    drupal_goto('node/' . $content->nid, array('fragment' => 'comment-' . $content->cid));
   }
 }
 
 /**
-* Menu callback; mark/unmark content as spam.
-*
-* When content is marked as spam, it is also unpublished (if necessary) and vice-versa.
-*
-* @param string Content type; it can be 'node' or 'comment'.
-* @param integer Content ID; can be either a nid or a cid.
-* @param string Operation; it can be 'submit-spam' or 'submit-ham'.
-*/
+ * Menu callback; mark/unmark content as spam.
+ *
+ * When content is marked as spam, it is also unpublished (if necessary) and
+ * vice-versa.
+ *
+ * @param string Content type; it can be 'node' or 'comment' .
+ * @param integer Content ID; can be either a nid or a cid.
+ * @param string Operation; it can be 'submit-spam' or 'submit-ham' .
+ */
 function antispam_callback_set_spam_status($content_type, $object, $op) {
   if ($content_type == 'node') {
     $is_spam = antispam_content_is_spam($content_type, $object->nid);
@@ -715,14 +693,15 @@ function antispam_callback_set_spam_status($content_type, $object, $op) {
     $content = antispam_content_load($content_type, $object->nid);
     $is_published = ($content->status ? TRUE : FALSE);
   }
-  else { // comment
+  // Comment.
+  else {
     $is_spam = antispam_content_is_spam($content_type, $object->cid);
     // Load the content (existence has been checked in hook_menu).
     $content = antispam_content_load($content_type, $object->cid);
     $is_published = ($content->status == COMMENT_PUBLISHED ? TRUE : FALSE);
   }
 
-  // insert or remove the spam marker (publishing/unpublishing if necessary).
+  // Insert or remove the spam marker (publishing/unpublishing if necessary).
   if ($op == 'submit-spam') {
     if (!$is_spam) {
       antispam_content_spam_operation($content_type, $content, 'submit-spam');
@@ -732,7 +711,7 @@ function antispam_callback_set_spam_status($content_type, $object, $op) {
       antispam_content_publish_operation($content_type, $content, 'unpublish');
     }
   }
-  else if ($op == 'submit-ham') {
+  elseif ($op == 'submit-ham') {
     if ($is_spam) {
       antispam_content_spam_operation($content_type, $content, 'submit-ham');
       antispam_increase_counter(ANTISPAM_COUNT_FALSE_POSITIVE);
@@ -743,22 +722,37 @@ function antispam_callback_set_spam_status($content_type, $object, $op) {
   }
 
   if ($content_type == 'node') {
-    drupal_goto('node/'. $content->nid);
+    drupal_goto('node/' . $content->nid);
   }
-  else { // comment
-    drupal_goto('node/'. $content->nid, array('fragment' => 'comment-'. $content->cid));
+  // Comment.
+  else {
+    drupal_goto('node/' . $content->nid, array('fragment' => 'comment-' . $content->cid));
   }
 }
 
-/******************************************************************************************
-*
-* Node operations
-* 
-******************************************************************************************/
+/**
+ * Webform: Check submitted values for spam.
+ */
+function antispam_webform_check($form, &$form_state) {
+  if (variable_get('antispam_webform_enabled', FALSE)) {
+    foreach ($form_state['values']['submitted'] as $value) {
+      if (is_string($value) && !is_numeric($value) && strlen($value) > 5 && antispam_api_cmd_spam_check($value) === ANTISPAM_API_RESULT_IS_SPAM) {
+        watchdog('spam detected', "Spam detected in webform value '%value'", array('%value' => $value), WATCHDOG_NOTICE);
+        form_error($form_state['clicked_button'], t('Invalid input'));
+        return;
+      }
+    }
+  }
+}
+
+
+/*******************************************************************************
+ * Node operations
+ ******************************************************************************/
 
 /**
-* Implements hook_node_load().
-*/
+ * Implements hook_node_load().
+ */
 function antispam_node_load($nodes, $types) {
   foreach ($nodes as $node) {
     $rec = db_query("SELECT signature, spaminess FROM {antispam_spam_marks} WHERE content_type='node' AND content_id=:content_id", array(':content_id' => $node->nid))->fetchObject();
@@ -774,34 +768,39 @@ function antispam_node_load($nodes, $types) {
 }
 
 /**
-* Implements hook_node_insert().
-*/
+ * Implements hook_node_insert().
+ */
 function antispam_node_insert($node) {
   _antispam_node_save($node);
 }
+
 /**
-* Implements hook_node_update().
-*/
+ * Implements hook_node_update().
+ */
 function antispam_node_update($node) {
   _antispam_node_save($node);
 }
+
 /**
-* Called from hook_node_insert() and hook_node_update()
-*/
+ * Called from hook_node_insert() and hook_node_update()
+ */
 function _antispam_node_save(&$node) {
-  // If anti-spam servie connections are not enabled, we have nothing else to do here.
+  // If anti-spam servie connections are not enabled, we have nothing else to
+  // do here.
   if (!variable_get('antispam_connection_enabled', 1)) {
     antispam_notify_moderators('node', $node, ($node->status ? TRUE : FALSE), FALSE);
     return;
   }
 
-  // Also quit asap, if current user has administration permission or permission to post without spam checking.
+  // Also quit ASAP, if current user has administration permission or
+  // permission to post without spam checking.
   if (antispam_is_spam_moderator($node->type) || user_access('post with no antispam checking')) {
     antispam_notify_moderators('node', $node, ($node->status ? TRUE : FALSE), FALSE);
     return;
   }
 
-  // Now, check if it's about a node type that we have not been explicitly requested to check.
+  // Now, check if it's about a node type that we have not been explicitly
+  // requested to check.
   $check_nodetypes = variable_get('antispam_check_nodetypes', array());
   if (!is_array($check_nodetypes) || !isset($check_nodetypes[$node->type]) || !$check_nodetypes[$node->type]) {
     antispam_notify_moderators('node', $node, ($node->status ? TRUE : FALSE), FALSE);
@@ -834,30 +833,30 @@ function _antispam_node_save(&$node) {
       antispam_content_publish_operation('node', $node, 'unpublish', FALSE);
     }
 
-    // Since users won't see their content published, show them a polite explanation on why.
+    // Since users won't see their content published, show them a polite
+    // explanation on why.
     $content_type_name = node_type_get_name($node);
     drupal_set_message(t('Your %content-type-name has been queued for moderation by site administrators and will be published after approval.', array('%content-type-name' => $content_type_name)));
     
     // Record the event to watchdog.
     if ($api_result[0] == ANTISPAM_API_RESULT_ERROR) {
-      watchdog('content', 'AntiSpam service seems to be down, %content-type-name queued for manual approval: %title', array('%content-type-name' => $content_type_name, '%title' => $node->title), WATCHDOG_WARNING, l(t('view'), 'node/'. $node->nid));
+      watchdog('content', 'AntiSpam service seems to be down, %content-type-name queued for manual approval: %title', array('%content-type-name' => $content_type_name, '%title' => $node->title), WATCHDOG_WARNING, l(t('view'), 'node/' . $node->nid));
     }
     else {
-      watchdog('content', 'Spam detected by AntiSpam in %content-type-name: %title', array('%content-type-name' => $content_type_name, '%title' => $node->title), WATCHDOG_WARNING, l(t('view'), 'node/'. $node->nid));
-      // If requested to, generate a delay so the spammer has to wait for a while.
+      watchdog('content', 'Spam detected by AntiSpam in %content-type-name: %title', array('%content-type-name' => $content_type_name, '%title' => $node->title), WATCHDOG_WARNING, l(t('view'), 'node/' . $node->nid));
+      // If requested to, generate a delay so the spammer has to wait for a
+      // while.
       if (($seconds = variable_get('antispam_antispambot_delay', 60)) > 0) {
-	    sleep($seconds);
+        sleep($seconds);
       }
     }
   }
 }
 
 /**
-* Implements hook_node_validate().
-*/
+ * Implements hook_node_validate().
+ */
 function antispam_node_validate($node, $form, &$form_state) {
-
-  // Ok, let's build a quick query to see if we can catch a spambot.
   global $user;
 
   $num_condition = 0;
@@ -902,8 +901,8 @@ function antispam_node_validate($node, $form, &$form_state) {
 }
 
 /**
-* Implements hook_node_delete().
-*/
+ * Implements hook_node_delete().
+ */
 function antispam_node_delete($node) {
   db_delete('antispam_spam_marks')
     ->condition('content_type', 'node')
@@ -918,25 +917,24 @@ function antispam_node_view($node, $view_mode, $langcode) {
   // $view_mode: 'full', 'teaser'
 
   if (antispam_is_spam_moderator($node->type)) {
-
     $links = array();
 
-    // adding publish/unpublish links
+    // Adding publish/unpublish links.
     if (variable_get('antispam_node_publish_links', 0)) {
       if ($node->status) {
-	    $links['antispam_node_unpublish'] = array('title' => t('Unpublish'), 'href' => 'antispam/node/'. $node->nid .'/unpublish');
+        $links['antispam_node_unpublish'] = array('title' => t('Unpublish'), 'href' => 'antispam/node/' . $node->nid . '/unpublish');
       }
       else {
-	    $links['antispam_node_publish'] = array('title' => t('Publish'), 'href' => 'antispam/node/'. $node->nid .'/publish');
+        $links['antispam_node_publish'] = array('title' => t('Publish'), 'href' => 'antispam/node/' . $node->nid . '/publish');
       }
     }
-    // adding submit ham/submit spam links
+    // Adding submit ham/submit spam links.
     if (variable_get('antispam_node_spam_links', 0)) {
       if (antispam_content_is_spam('node', $node->nid)) {
-        $links['antispam_node_ham'] = array('title' => (variable_get('antispam_connection_enabled', 1) ? t('Submit ham') : t('Mark as ham')), 'href' => 'antispam/node/'. $node->nid .'/submit-ham');
+        $links['antispam_node_ham'] = array('title' => (variable_get('antispam_connection_enabled', 1) ? t('Submit ham') : t('Mark as ham')), 'href' => 'antispam/node/' . $node->nid . '/submit-ham');
       }
       else {
-	    $links['antispam_node_spam'] = array('title' => (variable_get('antispam_connection_enabled', 1) ? t('Submit spam') : t('Mark as spam')), 'href' => 'antispam/node/'. $node->nid .'/submit-spam');
+        $links['antispam_node_spam'] = array('title' => (variable_get('antispam_connection_enabled', 1) ? t('Submit spam') : t('Mark as spam')), 'href' => 'antispam/node/' . $node->nid . '/submit-spam');
       }
     }
     $node->content['links']['node']['#links'] = 
@@ -944,18 +942,16 @@ function antispam_node_view($node, $view_mode, $langcode) {
   }
 }
 
-/******************************************************************************************
-*
-* Comment operations
-* 
-*******************************************************************************************/
+/*******************************************************************************
+ * Comment operations
+ ******************************************************************************/
 
 /**
-* Implements hook_comment_load().
-*/
+ * Implements hook_comment_load().
+ *
+ * Add signature and spaminess to the $comments object.
+ */
 function antispam_comment_load($comments) {
-  // add signature and spaminess to the $comments object
-
   foreach ($comments as $comment) {
     $rec = db_query("SELECT signature, spaminess FROM {antispam_spam_marks} WHERE content_type='comment' AND content_id=:content_id", array(':content_id' => $comment->cid))->fetchObject();
     if ($rec) {
@@ -963,26 +959,19 @@ function antispam_comment_load($comments) {
       $comment->spaminess = $rec->spaminess;
     }
     else {
-      $comment->signature = '';
       $comment->spaminess = 0.0;
-    }
-    if ($comment->uid == 0) {
-      $comment->name = variable_get('anonymous', t('Anonymous'));
     }
   }
 }
 
 /**
-* Implements hook_comment_presave()
-*/
+ * Implements hook_comment_presave()
+ */
 function antispam_comment_presave($comment) {
-
-  // NOTE:
+  // NOTE: Called from comment_save().
   //
-  // called from comment_save().
-  //
-  // $comment->cid is not yet determined at this moment for a new comment
-  // if this is updating existing comment, then cid is already assigned.
+  // $comment->cid is not yet determined at this moment for a new comment.
+  // If this is updating existing comment, then cid is already assigned.
 
   $num_condition = 0;
   $debug_info = array();
@@ -992,29 +981,36 @@ function antispam_comment_presave($comment) {
 
   $query = db_select('antispam_spam_marks', 's');
   $query->fields('s', array('content_id'));
-  if ($antispambot_rules['body']) {
-    $query->join('comment', 'c', 's.content_id = c.cid');
-  }
   $query->condition('s.content_type', 'comment');
   $query->range(0, 1);
 
+  $rules_conditions = db_or();
+
   if ($antispambot_rules['ip']) {
-    $query->condition('s.hostname', ip_address());
+    $rules_conditions->condition('s.hostname', ip_address());
     $debug_info['IP-address'] = ip_address();
     $num_condition++;
   }
   if ($antispambot_rules['mail'] && !empty($comment->mail)) {
-    $query->condition('s.mail', $comment->mail);
+    $rules_conditions->condition('s.mail', $comment->mail);
     $debug_info['E-mail'] = $comment->mail;
     $num_condition++;
   }
   if ($antispambot_rules['body'] && !empty($comment->comment_body)) {
-    $query->condition('c.comment', render($comment->comment_body[$comment->language][0]['value']));
-    $debug_info['Content'] = $comment->mail[$comment->language][0]['value'];
+    if ($num_condition) {
+      $join_type = 'LEFT OUTER';
+    }
+    else {
+      $join_type = 'INNER';
+    }
+    $query->addJoin($join_type, 'field_data_comment_body', 'c', 's.content_type = c.entity_type AND s.content_id = c.entity_id');
+    $rules_conditions->condition('c.comment_body_value', $comment->comment_body[$comment->language][0]['value']);
+    $debug_info['Content'] = $comment->comment_body[$comment->language][0]['value'];
     $num_condition++;
   }
 
   if ($num_condition) {
+    $query->condition($rules_conditions);
     $has_rows = $query->execute()->fetchField();
     if ($has_rows) {
       antispam_anti_spambot_action($debug_info);
@@ -1023,31 +1019,32 @@ function antispam_comment_presave($comment) {
 }
 
 /**
-* Implements hook_comment_insert().
-*/
+ * Implements hook_comment_insert().
+ */
 function antispam_comment_insert($comment) {
   _antispam_comment_save($comment);
 }
 
 /**
-* Implements hook_comment_update().
-*/
+ * Implements hook_comment_update().
+ */
 function antispam_comment_update($comment) {
   _antispam_comment_save($comment);
 }
 
 /**
-* Called from hook_comment_insert() and hook_comment_update()
-*/
+ * Called from hook_comment_insert() and hook_comment_update().
+ */
 function _antispam_comment_save($comment) {
-
-  // If anti-spam servie connections are not enabled, we have nothing else to do here.
+  // If anti-spam servie connections are not enabled, we have nothing else to
+  // do here.
   if (!variable_get('antispam_connection_enabled', 1)) {
     antispam_notify_moderators('node', $node, ($node->status ? TRUE : FALSE), FALSE);
     return;
   }
 
-  // Also quit asap, if current user has administration permission or permission to post without spam checking.
+  // Also quit asap, if current user has administration permission or
+  // permission to post without spam checking.
   if (antispam_is_spam_moderator('comments') || user_access('post with no antispam checking')) {
     antispam_notify_moderators('comment', $comment, ($comment->status == COMMENT_PUBLISHED ? TRUE : FALSE), FALSE);
     return;
@@ -1082,29 +1079,31 @@ function _antispam_comment_save($comment) {
       antispam_content_publish_operation('comment', $comment, 'unpublish', FALSE);
     }
 
-    // Since users won't see their replies published, show them a polite explanation on why.
+    // Since users won't see their replies published, show them a polite
+    // explanation on why.
     drupal_set_message(t('Your comment has been queued for moderation by site administrators and will be published after approval.'));
 
     // Record the event to watchdog.
     if ($api_result[0] == ANTISPAM_API_RESULT_ERROR) {
-      watchdog('content', 'AntiSpam service seems to be down, comment queued for manual approval: %subject', array('%subject' => $comment->subject), WATCHDOG_WARNING, l(t('view'), 'node/'. $comment->nid, array('fragment' => 'comment-'. $comment->cid)));
+      watchdog('content', 'AntiSpam service seems to be down, comment queued for manual approval: %subject', array('%subject' => $comment->subject), WATCHDOG_WARNING, l(t('view'), 'node/' . $comment->nid, array('fragment' => 'comment-' . $comment->cid)));
     }
     else {
-      watchdog('content', 'Spam detected by AntiSpam in comment: %subject', array('%subject' => $comment->subject), WATCHDOG_WARNING, l(t('view'), 'node/'. $comment->nid, array('fragment' => 'comment-'. $comment->cid)));
-      // If requested to, generate a delay so the spammer has to wait for a while.
+      watchdog('content', 'Spam detected by AntiSpam in comment: %subject', array('%subject' => $comment->subject), WATCHDOG_WARNING, l(t('view'), 'node/' . $comment->nid, array('fragment' => 'comment-' . $comment->cid)));
+      // If requested to, generate a delay so the spammer has to wait for a
+      // while.
       if (($seconds = variable_get('antispam_antispambot_delay', 60)) > 0) {
-	    sleep($seconds);
+        sleep($seconds);
       }
     }
   }
 }
 
 /**
-* Implements hook_comment_delete().
-*/
+ * Implements hook_comment_delete().
+ */
 function antispam_comment_delete($comment) {
   db_delete('antispam_spam_marks')
-    ->condition('content_type', 'node')
+    ->condition('content_type', 'comment')
     ->condition('content_id', $comment->cid)
     ->execute();
 }
@@ -1116,33 +1115,28 @@ function antispam_comment_view($comment, $view_mode, $langcode) {
   // $view_mode: 'full', 'teaser'
 
   if (antispam_is_spam_moderator('comments')) {
-
     $links = array();
 
     if (variable_get('antispam_comment_publish_links', 1)) {
       if ($comment->status == COMMENT_PUBLISHED) {
-	    $links['antispam_comment_unpublish'] = array('title' => t('Unpublish'), 'href' => 'antispam/comment/'. $comment->cid .'/unpublish');
+        $links['antispam_comment_unpublish'] = array('title' => t('Unpublish'), 'href' => 'antispam/comment/' . $comment->cid . '/unpublish');
       }
-      else if ($comment->status == COMMENT_NOT_PUBLISHED) {
-	    $links['antispam_comment_publish'] = array('title' => t('Publish'), 'href' => 'antispam/comment/'. $comment->cid .'/publish');
+      elseif ($comment->status == COMMENT_NOT_PUBLISHED) {
+        $links['antispam_comment_publish'] = array('title' => t('Publish'), 'href' => 'antispam/comment/' . $comment->cid . '/publish');
       }
     }
     if (variable_get('antispam_comment_spam_links', 1)) {
       if (antispam_content_is_spam('comment', $comment->cid)) {
-	    $links['antispam_comment_ham'] = array('title' => (variable_get('antispam_connection_enabled', 1) ? t('Submit ham') : t('Mark as ham')), 'href' => 'antispam/comment/'. $comment->cid .'/submit-ham');
+        $links['antispam_comment_ham'] = array('title' => (variable_get('antispam_connection_enabled', 1) ? t('Submit ham') : t('Mark as ham')), 'href' => 'antispam/comment/' . $comment->cid . '/submit-ham');
       }
       else {
-	    $links['antispam_comment_spam'] = array('title' => (variable_get('antispam_connection_enabled', 1) ? t('Submit spam') : t('Mark as spam')), 'href' => 'antispam/comment/'. $comment->cid .'/submit-spam');
+        $links['antispam_comment_spam'] = array('title' => (variable_get('antispam_connection_enabled', 1) ? t('Submit spam') : t('Mark as spam')), 'href' => 'antispam/comment/' . $comment->cid . '/submit-spam');
       }
     }
     $comment->content['links']['comment']['#links'] 
       = array_merge($comment->content['links']['comment']['#links'], $links);
   }
 }
-
-
-
-
 
 /**
  * Get anti-spambot rules.
@@ -1168,7 +1162,7 @@ function antispam_get_anti_spambot_rules() {
 /**
  * Check if anti-spambot options are enabled.
  *
- * @return boolean TRUE if enabled; FALSE otherwise.
+ * @return boolean
  */
 function antispam_is_anti_spambot_enabled() {
   $antispambot_rules = antispam_get_anti_spambot_rules();
@@ -1178,7 +1172,9 @@ function antispam_is_anti_spambot_enabled() {
 /**
  * Perform an anti-spambot action based on module settings.
  *
- * @param array Extra data, used here to enhance the logged information, for debugging purposes.
+ * @param array $debug_info
+ *   Extra data, used here to enhance the logged information, for debugging
+ *   purposes.
  */
 function antispam_anti_spambot_action($debug_info) {
   $antispambot_action = variable_get('antispam_antispambot_action', '503');
@@ -1195,7 +1191,7 @@ function antispam_anti_spambot_action($debug_info) {
 
   $items = array();
   foreach ($debug_info as $label => $value) {
-    $items[] = '<strong>'. check_plain($label) .'</strong>: '. check_plain($value);
+    $items[] = '<strong>' . check_plain($label) . '</strong>: ' . check_plain($value);
   }
 
   // From here on, the request is killed using different methods.
@@ -1203,7 +1199,7 @@ function antispam_anti_spambot_action($debug_info) {
     drupal_access_denied();
     $message = t('Spambot detected (action: 403 Forbidden).');
   }
-  else if ($antispambot_action == '403') {
+  elseif ($antispambot_action == '403') {
     @header('HTTP/1.0 403 Forbidden');
     print t('Access denied');
     $message = t('Spambot detected (action: 403 Forbidden).');
@@ -1223,14 +1219,17 @@ function antispam_anti_spambot_action($debug_info) {
 /**
  * Expand query for debugging purposes.
  *
- * @param string SQL statement.
- * @param mixed array or variable list of arguments.
+ * @param string $query
+ *   SQL statement.
+ * @param mixed
+ *   Array or variable list of arguments.
  */
 function _antispam_translate_query($query) {
   $args = func_get_args();
   array_shift($args);
   $query = db_prefix_tables($query);
-  if (isset($args[0]) && is_array($args[0])) { // 'All arguments in one array' syntax
+  // 'All arguments in one array' syntax.
+  if (isset($args[0]) && is_array($args[0])) {
     $args = $args[0];
   }
   _db_query_callback($args, TRUE);
@@ -1241,9 +1240,13 @@ function _antispam_translate_query($query) {
 /**
  * Check if specified content is marked as spam.
  *
- * @param string Content type; can be either 'node' or 'comment'.
- * @param integer Content ID; can be either a nid or a cid.
- * @return boolean TRUE if content is marked as spam; FALSE otherwise.
+ * @param string $content_type
+ *   Content type; can be either 'node' or 'comment' .
+ * @param integer $content_id
+ *   Content ID; can be either a nid or a cid.
+ *
+ * @return boolean
+ *   TRUE if content is marked as spam; FALSE otherwise.
  */
 function antispam_content_is_spam($content_type, $content_id) {
   return db_query_range('SELECT 1 FROM {antispam_spam_marks} WHERE content_type=:content_type AND content_id=:content_id', 0, 1, array(':content_type' => $content_type, ':content_id' => $content_id))->fetchField();
@@ -1252,9 +1255,13 @@ function antispam_content_is_spam($content_type, $content_id) {
 /**
  * Get moderator type required for specified content.
  *
- * @param string Content type; can be either 'node' or 'comment'.
- * @param integer Content ID; can be either a nid or a cid.
- * @return string Moderator Type or empty string if content is not found.
+ * @param string $content_type
+ *   Content type; can be either 'node' or 'comment' .
+ * @param integer $content_id
+ *   Content ID; can be either a nid or a cid.
+ *
+ * @return boolean
+ *   Moderator Type or empty string if content is not found.
  */
 function antispam_content_get_moderator_type($content_type, $content_id) {
   watchdog('antispam', 'antispam_content_get_moderator_type is called. type=' . $content_type . ', id=' . $content_id);
@@ -1264,7 +1271,7 @@ function antispam_content_get_moderator_type($content_type, $content_id) {
       $moderator_type = '';
     }
   }
-  else if ($content_type == 'comment') {
+  elseif ($content_type == 'comment') {
     $has_rows = db_query_range('SELECT 1 FROM {comment} WHERE cid=:cid', 0, 1, array(':cid' => $content_id))->fetchField();
     $moderator_type = $has_rows ? 'comments' : '';
   }
@@ -1277,8 +1284,11 @@ function antispam_content_get_moderator_type($content_type, $content_id) {
 /**
  * Get the types the current user is allowed to moderate.
  *
- * @param object The account to check; use current user if not given.
- * @return array Moderator Types.
+ * @param object $account
+ *   The account to check; use current user if not given.
+ *
+ * @return array
+ *   Moderator Types.
  */
 function antispam_get_moderator_types($account = NULL) {
   global $user;
@@ -1293,7 +1303,7 @@ function antispam_get_moderator_types($account = NULL) {
     $node_types = node_type_get_names();
   }
 
-  // suppress warning message
+  // Suppress warning message.
   $moderator_types[$account->uid] = NULL;
 
   if (!isset($moderator_types[$account->uid])) {
@@ -1304,13 +1314,13 @@ function antispam_get_moderator_types($account = NULL) {
     }
     else {
       foreach ($node_types as $type => $name) {
-        if (user_access('moderate spam in nodes of type '. $node_types[$type], $account)) {
+        if (user_access('moderate spam in nodes of type ' . $node_types[$type], $account)) {
           $moderator_types[$account->uid][$type] = $name;
         }
       }
     }
 
-    if (user_access('administer comments', $account) || user_access('moderate spam in comments', $account)) {
+    if (module_exists('comment') && (user_access('administer comments', $account) || user_access('moderate spam in comments', $account))) {
       $moderator_types[$account->uid]['comments'] = t('comments');
     }
   }
@@ -1320,9 +1330,13 @@ function antispam_get_moderator_types($account = NULL) {
 /**
  * Is current user spam moderator?
  *
- * @param string Moderator Type (comments, node type or NULL).
- * @param object The account to check; use current user if not given.
- * @return boolean TRUE if current user is moderator of specified type; FALSE otherwise.
+ * @param string $moderator_type
+ *   Moderator Type - comments, node type or NULL.
+ * @param object $account
+ *   The user account to check; use current user if not given.
+ *
+ * @return boolean
+ *   TRUE if current user is moderator of specified type; FALSE otherwise.
  */
 function antispam_is_spam_moderator($moderator_type = NULL, $account = NULL) {
   global $user;
@@ -1339,10 +1353,14 @@ function antispam_is_spam_moderator($moderator_type = NULL, $account = NULL) {
 /**
  * Notify moderators of new/updated content, only content needing approval or nothing at all.
  *
- * @param string Content type; can be either 'node' or 'comment'.
- * @param object Content object.
- * @param boolean TRUE if content is in published status.
- * @param boolean TRUE if content has been marked as spam.
+ * @param string $content_type
+ *   Content type; can be either 'node' or 'comment' .
+ * @param object $content
+ *   The content object to work on.
+ * @param boolean $is_published
+ *   TRUE if content is in published status.
+ * @param boolean $is_spam
+ *   TRUE if content has been marked as spam.
  */
 function antispam_notify_moderators($content_type, $content, $is_published, $is_spam) {
   global $user, $base_url;
@@ -1362,24 +1380,24 @@ function antispam_notify_moderators($content_type, $content, $is_published, $is_
   }
   else {
     $moderator_types = antispam_get_moderator_types();
-    $moderator_permission = 'moderate spam in nodes of type '. $moderator_types[$content->type];
+    $moderator_permission = 'moderate spam in nodes of type ' . $moderator_types[$content->type];
     $administer_permission = 'administer nodes';
   }
 
   // Obtain list of moderators of the specified content type.
-  $sql = 'SELECT u.uid, u.name, u.mail, m.email_for'.
-          ' FROM {role_permission} p'.
-         ' INNER JOIN {users_roles} r ON r.rid = p.rid'.
-         ' INNER JOIN {users} u ON u.uid = r.uid OR u.uid = 1'.
-          ' LEFT JOIN {antispam_moderator} m ON m.uid = u.uid'.
-         ' WHERE p.permission LIKE \'%:perm1%\''.
-            ' OR p.permission LIKE \'%:perm2%\'';
+  $sql = 'SELECT u.uid, u.name, u.mail, m.email_for'
+    . ' FROM {role_permission} p'
+    . '   INNER JOIN {users_roles} r ON r.rid = p.rid'
+    . '   INNER JOIN {users} u ON u.uid = r.uid OR u.uid = 1'
+    . '   LEFT JOIN {antispam_moderator} m ON m.uid = u.uid'
+    . ' WHERE p.permission LIKE \'%:perm1%\''
+    . ' OR p.permission LIKE \'%:perm2%\'';
   $result = db_query($sql, array(':perm1' => $moderator_permission, ':perm2' => $administer_permission));
   $moderators = array();
   foreach ($result as $u) {
-    // if a moderator submit a new node/comment, then exclude him/her from the list
+    // If a moderator submit a new node/comment, then exclude them from the
+    // list.
     if ($u->uid != $user->uid) { 
-       
       $moderators[$u->uid] = array(
         'name' => $u->name,
         'email_to' => $u->mail,
@@ -1387,14 +1405,15 @@ function antispam_notify_moderators($content_type, $content, $is_published, $is_
       );
     }
   }
-  // check to see if we need to add the admin to the notification moderator list
-  $sql = 'SELECT u.uid, u.name, u.mail, m.email_for'.
-         ' FROM {users} u'.
-         ' LEFT JOIN {antispam_moderator} m ON m.uid = u.uid'.
-         ' WHERE u.uid=1';
+  // Check to see if we need to add the admin to the notification moderator
+  // list.
+  $sql = 'SELECT u.uid, u.name, u.mail, m.email_for'
+    . ' FROM {users} u'
+    . ' LEFT JOIN {antispam_moderator} m ON m.uid = u.uid'
+    . ' WHERE u.uid=1';
   $u = db_query($sql)->fetchObject();
-  if ($u) {
-    // if the admin submit a new node/comment, then exclude from the list
+  if (!empty($u)) {
+    // If the admin submit a new node/comment, then exclude from the list.
     if ($u->uid != $user->uid) { 
       $moderators[$u->uid] = array(
         'name' => $u->name,
@@ -1404,7 +1423,8 @@ function antispam_notify_moderators($content_type, $content, $is_published, $is_
     }
   }
 
-  // Extract unique email addresses and ignore those who have requested to not get e-mail notifications.
+  // Extract unique email addresses and ignore those who have requested to not
+  // get e-mail notifications.
   $unique_emails = array();
   foreach ($moderators as $uid => $moderator) {
     if ($moderator['email_for'] == 'all' || ($moderator['email_for'] == 'approval' && !$is_published)) {
@@ -1417,19 +1437,19 @@ function antispam_notify_moderators($content_type, $content, $is_published, $is_
     return;
   }
 
-  // If this is about a comment, try to load the node.
-  // Also, prepare arguments for notification message.
+  // If this is about a comment, try to load the node. Also, prepare arguments
+  // for notification message.
   $site_name = variable_get('site_name', t('Drupal'));
   if ($content_type == 'comment') {
     if (!($node = antispam_content_load('node', $content->nid))) {
-      watchdog('antispam', 'An error has ocurred while trying to notify moderators about a comment. The associated node could not be loaded.', array(), WATCHDOG_NOTICE, l(t('view'), 'node/'. $content->nid, array('fragment' => 'comment-'. $content->cid)));
+      watchdog('antispam', 'An error has ocurred while trying to notify moderators about a comment. The associated node could not be loaded. ', array(), WATCHDOG_NOTICE, l(t('view'), 'node/' . $content->nid, array('fragment' => 'comment-' . $content->cid)));
       return;
     }
     $message_args = array(
       '@title-label' => t('Subject'),
       '@content-title' => $content->subject,
       '@content-type' => t('comment'),
-      '!content-link' => url('node/'. $content->nid, array('fragment' => 'comment-'. $content->cid, 'absolute' => TRUE))
+      '!content-link' => url('node/' . $content->nid, array('fragment' => 'comment-' . $content->cid, 'absolute' => TRUE))
     );
   }
   else {
@@ -1437,10 +1457,10 @@ function antispam_notify_moderators($content_type, $content, $is_published, $is_
       '@title-label' => t('Title'),
       '@content-title' => $content->title,
       '@content-type' => $moderator_types[$content->type],
-      '!content-link' => url('node/'. $content->nid, array('absolute' => TRUE))
+      '!content-link' => url('node/' . $content->nid, array('absolute' => TRUE))
     );
   }
-  $message_args['@content-status'] = ($is_published ? t('published') : t('not published')) . ($is_spam ? ' ('. t('marked as spam') .')' : '');
+  $message_args['@content-status'] = ($is_published ? t('published') : t('not published')) . ($is_spam ? ' (' . t('marked as spam') . ')' : '');
   $message_args['@site-name'] = $site_name;
   $message_args['!site-link'] = $base_url . base_path();
 
@@ -1468,7 +1488,6 @@ EOT
 
   // Send e-mails.
   foreach ($unique_emails as $email_to => $uid) {
-
     $message_body = str_replace('@user-name', check_plain($moderators[$uid]['name']), $message_body);
     $params = array(
       'body' => $message_body,
@@ -1495,14 +1514,13 @@ function antispam_mail($key, &$message, $params) {
   $message['body'][] = $params['body'];
 }
 
-/******************************************************************************************
-*
-* User operations
-* 
-*******************************************************************************************/
+/*******************************************************************************
+ * User operations.
+ ******************************************************************************/
+
 /**
- * Returns the array of fields for AntiSpam block configuration
- * Called from hook_block_view(), hook_block_save() and hook_block_configure()
+ * Returns the array of fields for AntiSpam block configuration.
+ * Called from hook_block_view(), hook_block_save() and hook_block_configure().
  */
 function _antispam_get_email_for_options() {
   return array(
@@ -1516,6 +1534,11 @@ function _antispam_get_email_for_options() {
  * Implements hook_form_alter().
  */
 function antispam_form_alter(&$form, &$form_state, $form_id) {
+  // Add anti-spam integration to webforms.
+  if (strpos($form_id, 'webform_client_form_') !== FALSE) {
+    $form['#validate'][] = 'antispam_webform_check';
+  }
+
   if (!($form_id == 'user_register_form' || $form_id == 'user_profile_form')) {
     return;
   }
@@ -1612,7 +1635,8 @@ function antispam_user_delete($account) {
 /**
  * Format the 'Counting since' date.
  *
- * @return string Counting since date formatted according to module settings.
+ * @return string
+ *   Counting since date formatted according to module settings.
  */
 function antispam_get_counting_since() {
   $since = variable_get('antispam_counter_since', array('day' => date('j'), 'month' => date('n'), 'year' => date('Y')));
@@ -1629,8 +1653,8 @@ function antispam_get_counting_since() {
 }
 
 /**
- * Returns the array of fields for AntiSpam block configuration
- * Called from hook_block_view(), hook_block_save() and hook_block_configure()
+ * Returns the array of fields for AntiSpam block configuration.
+ * Called from hook_block_view(), hook_block_save() and hook_block_configure().
  */
 function _antispam_get_block_fields() {
   return array(
@@ -1676,11 +1700,11 @@ function antispam_block_configure($delta = '') {
     $form = array();
     $form['description'] = array(
       '#type' => 'item',
-      '#markup' => '<div class="description">'. t('These options allow to customize the look of this <em>antispam spam counter</em> block.') .'</div>'
+      '#markup' => '<div class="description">' . t('These options allow to customize the look of this <em>antispam spam counter</em> block.') . '</div>'
     );
-    $block_settings = variable_get('antispam_blocks_'. $delta, FALSE);
+    $block_settings = variable_get('antispam_blocks_' . $delta, FALSE);
     foreach ($block_fields as $field_key => $field_info) {
-      $field_name = 'antispam_blocks_'. $delta .'_'. $field_key;
+      $field_name = 'antispam_blocks_' . $delta . '_' . $field_key;
       $form[$field_name] = array();
       foreach ($field_info as $key => $value) {
         $form[$field_name][$key] = $value;
@@ -1701,10 +1725,10 @@ function antispam_block_save($delta = '', $edit = array()) {
   if ($delta >= 0 && $delta < variable_get('antispam_blocks_counter', 1)) {
     $block_settings = array();
     foreach ($block_fields as $field_key => $field_info) {
-      $field_name = 'antispam_blocks_'. $delta .'_'. $field_key;
+      $field_name = 'antispam_blocks_' . $delta . '_' . $field_key;
       $block_settings[$field_key] = $edit[$field_name];
     }
-    variable_set('antispam_blocks_'. $delta, $block_settings);
+    variable_set('antispam_blocks_' . $delta, $block_settings);
   }
 }
 
@@ -1714,17 +1738,18 @@ function antispam_block_save($delta = '', $edit = array()) {
 function antispam_block_view($delta = '') {
   $block_fields = _antispam_get_block_fields();
   if ($delta >= 0 && $delta < variable_get('antispam_blocks_counter', 1)) {
-    $block_settings = variable_get('antispam_blocks_'. $delta, FALSE);
+    $block_settings = variable_get('antispam_blocks_' . $delta, FALSE);
     if (!$block_settings) {
       $block_settings = array();
     }
     $block_args = array(
-      'content' => '', // Built below.
+      'content' => '',
       'counter' => antispam_get_total_counter(ANTISPAM_COUNT_SPAM_DETECTED),
       'since'   => antispam_get_counting_since(),
-      'text'    => '', // Built below.
-      'image'   => '', // Built below.
-      'block'   => array('delta' => $delta) // completed below with current block settings.
+      'text'    => '',
+      'image'   => '',
+      // Completed below with current block settings.
+      'block'   => array('delta' => $delta),
     );
     foreach ($block_fields as $field_key => $field_info) {
       if (!isset($block_settings[$field_key])) {
@@ -1742,11 +1767,11 @@ function antispam_block_view($delta = '') {
       'html' => t('@site_name is proudly protected by <a href="!antispam"@target>AntiSpam</a>, %spams caught since @since', array('@site_name' => $sitename, '!antispam' => url('http://drupal.org/project/antispam'), '@target' => $target, '%spams' => format_plural($block_args['counter'], '1 spam', '@count spams'), '@since' => $block_args['since']))
     );
     $title_text = $block_args['text']['plain'];
-    $image_url = base_path() . drupal_get_path('module', 'antispam') .'/antispam.png';
-    $block_args['image'] = '<img src="'. $image_url .'" title="'. $title_text .'" alt="'. $title_text .'" />';
+    $image_url = base_path() . drupal_get_path('module', 'antispam') . '/antispam.png';
+    $block_args['image'] = '<img src="' . $image_url . '" title="' . $title_text . '" alt="' . $title_text . '" />';
 
     if ($block_settings['type'] == 'image') {
-      $block_args['content'] = '<a href="http://drupal.org/project/antispam" title="'. $title_text .'"'. $target .'>'. $block_args['image'] .'</a>';
+      $block_args['content'] = '<a href="http://drupal.org/project/antispam" title="' . $title_text . '"' . $target . '>' . $block_args['image'] . '</a>';
     }
     else {
       $block_args['content'] = $block_args['text']['html'];
@@ -1789,16 +1814,19 @@ function antispam_theme() {
 /**
  * Allow themes customize the content of the antispam spam counter block.
  *
- * @param array arguments where each element is:
- *              content: String; the completely built block content.
- *              counter: Integer; the current spam counter.
- *              since  : String; the formatted 'counting since' date.
- *              text   : Array; with 2 subarrays defined as follows:
- *                       plain: Array with 2 elements ('short' and 'long').
- *                       html : Array with 2 elements ('short' and 'long').
- *              image  : String; the completely built IMG tag.
- *              block  : Array; Block settings.
- * @return string The content of the block.
+ * @param array $args
+ *   A nested array where each element is:
+ *     content: String; the completely built block content.
+ *     counter: Integer; the current spam counter.
+ *     since  : String; the formatted 'counting since' date.
+ *     text   : Array; with 2 subarrays defined as follows:
+ *              plain: Array with 2 elements ('short' and 'long').
+ *              html : Array with 2 elements ('short' and 'long').
+ *     image  : String; the completely built IMG tag.
+ *     block  : Array; Block settings.
+ *
+ * @return string
+ *   The content of the block.
  */
 function theme_antispam_counter_block($args) {
   return $args['content'];
@@ -1807,9 +1835,13 @@ function theme_antispam_counter_block($args) {
 /**
  * Load a node or a comment.
  *
- * @param string Content type; can be either 'node' or 'comment'.
- * @param integer Content ID; can be either a nid or a cid.
- * @return mixed An object with requested content; FALSE on failure.
+ * @param string $content_type
+ *   Content type; can be either 'node' or 'comment' .
+ * @param integer $content_id
+ *   Content ID; can be either a nid or a cid.
+ *
+ * @return mixed
+ *  An object with requested content; FALSE on failure.
  */
 function antispam_content_load($content_type, $content_id) {
 
@@ -1827,9 +1859,13 @@ function antispam_content_load($content_type, $content_id) {
 /**
  * Delete a node or a comment.
  *
- * @param string Content type; can be either 'node' or 'comment'.
- * @param integer Content ID; can be either a nid or a cid.
- * @return boolean TRUE if specified was there; FALSE otherwise.
+ * @param string $content_type
+ *   Content type; can be either 'node' or 'comment' .
+ * @param integer $content_id
+ *   Content ID; can be either a nid or a cid.
+ *
+ * @return boolean
+ *  TRUE if specified was there; FALSE otherwise.
  */
 function antispam_content_delete($content_type, $content_id) {
   module_load_include('inc', 'comment', 'comment.admin'); 
@@ -1838,7 +1874,7 @@ function antispam_content_delete($content_type, $content_id) {
     node_delete($content_id);
     return TRUE;
   }
-  else if ($content_type == 'comment') {
+  elseif ($content_type == 'comment') {
     comment_delete($content_id);
     return TRUE;
   }
@@ -1846,10 +1882,10 @@ function antispam_content_delete($content_type, $content_id) {
 }
 
 /**
- * Clear Drupal cache.
+ * Implements hook_clear_cache().
  *
- * This function needs to be called so anonymous users get updated content
- * when certain operations have been executed.
+ * This function needs to be called so anonymous users get updated content when
+ * certain operations have been executed.
  */
 function antispam_clear_cache() {
   static $already_done = FALSE;
@@ -1862,41 +1898,47 @@ function antispam_clear_cache() {
 /**
  * Mark content as spam or remove the mark.
  *
- * @param string Content type; can be either 'node' or 'comment'.
- * @param object Content object.
- * @param string Operation; it can be 'submit-spam' or 'submit-ham'.
- * @param boolean TRUE to log action (default); FALSE otherwise (ie. the caller logs the action).
- * @param string Signature; Currently DEFENSIO is the only one that returns this.
- * @param float Spaminess; Currently DEFENSIO is the only one that returns this.
+ * @param string $content_type
+ *   Content type; can be either 'node' or 'comment'.
+ * @param object $content
+ *   Content object.
+ * @param string $op
+ *   Operation; it can be 'submit-spam' or 'submit-ham'.
+ * @param boolean $log_action
+ *   TRUE to log action (default), otherwise the caller logs the action.
  */
 function antispam_content_spam_operation($content_type, $content, $op, $log_action = TRUE) {
-  watchdog('antispam', 'antispam_content_spam_operation: type=' . $content_type . '. op=' . $op);
+  watchdog('antispam', 'antispam_content_spam_operation: type=' . $content_type . ' . op=' . $op);
   if ($content_type == 'node') {
     global $user;
     $content_id = $content->nid;
     $content_title = $content->title;
-    $content_link = l(t('view'), 'node/'. $content->nid);
+    $content_link = l(t('view'), 'node/' . $content->nid);
     $user_mail = (isset($user->mail) ? $user->mail : '');
   }
-  else { // comment
+  // Comment.
+  else {
     $content_id = $content->cid;
     $content_title = $content->subject;
-    $content_link = l(t('view'), 'node/'. $content->nid, array('fragment' => 'comment-'. $content->cid));
+    $content_link = l(t('view'), 'node/' . $content->nid, array('fragment' => 'comment-' . $content->cid));
     $user_mail = $content->mail;
   }
 
   watchdog('antispam', 'antispam_content_spam_operation: content_id=' . $content_id);
-  if(!isset($content->signature)) $content->signature = '';
-  if(!isset($content->spaminess)) $content->spaminess = 0.0;
+  if (!isset($content->signature)) {
+    $content->signature = '';
+  }
+  if (!isset($content->spaminess)) {
+    $content->spaminess = 0.0;
+  }
 
   if ($op == 'submit-spam') {
-
     if (variable_get('antispam_connection_enabled', 1)) {
+      // Defensio.
       if (antispam_get_service_provider() == DEFENSIO_SERVICE) {
-        // DEFENSIO
         if ($content->signature == '') {
           // In we do not have the content signature, then we first need to
-          // audit the comment and obtain the signature
+          // audit the comment and obtain the signature.
           $api_result = antispam_api_cmd_comment_check($content_type, $content);
           $content->signature = $api_result[1];
           $content->spaminess = $api_result[2];
@@ -1921,14 +1963,15 @@ function antispam_content_spam_operation($content_type, $content, $op, $log_acti
       ))
       ->execute();
   }
-  else { // submit-ham
 
+  // Submit-ham.
+  else {
     if (variable_get('antispam_connection_enabled', 1)) {
+      // Defensio.
       if (antispam_get_service_provider() == DEFENSIO_SERVICE) {
-        // DEFENSIO
         if ($content->signature == '') {
           // In we do not have the content signature, then we first need to
-          // audit the comment and obtain the signature
+          // audit the comment and obtain the signature.
           $api_result = antispam_api_cmd_comment_check($content_type, $content);
           $content->signature = $api_result[1];
           $content->spaminess = $api_result[2];
@@ -1955,33 +1998,50 @@ function antispam_content_spam_operation($content_type, $content, $op, $log_acti
 /**
  * Execute content publish/unpublish operations.
  *
- * @param string Content type; it can be 'node' or 'comment'.
- * @param object Content object.
- * @param string Operation; it can be 'publish' or 'unpublish'.
- * @param boolean TRUE to log action (default); FALSE otherwise (ie. the caller logs the action).
+ * @param string $content_type
+ *   Content type; it can be 'node' or 'comment' .
+ * @param object $content
+ *   Content object.
+ * @param string $op
+ *   Operation; it can be 'publish' or 'unpublish' .
+ * @param boolean $log_action
+ *   TRUE to log action (default), otherwise the caller logs the action.
  */
 function antispam_content_publish_operation($content_type, $content, $op, $log_action = TRUE) {
   module_load_include('inc', 'comment', 'comment.admin'); 
 
   if ($content_type == 'node') {
-    // This code snippet is based on node.module::node_admin_nodes_submit()
+    // This code snippet is based on node.module::node_admin_nodes_submit().
     // Only the node record is updated, no other hooks are invoked.
 
-    // perform the update action.
+    // Perform the update action.
     db_update('node')
       ->fields(array(
-        'status' => ($op == 'publish'? 1:0)
+        'status' => ($op == 'publish' ? 1 : 0)
       ))
       ->condition('nid', $content->nid)
       ->execute();
 
+    // Perform the update action of the revision.
+    db_update('node_revision')
+      ->fields(array(
+        'status' => ($op == 'publish' ? 1 : 0)
+      ))
+      ->condition('nid', $content->nid)
+      ->condition('vid', $content->vid)
+      ->execute();
+
+    // Reset the cache for the updated node in order to update the dmin views.
+    entity_get_controller('node')->resetCache(array($content->nid));
+
     if ($log_action) {
       $action = ($op == 'publish' ? t('Content published') : t('Content unpublished'));
-      watchdog('content', '@action: @title', array('@action' => $action, '@title' => $content->title), WATCHDOG_NOTICE, l(t('view'), 'node/'. $content->nid));
+      watchdog('content', '@action: @title', array('@action' => $action, '@title' => $content->title), WATCHDOG_NOTICE, l(t('view'), 'node/' . $content->nid));
     }
   }
-  else { // comment
 
+  // Comment.
+  else {
     if ($op == 'publish') {
       comment_publish_action($content, array('cid' => $content->cid));
       db_update('comment')
@@ -1990,7 +2050,7 @@ function antispam_content_publish_operation($content_type, $content, $op, $log_a
         ->execute();
       module_invoke_all('comment_published', $content);
     }
-    else if ($op == 'unpublish') {
+    elseif ($op == 'unpublish') {
       comment_unpublish_action($content, array('cid' => $content->cid));
       db_update('comment')
         ->fields(array('status' => COMMENT_NOT_PUBLISHED))
@@ -1999,12 +2059,12 @@ function antispam_content_publish_operation($content_type, $content, $op, $log_a
       // Allow modules to respond to the updating of a comment.
       module_invoke_all('comment_unpublished', $content);
     }
-    // update comment statistics.
+    // Update comment statistics.
     _comment_update_node_statistics($content->nid);
 
     if ($log_action) {
       $action = ($op == 'publish' ? t('Comment published') : t('Comment unpublished'));
-      watchdog('content', '@action: %subject', array('@action' => $action, '%subject' => $content->subject), WATCHDOG_NOTICE, l(t('view'), 'node/'. $content->nid, array('fragment' => 'comment-'. $content->cid)));
+      watchdog('content', '@action: %subject', array('@action' => $action, '%subject' => $content->subject), WATCHDOG_NOTICE, l(t('view'), 'node/' . $content->nid, array('fragment' => 'comment-' . $content->cid)));
     }
   }
   antispam_clear_cache();
@@ -2013,20 +2073,23 @@ function antispam_content_publish_operation($content_type, $content, $op, $log_a
 /**
  * Prepare comment data for AntiSpam requests.
  *
- * @param $content_type: string 'node' or 'comment' or 'other'
- * @param $content: object $node or $comment or $other
- * @param $provider: integer AKISMET_SERVIE/TYPEPAD_SERVICE/DEFENSIO_SERVICE
+ * @param string $content_type
+ *   Content type; it can be 'node' or 'comment' .
+ * @param object $content
+ *   Content object.
+ * @param integer $provider
+ *   AKISMET_SERVIE/TYPEPAD_SERVICE/DEFENSIO_SERVICE
+ *
  * @return array
  */
 function antispam_prepare_comment_data($content_type, $content, $provider) {
   // Prepare data that is common to nodes/comments.
   global $user, $base_url;
 
+  // Defensio.
   if ($provider == DEFENSIO_SERVICE) {
-    // DEFENSIO
-    if (isset($content->signature) && $content->signature != '') { // 2011.1.8
-    // if ($content->signature != '') {
-      // for submit spam/ham, we only needs signature
+    if (isset($content->signature) && $content->signature != '') {
+      // For submit spam/ham, we only needs signature.
       $comment_data = array(
         'signature' => $content->signature,
       );
@@ -2044,24 +2107,24 @@ function antispam_prepare_comment_data($content_type, $content, $provider) {
         'comment-author' => $content->name,
       );
       if ($content_type == 'comment') {
-        $comment_data['permalink'] = url('node/'. $content->nid, array('fragment' => 'comment-'. $content->cid));
+        $comment_data['permalink'] = url('node/' . $content->nid, array('fragment' => 'comment-' . $content->cid));
         $comment_data['comment-author-email'] = $content->mail;
         $comment_data['comment-author-url'] = $content->homepage;
         $comment_data['comment-content'] = render($content->comment_body[$content->language][0]['value']);
-        // date when the original article was created
+        // Date when the original article was created.
         $node_created = db_query("SELECT created FROM {node} WHERE nid=:nid", array(':nid' => $content->nid))->fetchField();
         $comment_data['article-date'] = date("Y/m/d", $node_created);
         $comment_data['comment-type'] = 'comment';
       }
-      else if ($content_type == 'node') {
-        $comment_data['permalink'] = url('node/'. $content->nid);
+      elseif ($content_type == 'node') {
+        $comment_data['permalink'] = url('node/' . $content->nid);
         $comment_data['comment-author_email'] = (isset($user->mail) ? $user->mail : '');
         $comment_data['comment-author_url'] = '';
         $comment_data['comment-content'] = render($content->body[$content->language][0]['value']);
         $comment_data['article-date'] = date("Y/m/d");  // now
         $comment_data['comment-type'] = 'other';
       }
-      else { // other
+      else {
         $comment_data['permalink'] = '';
         $comment_data['comment-author_email'] = (isset($user->mail) ? $user->mail : isset($content->mail)? $content->mail : '');
         $comment_data['comment-author_url'] = (isset($content->homepage) ? $content->homepage : '');
@@ -2082,8 +2145,8 @@ function antispam_prepare_comment_data($content_type, $content, $provider) {
       }
     }
   }
+  // Akismet or Typepad.
   else {
-    // AKISMET, TYPEPAD
     $comment_data = array(
       // IP address of the comment submitter.
       'user_ip' => (!empty($content->hostname) ? $content->hostname : ip_address()),
@@ -2091,24 +2154,25 @@ function antispam_prepare_comment_data($content_type, $content, $provider) {
       'user_agent' => $_SERVER['HTTP_USER_AGENT'],
       // The content of the HTTP_REFERER header should be sent here.
       'referrer' => $_SERVER['HTTP_REFERER'],
-      // May be blank, comment, trackback, pingback, or a made up value like "registration".
+      // May be blank, comment, trackback, pingback, or a made up value like
+      // "registration".
       'comment_type' => '',
       // Submitted name with the comment.
       'comment_author' => $content->name,
     );
     if ($content_type == 'comment') {
-      $comment_data['permalink'] = url('node/'. $content->nid, array('fragment' => 'comment-'. $content->cid));
+      $comment_data['permalink'] = url('node/' . $content->nid, array('fragment' => 'comment-' . $content->cid));
       $comment_data['comment_author_email'] = $content->mail;
       $comment_data['comment_author_url'] = $content->homepage;
       $comment_data['comment_content'] = render($content->comment_body[$content->language][0]['value']);
     }
-    else if ($content_type == 'node') {
-      $comment_data['permalink'] = url('node/'. $content->nid);
+    elseif ($content_type == 'node') {
+      $comment_data['permalink'] = url('node/' . $content->nid);
       $comment_data['comment_author_email'] = (isset($user->mail) ? $user->mail : '');
       $comment_data['comment_author_url'] = '';
       $comment_data['comment_content'] = render($content->body[$content->language][0]['value']);
     }
-    else { // other
+    else {
       $comment_data['permalink'] = '';
       $comment_data['comment-author_email'] = (isset($user->mail) ? $user->mail : isset($content->mail)? $content->mail : '');
       $comment_data['comment-author_url'] = (isset($content->homepage) ? $content->homepage : '');
@@ -2119,7 +2183,7 @@ function antispam_prepare_comment_data($content_type, $content, $provider) {
 }
 
 /**
- * Parse response data (in yaml format) from DEFENSIO service
+ * Parse response data (in yaml format) from Defensio service.
  */
 function _antispam_parse_yaml_response($response, $field = '') {
   $lines = explode("\n", $response);
@@ -2142,15 +2206,19 @@ function _antispam_parse_yaml_response($response, $field = '') {
   }
 }
 
-/************************************************************\
-  AntiSpam API implementation
-\************************************************************/
+/*******************************************************************************
+ * AntiSpam API implementation
+ ******************************************************************************/
 
 /**
- * AntiSpam API: Key Verification 
+ * AntiSpam API: Key Verification.
  *
- * @param string API Key.
- * @return integer See constants ANTISPAM_API_RESULT_xxx.
+ * @param string $key
+ *   API Key.
+ * @param integer $provider
+ *
+ * @return integer
+ *   See constants ANTISPAM_API_RESULT_xxx.
  */
 function antispam_api_cmd_verify_key($key, $provider) {
   global $base_url;
@@ -2160,33 +2228,31 @@ function antispam_api_cmd_verify_key($key, $provider) {
   $api_host = antispam_get_api_host($provider);
   if ($provider == DEFENSIO_SERVICE) {
     // DEFENSIO
-    $request = 'owner-url='. $base_url . base_path();
-    $response = _antispam_api_http_post($request, $api_host, '/blog/'. DEFENSIO_API_VERSION .'/validate-key/' . $key . '.yaml');
+    $request = 'owner-url=' . $base_url . base_path();
+    $response = _antispam_api_http_post($request, $api_host, '/blog/' . DEFENSIO_API_VERSION . '/validate-key/' . $key . ' .yaml');
     if (!isset($response[1])) {
-      watchdog('antispam', "verifying a key: can not get a response back from the service provider " . antispam_get_privider_name($provider, FALSE));
+      watchdog('antispam', "verifying a key: can not get a response back from the service provider " . antispam_get_provider_name($provider, FALSE));
       return ANTISPAM_API_RESULT_ERROR;
     }
     return (_antispam_parse_yaml_response($response[1], 'status') == 'success' ? ANTISPAM_API_RESULT_SUCCESS : ANTISPAM_API_RESULT_ERROR);
   }
   else {
     // AKISMET, TYPEPAD
-    $request = 'key='. $key .'&blog='. $base_url . base_path();
-    $response = _antispam_api_http_post($request, $api_host, '/'. AKISMET_API_VERSION .'/verify-key');
+    $request = 'key=' . $key . '&blog=' . $base_url . base_path();
+    $response = _antispam_api_http_post($request, $api_host, '/' . AKISMET_API_VERSION . '/verify-key');
     if (!isset($response[1])) {
-      watchdog('antispam', "verifying a key: can not get a response back from the service provider " . antispam_get_privider_name($provider, FALSE));
+      watchdog('antispam', "verifying a key: can not get a response back from the service provider " . antispam_get_provider_name($provider, FALSE));
       return ANTISPAM_API_RESULT_ERROR;
     }
     return ('valid' == $response[1] ? ANTISPAM_API_RESULT_SUCCESS : ANTISPAM_API_RESULT_ERROR);
   }
 }
 
-
 /**
- * AntiSpam API: Generic Data Check 
+ * AntiSpam API: Generic Data Check.
  *
- * return: -1  Error
- *          0  Ham
- *          1  Spam
+ * @return integer
+ *   -1 = Error, 0 = Ham, 1 = Spam.
  */
 function antispam_api_cmd_spam_check($body, $name = NULL, $mail = NULL, $homepage = NULL) {
   $provider = antispam_get_service_provider();
@@ -2195,34 +2261,38 @@ function antispam_api_cmd_spam_check($body, $name = NULL, $mail = NULL, $homepag
   if (empty($api_key)) {
     return array(ANTISPAM_API_RESULT_ERROR);
   }
-  $content = array(
-    'body' => $body,
-    'name' => $name,
-    'mail' => $mail,
-    'homepage' => $homepage,
-  );
+
+  $content = new stdClass();
+  $content->body = $body;
+  $content->name = $name;
+  $content->mail = $mail;
+  $content->homepage = $homepage;
+
   $api_result = antispam_api_cmd_comment_check('other', $content);
   if ($api_result[0] == ANTISPAM_API_RESULT_IS_HAM) {
-    return 0; // Ham
+    return 0;
   }
-  else if ($api_result[0] == ANTISPAM_API_RESULT_IS_SPAM) {
-    return 1; // Spam
+  elseif ($api_result[0] == ANTISPAM_API_RESULT_IS_SPAM) {
+    return 1;
   }
+  // Error - shouldn't happen.
   else {
-    return -1; // Error
+    return -1;
   }
 }
 
 /**
- * AntiSpam API: Comment Check 
+ * AntiSpam API: Comment Check.
  *
- * @param $content_type: string 'node' or 'comment' or 'other'
- * @param $content: object $node or $comment
+ * @param string $content_type
+ *   Content type; it can be 'node' or 'comment' .
+ * @param object $content
+ *   Content object.
  *
  * @return array 
- *           result[0] - return status (int) See constants ANTISPAM_API_RESULT_xxx.
- *           result[1] - signature (string) - DEFENSIO only
- *           result[2] - spaminess (float) value between 0 to 1 - DEFENSIO only
+ *   result[0] - return status (int) See constants ANTISPAM_API_RESULT_xxx.
+ *   result[1] - signature (string) - DEFENSIO only.
+ *   result[2] - spaminess (float) value between 0 to 1 - DEFENSIO only.
  */
 function antispam_api_cmd_comment_check($content_type, $content) {
   if (!variable_get('antispam_connection_enabled', 1)) {
@@ -2238,13 +2308,13 @@ function antispam_api_cmd_comment_check($content_type, $content) {
     return array(ANTISPAM_API_RESULT_ERROR);
   }
 
+  // Defensio.
   if ($provider == DEFENSIO_SERVICE) {
-    // DEFENSIO
     $comment_data = array_merge(_antispam_api_prepare_request_data(), $comment_data);
     $query_string = _antispam_api_build_query_string($comment_data);
-    $response = _antispam_api_http_post($query_string, $api_host, '/app/'. DEFENSIO_API_VERSION .'/audit-comment/' . $api_key . '.yaml');
+    $response = _antispam_api_http_post($query_string, $api_host, '/app/' . DEFENSIO_API_VERSION . '/audit-comment/' . $api_key . ' .yaml');
     if (!isset($response[1])) {
-      watchdog('antispam', "cheking a content failed: can not get a response back from the service provider " . antispam_get_privider_name($provider, FALSE));
+      watchdog('antispam', "cheking a content failed: can not get a response back from the service provider " . antispam_get_provider_name($provider, FALSE));
       return array(ANTISPAM_API_RESULT_ERROR);
     }
     $res_array = _antispam_parse_yaml_response($response[1]);
@@ -2257,24 +2327,27 @@ function antispam_api_cmd_comment_check($content_type, $content) {
     }
     else {
       $out = print_r($res_array, TRUE);
-      watchdog('antispam', "cheking a content failed: unexpected response is returned from the service provider " . antispam_get_privider_name($provider, FALSE) . ": " . $out);
+      watchdog('antispam', "cheking a content failed: unexpected response is returned from the service provider " . antispam_get_provider_name($provider, FALSE) . ": " . $out);
       return array(ANTISPAM_API_RESULT_ERROR);
     }
   }
+
+  // Akismet or Typepad.
   else {
-    // AKISMET, TYPEPAD
     $comment_data = array_merge(_antispam_api_prepare_request_data(), $comment_data);
     $query_string = _antispam_api_build_query_string($comment_data);
-    $host = $api_key .'.'. $api_host;
-    $response = _antispam_api_http_post($query_string, $host, '/'. AKISMET_API_VERSION .'/comment-check');
+    $host = $api_key . ' . ' . $api_host;
+    $response = _antispam_api_http_post($query_string, $host, '/' . AKISMET_API_VERSION . '/comment-check');
 
     if (!isset($response[1])) {
-      watchdog('antispam', "cheking a content failed: can not get a response back from the service provider " . antispam_get_privider_name($provider, FALSE));
+      watchdog('antispam', "cheking a content failed: can not get a response back from the service provider " . antispam_get_provider_name($provider, FALSE));
       return array(ANTISPAM_API_RESULT_ERROR);
     }
     $result[0] = ('true' == $response[1] ? ANTISPAM_API_RESULT_IS_SPAM : ANTISPAM_API_RESULT_IS_HAM);
-    $result[1] = '';  // signature
-    $result[2] = 0.0; // spaminess
+    // Signature.
+    $result[1] = '';
+    // Spaminess.
+    $result[2] = 0.0;
     return $result;
   }
 }
@@ -2282,10 +2355,13 @@ function antispam_api_cmd_comment_check($content_type, $content) {
 /**
  * AntiSpam API: Submit Spam 
  *
- * @param $content_type: string 'node' or 'comment'
- * @param $content: object $node or $comment
+ * @param string $content_type
+ *   Content type; it can be 'node' or 'comment' .
+ * @param object $content
+ *   Content object.
  *
- * @return integer See constants ANTISPAM_API_RESULT_xxx.
+ * @return integer
+ *   See constants ANTISPAM_API_RESULT_xxx.
  */
 function antispam_api_cmd_submit_spam($content_type, $content) {
   if (!variable_get('antispam_connection_enabled', 1)) {
@@ -2299,23 +2375,25 @@ function antispam_api_cmd_submit_spam($content_type, $content) {
   if (empty($api_key)) {
     return ANTISPAM_API_RESULT_ERROR;
   }
+
+  // Defensio.
   if ($provider == DEFENSIO_SERVICE) {
-    // DEFENSIO
     $query_string = _antispam_api_build_query_string($comment_data);
-    $response = _antispam_api_http_post($query_string, $api_host, '/blog/'. DEFENSIO_API_VERSION .'/report-false-negatives/' . $api_key . '.yaml');
+    $response = _antispam_api_http_post($query_string, $api_host, '/blog/' . DEFENSIO_API_VERSION . '/report-false-negatives/' . $api_key . ' .yaml');
     if (!isset($response[1])) {
-      watchdog('antispam', "submitting spam: can not get a response back from the service provider " . antispam_get_privider_name($provider, FALSE));
+      watchdog('antispam', "submitting spam: can not get a response back from the service provider " . antispam_get_provider_name($provider, FALSE));
       return ANTISPAM_API_RESULT_ERROR;
     }
     return (_antispam_parse_yaml_response($response[1], 'status') == 'success' ? ANTISPAM_API_RESULT_SUCCESS : ANTISPAM_API_RESULT_ERROR);
   }
+
+  // Akismet or Typepad.
   else {
-    // AKISMET, TYPEPAD
     $query_string = _antispam_api_build_query_string($comment_data);
-    $host = $api_key .'.'. $api_host;
-    $response = _antispam_api_http_post($query_string, $host, '/'. AKISMET_API_VERSION .'/submit-spam');
+    $host = $api_key . ' . ' . $api_host;
+    $response = _antispam_api_http_post($query_string, $host, '/' . AKISMET_API_VERSION . '/submit-spam');
     if (!isset($response[1])) {
-      watchdog('antispam', "submitting spam: can not get a response back from the service provider " . antispam_get_privider_name($provider, FALSE));
+      watchdog('antispam', "submitting spam: can not get a response back from the service provider " . antispam_get_provider_name($provider, FALSE));
       return ANTISPAM_API_RESULT_ERROR;
     }
     else {
@@ -2327,10 +2405,13 @@ function antispam_api_cmd_submit_spam($content_type, $content) {
 /**
  * AntiSpam API: Submit Ham 
  *
- * @param $content_type: string 'node' or 'comment'
- * @param $content: object $node or $comment
+ * @param string $content_type
+ *   Content type; it can be 'node' or 'comment' .
+ * @param object $content
+ *   Content object.
  *
- * @return integer See constants ANTISPAM_API_RESULT_xxx.
+ * @return integer
+ *   See constants ANTISPAM_API_RESULT_xxx.
  */
 function antispam_api_cmd_submit_ham($content_type, $content) {
   if (!variable_get('antispam_connection_enabled', 1)) {
@@ -2344,23 +2425,25 @@ function antispam_api_cmd_submit_ham($content_type, $content) {
   if (empty($api_key)) {
     return ANTISPAM_API_RESULT_ERROR;
   }
+
+  // Defensio.
   if ($provider == DEFENSIO_SERVICE) {
-    // DEFENSIO
     $query_string = _antispam_api_build_query_string($comment_data);
-    $response = _antispam_api_http_post($query_string, $api_host, '/blog/'. DEFENSIO_API_VERSION .'/report-false-positives/' . $api_key . '.yaml');
+    $response = _antispam_api_http_post($query_string, $api_host, '/blog/' . DEFENSIO_API_VERSION . '/report-false-positives/' . $api_key . ' .yaml');
     if (!isset($response[1])) {
-      watchdog('antispam', "submitting ham: can not get a response back from the service provider " . antispam_get_privider_name($provider, FALSE));
+      watchdog('antispam', "submitting ham: can not get a response back from the service provider " . antispam_get_provider_name($provider, FALSE));
       return ANTISPAM_API_RESULT_ERROR;
     }
     return (_antispam_parse_yaml_response($response[1], 'status') == 'success' ? ANTISPAM_API_RESULT_SUCCESS : ANTISPAM_API_RESULT_ERROR);
   }
+
+  // Akismet or Typepad.
   else {
-    // AKISMET, TYPEPAD
     $query_string = _antispam_api_build_query_string($comment_data);
-    $host = $api_key .'.'. $api_host;
-    $response = _antispam_api_http_post($query_string, $host, '/'. AKISMET_API_VERSION .'/submit-ham');
+    $host = $api_key . ' . ' . $api_host;
+    $response = _antispam_api_http_post($query_string, $host, '/' . AKISMET_API_VERSION . '/submit-ham');
     if (!isset($response[1])) {
-      watchdog('antispam', "submitting ham: can not get a response back from the service provider " . antispam_get_privider_name($provider, FALSE));
+      watchdog('antispam', "submitting ham: can not get a response back from the service provider " . antispam_get_provider_name($provider, FALSE));
       return ANTISPAM_API_RESULT_ERROR;
     }
     else {
@@ -2372,12 +2455,14 @@ function antispam_api_cmd_submit_ham($content_type, $content) {
 /**
  * Prepare user request data for AntiSpam requests.
  *
- * @return array Relevant information extracted from $_SERVER superglobal.
+ * @return array
+ *   Relevant information extracted from $_SERVER superglobal.
  */
 function _antispam_api_prepare_request_data() {
-  // You may add more elements here, but they are often related to internal server
-  // data that makes little sense to check whether a comment is spam or not.
-  // Be sure to not send HTTP_COOKIE as it may compromise your user's privacy!
+  // You may add more elements here, but they are often related to internal 
+  // server data that makes little sense to check whether a comment is spam or 
+  // not. Be sure to not send HTTP_COOKIE as it may compromise your user's 
+  // privacy!
   static $safe_to_send = array(
     'CONTENT_LENGTH',
     'CONTENT_TYPE',
@@ -2398,8 +2483,8 @@ function _antispam_api_prepare_request_data() {
     'SCRIPT_NAME'
   );
 
-  // The contents of $_SERVER doesn't change between requests,
-  // so we can have this cached in static storage.
+  // The contents of $_SERVER doesn't change between requests, so we can have
+  // this cached in static storage.
   static $server_data;
   if (!$server_data) {
     $server_data = array();
@@ -2416,49 +2501,60 @@ function _antispam_api_prepare_request_data() {
  * Build query string for AntiSpam request.
  *
  * @param array
+ *
  * @return string
  */
 function _antispam_api_build_query_string($array) {
   global $base_url;
 
+  // Defensio.
   if (antispam_get_service_provider() == DEFENSIO_SERVICE) {
-    // DEFENSIO
     $string = 'owner-url=' . $base_url . base_path();
   }
+
+  // Akismet or Typepad.
   else {
-    // AKISMET, TYPEPAD
-    $string = 'blog='. $base_url . base_path();
+    $string = 'blog=' . $base_url . base_path();
   }
+
   foreach ($array as $key => $value) {
     $string .= '&' . $key . '=' . urlencode(stripslashes($value));
   }
+
   return $string;
 }
 
 /**
  * Perform a HTTP POST request against the antispam server.
  *
- * @param string The request.
- * @param string The antispam host, prefixed with the API key (except when checking for the key itself).
- * @param string The path where to perform the request.
- * @return array Headers in $response[0] and entity in $response[1].
+ * @param string $request
+ *   The request.
+ * @param string $host
+ *   The antispam host, prefixed with the API key (except when checking for the
+ *   key itself).
+ * @param string $path
+ *   The path where to perform the request.
+ *
+ * @return array
+ *   Headers in $response[0] and entity in $response[1].
  */
 function _antispam_api_http_post($request, $host, $path) {
   $fsock_timeout = (int)variable_get('antispam_connection_timeout', 10);
 
   $http_request = "POST $path HTTP/1.0\r\n"
-    ."Host: $host\r\n"
-    ."Content-Type: application/x-www-form-urlencoded; charset=utf-8\r\n"
-    .'Content-Length: '. strlen($request) ."\r\n"
-    .'User-Agent: '. ANTISPAM_API_USERAGENT ."\r\n"
-    ."\r\n"
-    .$request;
+    . "Host: $host\r\n"
+    . "Content-Type: application/x-www-form-urlencoded; charset=utf-8\r\n"
+    . 'Content-Length: ' . strlen($request) . "\r\n"
+    . 'User-Agent: ' . ANTISPAM_API_USERAGENT . "\r\n"
+    . "\r\n"
+    . $request;
 
   $response = '';
   if (false !== ($fs = @fsockopen($host, ANTISPAM_API_PORT, $errno, $errstr, $fsock_timeout))) {
     fwrite($fs, $http_request);
     while (!feof($fs)) {
-      $response .= fgets($fs, 1160); // One TCP-IP packet
+      // One TCP-IP packet.
+      $response .= fgets($fs, 1160);
     }
     fclose($fs);
     $response = explode("\r\n\r\n", $response, 2);

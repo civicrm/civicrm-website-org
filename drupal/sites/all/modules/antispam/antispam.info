@@ -1,15 +1,12 @@
 name = AntiSpam
-description = Use the anti-spam service to protect your site from spam
-configure = admin/config/antispam
+description = Use the Akismet, Defensio or TypePad AntiSpam services to protect your site from spam.
+configure = admin/config/spamprevention/antispam
 core = 7.x
-files[] = antispam.module
-files[] = antispam.admin.inc
-files[] = antispam.cron.inc
-files[] = antispam.install
+files[] = tests/antispam.test
 
-; Information added by drupal.org packaging script on 2012-07-09
-version = "7.x-1.5"
+; Information added by Drupal.org packaging script on 2014-03-11
+version = "7.x-1.5+20-dev"
 core = "7.x"
 project = "antispam"
-datestamp = "1341813076"
+datestamp = "1394546037"
 
