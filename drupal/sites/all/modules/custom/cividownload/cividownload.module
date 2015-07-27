@@ -28,7 +28,7 @@ function cividownload_menu() {
 function cividownload_download_page() {
   // check for download mode
   $download_mode = variable_get('cividownload_mode');
-  if ($download_mode == 2 && arg(1) != 'list' ) { 
+  if ($download_mode == 2 && arg(1) != 'list' ) {
     $campaign_page = variable_get('campaign_page_url', '/campaign46');
     drupal_goto($campaign_page);
   }
@@ -48,24 +48,29 @@ function cividownload_download_list() {
   // build urls for the releases
   $content['download_urls'] = array(
     'drupal' => array(
-      'title' => t('Drupal 7.x'),
+      'title' => t('for Drupal 7.x'),
       'url' => "{$url}drupal",
       'filename' => 'drupal.tar.gz',
     ),
     'drupal6' => array(
-      'title' => t('Drupal 6.x'),
+      'title' => t('for Drupal 6.x'),
       'url' => "{$url}drupal6",
       'filename' => 'drupal6.tar.gz',
     ),
     'joomla' => array(
-      'title' => t('Joomla 2.5.x / 3.x'),
+      'title' => t('for Joomla 2.5.x / 3.x'),
       'url' => "{$url}joomla",
       'filename' => 'joomla.zip',
     ),
     'wordpress' => array(
-      'title' => t('WordPress 3.x / 4.x'),
+      'title' => t('for WordPress 3.x / 4.x'),
       'url' => "{$url}wordpress",
       'filename' => 'wordpress.zip',
+    ),
+    'l10n' => array(
+      'title' => t('localization files'),
+      'url' => "{$url}l10n",
+      'filename' => 'l10n.tar.gz',
     ),
   );
 
@@ -181,8 +186,8 @@ function cividownload_civicrm_buildForm($formName, &$form) {
     drupal_add_js(drupal_get_path('module', 'cividownload') . '/cividownload.js', array('weight' => 1000));
 
     // set page title
-    $pageTitle = "Support CiviCRM"; 
-    
+    $pageTitle = "Support CiviCRM";
+
     // get the source from the url
     $src = CRM_Utils_Request::retrieve('src', 'String', $form);
     if (!empty($src)) {
@@ -246,7 +251,7 @@ function cividownload_civicrm_buildForm($formName, &$form) {
       drupal_add_js(drupal_get_path('module', 'cividownload') . '/cividownload-redirect.js', array('weight' => 1000));
 
     }
-  } 
+  }
 }
 
 /**
@@ -255,7 +260,7 @@ function cividownload_civicrm_buildForm($formName, &$form) {
  *
  * @param Array $releases An array generated from the 'releases' property of
  *  a version in versions.json
- * 
+ *
  * @return String
  */
 function cividownload_get_latest_release($releases) {

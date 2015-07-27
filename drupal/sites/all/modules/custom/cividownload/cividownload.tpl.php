@@ -14,7 +14,7 @@
         }
         ?>
         <a class="download-link" href="<?php echo $url;?>">Download</a>
-        &nbsp;CiviCRM <?php echo $content['civicrm_version']; ?> <?php echo 'for ' . $values['title']; ?>
+        &nbsp;CiviCRM <?php echo $content['civicrm_version']; ?> <?php echo $values['title']; ?>
       </div>
       <br/>
     <?php } ?>
@@ -37,7 +37,7 @@ $url = "https://download.civicrm.org/civicrm-{$content['civicrm_lts_version']}-"
 }
 ?>
       <a class="download-link" href="<?php echo $url;?>&rtype=lts">Download</a>
-      &nbsp;CiviCRM <?php echo $content['civicrm_lts_version']; ?> <?php echo 'for ' . $values['title']; ?>
+      &nbsp;CiviCRM <?php echo $content['civicrm_lts_version']; ?> <?php echo $values['title']; ?>
     </div>
     <br/>
   <?php } ?>
@@ -49,7 +49,7 @@ $url = "https://download.civicrm.org/civicrm-{$content['civicrm_lts_version']}-"
     <div class="crm-introduction" style="font-size: 1.2em;">
       <a href="https://civicrm.org/versions" target="_blank">Which version should I get? ›</a>
       <br />
-      <a href="http://sourceforge.net/projects/civicrm/files/" target="_blank">Localization files, previous and pre-release versions (on Sourceforge.net) ›</a>
+      <a href="http://sourceforge.net/projects/civicrm/files/" target="_blank">Previous and pre-release versions (on Sourceforge.net) ›</a>
       <br />
       <a href="http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Upgrades" target="_blank">Installation and Upgrade Guides ›</a>
       <br />
