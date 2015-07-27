@@ -139,7 +139,12 @@
         $('.crm-organization-details').html($('#onBehalfOfOrg').html());
         $('#onBehalfOfOrg').remove();
         $('.custom_pre_profile-group').appendTo('.crm-your-details');
-        $('.crm-payment-options').html($('.payment_options-group').html());
+        if ($('.payment_options-group').length > 0) {
+          $('.crm-payment-options').html($('.payment_options-group').html());
+        }
+        else {
+          $('.crm-your-details').next().hide();
+        }
         $('.payment_options-group').remove();
         $('.crm-contribute-button').html($('.crm-submit-buttons').html());
         $('.crm-submit-buttons').remove();
