@@ -112,9 +112,9 @@
         <div><fieldset class="crm-payment-options"></fieldset></div>
         <div class="crm-contribute-button"></div>
       </div>
-      <div class="crm-right-side">
+      <!--div class="crm-right-side">
         <div class="crm-member-benefits"></div>
-      </div>
+      </div-->
     </div>
     <div class="clear"></div>
   </div>
@@ -129,7 +129,7 @@
         {literal}
         $('.crm-intro-text').html($('#intro_text').html());
         $('#intro_text').remove();
-        $('.crm-member-benefits').html($('#membership-intro').html());
+        //$('.crm-member-benefits').html($('#membership-intro').html());
         $('#membership-intro').remove();
         $('.crm-fees').html($('.crm-section').html());
         $('#membership').remove();
@@ -447,9 +447,9 @@
 	cj('input[name="soft_credit_type_id"]').on('change', function() {
 		enableHonorType();
 	});
-	
+
   function enableHonorType( ) {
-    var selectedValue = cj('input[name="soft_credit_type_id"]:checked'); 
+    var selectedValue = cj('input[name="soft_credit_type_id"]:checked');
     if ( selectedValue.val() > 0) {
       cj('#honorType').show();
     }
@@ -463,7 +463,7 @@
 	});
 
   function showRecurHelp( ) {
-    var showHelp = cj('input[id="is_recur"]:checked'); 
+    var showHelp = cj('input[id="is_recur"]:checked');
     if ( showHelp.val() > 0) {
       cj('#recurHelp').show();
     }
@@ -471,7 +471,7 @@
       cj('#recurHelp').hide();
     }
   }
-	
+
   function pcpAnonymous( ) {
     // clear nickname field if anonymous is true
     if (document.getElementsByName("pcp_is_anonymous")[1].checked) {
@@ -551,12 +551,12 @@
     updatePriceSetHighlight();
 
     function toggleBillingBlockIfFree(){
-      var total_amount_tmp =  $(this).data('raw-total'); 
+      var total_amount_tmp =  $(this).data('raw-total');
       // Hide billing questions if this is free
       if (total_amount_tmp == 0){
         cj("#billing-payment-block").hide();
         cj(".payment_options-group").hide();
-      } 
+      }
       else {
         cj("#billing-payment-block").show();
         cj(".payment_options-group").show();
