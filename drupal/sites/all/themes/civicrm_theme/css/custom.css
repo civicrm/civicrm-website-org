@@ -3266,3 +3266,11 @@ form#webform-client-form-2278,
     margin-top: -35px;
     padding: 20px;
 }
+
+p.pullquote{
+    text-align: center;
+    margin-left: 60px;
+    margin-right: 60px;
+    font-size: 140%;
+}
+
