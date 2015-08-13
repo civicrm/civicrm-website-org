@@ -1,0 +1,40 @@
+.l-header {
+	background-color: $darkgrey;
+	height: 6em;
+	padding: 1.5em;
+
+	.l-branding {
+		width: 50%;
+
+		@include breakpoint($tablet) {
+			width: auto;
+		}
+	}
+
+	.l-region--menu {
+		display: none;
+
+		@include breakpoint($tablet) {
+			display: inline;
+			width: 70%;
+		}		
+	}
+
+	.menu {
+		text-align: right;
+		padding: 0;
+		margin: 0;
+
+		li {
+			list-style: none outside none;
+			display: inline-block;
+			margin: 0 0.75em;
+			padding: 0;
+			vertical-align: top;
+		}
+	}
+
+	.block--menu-menu-secondary-menu {
+		margin-bottom: 1em;
+	}
+}
