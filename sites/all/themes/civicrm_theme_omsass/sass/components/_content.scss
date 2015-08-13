@@ -1,0 +1,22 @@
+.l-main {
+	padding: 2% 3%;
+}
+
+.node--blog {
+	padding-bottom: 2em;
+    border-bottom: 1px solid #b7b8b9;
+    margin-bottom: 2em;
+}
+
+.links--inline {
+		li {
+			border-right: 2px solid #6c696a;
+			padding: 0 1em;
+			line-height: 1;
+			margin-right: 0;
+		}
+
+		li:last-child {
+			border-right: 0;
+		}
+    }

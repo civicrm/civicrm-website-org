@@ -1,0 +1,47 @@
+@include add-grid(12);
+@include add-gutter(1/3);
+
+.l-header {
+	
+	@include add-grid(2);
+	@include add-gutter(.25);
+
+	@include breakpoint($tablet) {
+		@include add-grid(2 10);
+		@include add-gutter(.25);
+	}
+
+	.l-branding {
+		@include grid-span(1,1);
+	}
+
+	.l-region--menu {
+		@include breakpoint($tablet) {
+			@include grid-span(1,2);	
+		}
+		
+	}
+}
+
+.l-region--footer-first {
+	@include layout(12) {
+		.footer-sm {
+			@include grid-span(10,1);
+		}
+
+		.block--search-form {
+			@include grid-span(2,9);
+			@include clearfix;
+		}
+
+		.block--menu-block {
+			@include grid-span(12,1);
+		}
+	}
+}
+
+.l-region--footer-second {
+	@include add-grid(2);
+	@include add-gutter(.25);	
+}
+
