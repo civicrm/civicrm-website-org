@@ -1,0 +1,89 @@
+@import "compass/utilities/sprites/base";
+
+// General Sprite Defaults
+// You can override them before you import this file.
+$icons-sprite-dimensions : false !default;
+$icons-use-percentages   : false !default;
+$icons-position          : 0% !default;
+$icons-spacing           : 0 !default;
+$icons-repeat            : no-repeat !default;
+$icons-prefix            : '' !default;
+$icons-clean-up          : true !default;
+$icons-layout            : vertical !default;
+$icons-inline            : false !default;
+$icons-sort-by           : 'none' !default;
+$icons-class-separator   : $default-sprite-separator !default;
+$icons-sprite-base-class : ".icons#{$icons-class-separator}sprite" !default;
+
+  
+ // These variables control the generated sprite output
+ // You can override them selectively before you import this file.
+ 
+   $icons-civi-sprite-position: $icons-position !default;
+   $icons-civi-sprite-spacing:  $icons-spacing !default;
+   $icons-civi-sprite-repeat:   $icons-repeat !default;
+ 
+
+ $icons-sprites: sprite-map("icons/civi-sprite.png",
+ 
+   $icons-civi-sprite-position: $icons-civi-sprite-position, 
+   $icons-civi-sprite-spacing:  $icons-civi-sprite-spacing, 
+   $icons-civi-sprite-repeat:   $icons-civi-sprite-repeat,
+ 
+ $layout   : $icons-layout,
+ $cleanup  : $icons-clean-up,
+ $spacing  : $icons-spacing,
+ $position : $icons-position,
+ $sort-by  : $icons-sort-by
+ );
+
+
+// All sprites should extend this class
+// The icons-sprite mixin will do so for you.
+@if $icons-inline {
+  #{$icons-sprite-base-class} {
+    background-image: inline-sprite($icons-sprites);
+  } 
+} @else {
+  #{$icons-sprite-base-class} {
+    background-image: sprite-url($icons-sprites);
+    background-repeat: no-repeat;
+  }
+}
+//sass functions to return the dimensions of a sprite image as units
+
+  @function icons-sprite-width($name) {
+    @return sprite-width($icons-sprites, $name);
+  }
+
+  @function icons-sprite-height($name) {
+    @return sprite-height($icons-sprites, $name);
+  }
+
+
+// Use this to set the dimensions of an element
+// based on the size of the original image.
+@mixin icons-sprite-dimensions($name) {
+  @include sprite-dimensions($icons-sprites, $name)
+}
+
+// Move the background position to display the sprite.
+@mixin icons-sprite-position($name, $offset-x: 0, $offset-y: 0, $use-percentages: $icons-use-percentages) {
+  @include sprite-background-position($icons-sprites, $name, $offset-x, $offset-y, $use-percentages)
+}
+
+// Extends the sprite base class and set the background position for the desired sprite.
+// It will also apply the image dimensions if $dimensions is true.
+@mixin icons-sprite($name, $dimensions: $icons-sprite-dimensions, $offset-x: 0, $offset-y: 0, $use-percentages: $icons-use-percentages, $separator: $icons-class-separator) {
+  @extend #{$icons-sprite-base-class};
+  @include sprite($icons-sprites, $name, $dimensions, $offset-x, $offset-y, $use-percentages, $separator: $separator);
+}
+
+@mixin icons-sprites($sprite-names, $dimensions: $icons-sprite-dimensions, $prefix: sprite-map-name($icons-sprites), $offset-x: 0, $offset-y: 0, $use-percentages: $icons-use-percentages, $separator: $icons-class-separator) {
+  @include sprites($icons-sprites, $sprite-names, $icons-sprite-base-class, $dimensions, $prefix, $offset-x, $offset-y, $use-percentages, $separator: $separator)
+}
+
+// Generates a class for each sprited image.
+@mixin all-icons-sprites($dimensions: $icons-sprite-dimensions, $prefix: sprite-map-name($icons-sprites), $offset-x: 0, $offset-y: 0, $use-percentages: $icons-use-percentages, $separator: $icons-class-separator) {
+  @include icons-sprites(civi-sprite, $dimensions, $prefix, $offset-x, $offset-y, $use-percentages, $separator: $separator);
+}

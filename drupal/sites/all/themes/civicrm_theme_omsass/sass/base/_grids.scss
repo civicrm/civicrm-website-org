@@ -1,0 +1,177 @@
+@include add-grid(12);
+@include add-gutter(1/3);
+
+.l-header {
+	
+	@include add-grid(2);
+	@include add-gutter(.25);
+
+	@include breakpoint($tablet) {
+		@include add-grid(2 10);
+		@include add-gutter(.25);
+	}
+
+	.l-header-inner {
+		max-width: 90%;
+		margin: auto;
+	}
+
+	.l-branding {
+		@include grid-span(1,1);
+	}
+
+	.l-region--menu {
+		@include breakpoint($tablet) {
+			@include grid-span(1,2);	
+		}
+		
+	}
+}
+
+.l-main {
+	max-width: 90%;
+	margin: auto;
+}
+
+.l-region--footer-first {
+	@include layout(12) {
+		.footer-sm {
+			@include grid-span(10,1);
+			clear:right;
+		}
+
+		.block--search-form {
+			@include grid-span(2,9);
+		}
+
+		.block--menu-block {
+			@include grid-span(12,1,15);
+			clear: both;
+
+			.menu-level-1 > .menu > li {
+				&:nth-child(n){
+					@include float-span(3);
+  					clear:none;
+				}
+				&:nth-child(5n+5) {
+					@include float-span(3,last);
+				}	
+			}
+		}
+	}
+}
+
+.l-region--footer-second {
+	@include add-grid(2);
+	@include add-gutter(.25);	
+}
+
+.view-service-providers {
+	.views-field-nothing {
+		@include add-grid(2);
+		@include add-gutter(.5);
+		
+		.display-name {
+			@include grid-span(2,1,$output-style: 'isolation',$options: 'both');
+		}
+
+		.p-logo {
+			@include grid-span(1,1,$output-style: 'isolation',$options: 'right');
+			width: 20%;
+			clear:right;
+
+			.civi-image {
+				margin-top: 100%;
+			}
+
+			@include breakpoint($tablet) {
+				width: 40%;
+			}
+
+			@include breakpoint($wide) {
+				width: 20%;
+			}
+		}
+
+		.p-data {
+			@include grid-span(2,1);
+			width: 80%;
+			padding-left: 3%;
+
+			@include breakpoint($tablet) {
+				width: 60%;
+			}
+			
+			@include breakpoint($wide) {
+				width: 80%;
+			}
+		}
+
+		.less-info {
+			@include grid-span(2,1,$output-style: 'isolation',$options: 'both');
+		}
+	}
+
+	.views-field-nothing-1 {
+		@include add-grid(3);
+		
+		display-name {
+			@include grid-span(3,1,$output-style: 'isolation',$options: 'both');
+		}		
+		
+		.name-logo {
+			@include grid-span(1,1);
+			width: 20%;
+			max-width: 150px;
+			img {
+				// max-width: 150px;
+			}
+		}
+
+		.contact-div {
+			@include grid-span(1,2);
+			width: 60%;
+			margin-left: 20%;
+
+			.contact-info {
+				margin-top: 0 !important;
+			}
+
+			@include breakpoint($tablet) {
+				width: 40%;
+				margin-left: 25%;
+			}
+
+			@include breakpoint($desktop) {
+				width: 50%;
+			}
+
+			@include breakpoint($wide) {
+				width: 60%;
+			}
+		}
+
+		.civi-image {
+			@include grid-span(1,3);
+			width: 20%;
+
+			@include breakpoint($tablet) {
+				width: 32%;
+			}
+
+			@include breakpoint($desktop) {
+				width: 30%;
+			}
+
+			@include breakpoint($wide) {
+				width: 20%;
+			}
+		}
+
+		.more-info {
+			@include grid-span(3,1,$output-style: 'isolation',$options: 'both');
+		}
+	}
+	
+}
+
