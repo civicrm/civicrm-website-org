@@ -3,6 +3,10 @@
 	height: 6em;
 	padding: 1.5em;
 
+	.l-header-inner {
+		max-width: 90%;
+	}
+
 	.l-branding {
 		width: 50%;
 
@@ -34,7 +38,7 @@
 		}
 	}
 
-	.block--menu-menu-secondary-menu {
+	.menu-name-menu-secondary-menu {
 		margin-bottom: 1em;
 	}
 }

@@ -1,4 +1,4 @@
-name = CiviCRM-o4
+name = CiviCRM-omSass
 description = SASS and Singularity Grid driven theme for Omega 4+
 base theme = omega
 screenshot = screenshot.png
@@ -8,15 +8,15 @@ core = 7.x
 ; ========================================
 ; Stylesheets
 ; ========================================
-stylesheets[all][] = css/civicrm-o4.normalize.css
-stylesheets[all][] = css/civicrm-o4.hacks.css
-stylesheets[all][] = css/civicrm-o4.styles.css
-stylesheets[all][] = css/civicrm-o4.no-query.css
+stylesheets[all][] = css/civicrm_theme_omsass.normalize.css
+stylesheets[all][] = css/civicrm_theme_omsass.hacks.css
+stylesheets[all][] = css/civicrm_theme_omsass.styles.css
+stylesheets[all][] = css/civicrm_theme_omsass.no-query.css
 
 ; ========================================
 ; Scripts
 ; ========================================
-scripts[] = js/civicrm-o4.behaviors.js
+scripts[] = js/civicrm_theme_omsass.behaviors.js
 
 ; ========================================
 ; Regions
@@ -130,3 +130,9 @@ settings[omega_libraries][html5shiv][status] = 0
 settings[omega_libraries][html5shiv][variant] = _default
 settings[nice_menus_custom_css] = ""
 settings[favicon_mimetype] = image/png
+
+; ========================================
+; Fonts
+; ========================================
+fonts[google_fonts_api][] = "Source Sans Pro&subset=latin-ext#700"
+fonts[google_fonts_api][] = "Source Sans Pro&subset=latin-ext#regular"
