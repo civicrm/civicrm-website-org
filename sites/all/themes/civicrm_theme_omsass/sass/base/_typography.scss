@@ -1,9 +1,9 @@
 
 body {
-	font-family: 'Source Sans Pro';
-	font-size: 16px;
-	line-height: 1.4;
+	font-family: 'Source Sans Pro' !important;
+	line-height: 1.4 !important;
 	color: $grey;
+	font-size: 16px !important;
 }
 
 a {
@@ -27,6 +27,12 @@ h5 {
 	font-size: 1.29em;
 }
 
+p {
+	line-height: 1.4 !important;
+	margin-top: 1em !important;
+	margin-bottom: 1em !important;
+}
+
 input.form-submit {
 	border: 0 none;
 	cursor: pointer;
@@ -36,6 +42,10 @@ td, th {
     font-weight: normal;
     text-align: left;
 }
+
+// .submitted {
+// 	font-
+// }
 
 #block-delta-blocks-breadcrumb {
 	li {
@@ -170,7 +180,7 @@ td, th {
 		}
 	}
 
-	.menu-name-main-menu {
+	.menu-name-menu-primary-menu {
 		a {
 			font-size: 1.3em; /* 20px @ 24px */
 			font-weight: bold;
@@ -179,9 +189,15 @@ td, th {
 
 	.menu-name-menu-secondary-menu {
 		a {
-			font-size: 0.67em; /* 16px @ 24px */
+			// font-size: 0.67em; /* 16px @ 24px */
 			font-weight: normal;
 		}
+	}
+}
+
+.l-main {
+	@include breakpoint($desktop) {
+		font-size: 20px !important;
 	}
 }
 
@@ -215,6 +231,12 @@ td, th {
 	}
 }
 
+.node__title {
+	a {
+		color: $grey;
+	}
+}
+
 .view-homepage-news {
 	a {
 		color: $white;
@@ -239,12 +261,15 @@ td, th {
 
 .view-service-providers {
 	a {
-		color: $white;
 		font-weight: bold;
 		text-transform: uppercase;
 	}
 
 	.views-label {
+		font-weight: bold;
+	}
+
+	.contact-info {
 		font-weight: bold;
 	}
 }
