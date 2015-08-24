@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AACA,iCAAkC;;EAChC,qBAAsB;IACpB,OAAO,EAAE,IAAI;;;EAIb,uCAA8B;IAC5B,WAAW,EAAE,YAAY;IACzB,UAAU,EAAE,YAAY",
-"sources": ["../sass/civicrm_theme_omsass.hacks.scss"],
-"names": [],
-"file": "civicrm_theme_omsass.hacks.css"
-}
