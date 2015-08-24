@@ -11,6 +11,6 @@ if [ -z "$REMOTE" ]; then
 fi
 
 set -ex
-TAG=deploy-$(date '+%Y-%m-%d-%H-%M')
+TAG=deploy-$(date -u '+%Y-%m-%d-%H-%M')
 git tag -a "$TAG" -m "Deployment tag ($TAG)"
 git push "$REMOTE" "$TAG"
