@@ -98,7 +98,7 @@ var wfCivi = (function ($, D) {
         $(':visible', container).hide();
         container.append('<input type="submit" class="form-submit ajax-processed civicrm-remove-file" value="' + Drupal.t('Change') + '" onclick="wfCivi.clearFileField(\'' + field + '\'); return false;">');
       }
-      container.prepend('<span class="civicrm-file-icon"><img alt="' + Drupal.t('File') + '" src="' + info.icon + '" /> ' + (info.name || '') + '</span>');
+      container.prepend('<span class="civicrm-file-icon"><img alt="' + Drupal.t('File') + '" src="' + info.icon + '" /> ' + (info.name ? ('<a href="'+ info.file_url+ '" target="_blank">'+info.name +'</a>') : '') + '</span>');
     }
   };
 
@@ -128,7 +128,12 @@ var wfCivi = (function ($, D) {
           if (n[5] === 'country') {
             $('select.civicrm-processed', this).val(setting.defaultCountry).trigger('change', 'webform_civicrm:reset');
           } else {
-            $(':input', this).not(':radio, :checkbox, :button, :submit').val('').trigger('change', 'webform_civicrm:reset');
+            $(':input', this).not(':radio, :checkbox, :button, :submit, :file, .form-file').each(function() {
+              if (this.id && $(this).val() != '') {
+                $(this).val('');
+                $(this).trigger('change', 'webform_civicrm:reset');
+              }
+            });
             $('.civicrm-remove-file', this).click();
             $('input:checkbox, input:radio', this).each(function() {
               $(this).removeAttr('checked').trigger('change', 'webform_civicrm:reset');
@@ -137,6 +142,7 @@ var wfCivi = (function ($, D) {
         }
         var type = (n[6] === 'name') ? 'name' : n[4];
         if ($.inArray(type, toHide) >= 0) {
+          $(':input', $el).webformProp('disabled', op === 'hide');
           $el[op](speed, function() {$el[op];});
         }
       }
@@ -162,7 +168,7 @@ var wfCivi = (function ($, D) {
         val = this.val;
       // Handle file fields
       if (this.data_type === 'File') {
-        pub.initFileField(fid, val);
+        pub.initFileField(fid, this);
         return;
       }
       // First try to find a single element - works for textfields and selects
@@ -193,7 +199,7 @@ var wfCivi = (function ($, D) {
           // Checkboxes & radios
           else {
             $.each($.makeArray(val), function(k, v) {
-              $(':input[value="'+v+'"]', $wrapper).attr('checked', 'checked').trigger('change', 'webform_civicrm:autofill');
+              $(':input[value="'+v+'"]', $wrapper).webformProp('checked', true).trigger('change', 'webform_civicrm:autofill');
             });
           }
         }
@@ -212,7 +218,7 @@ var wfCivi = (function ($, D) {
   }
 
   function populateStates(stateSelect, countryId) {
-    $(stateSelect).attr('disabled', 'disabled');
+    $(stateSelect).webformProp('disabled', true);
     if (stateProvinceCache[countryId]) {
       fillOptions(stateSelect, stateProvinceCache[countryId]);
     }
@@ -277,7 +283,7 @@ var wfCivi = (function ($, D) {
     var fields = $(item).parents('form.webform-client-form').find('[name*="['+(name.replace('master_id', ''))+'"]').not('[name*=location_type_id]').not('[name*=master_id]').not('[type="hidden"]');
     if (action === 'hide') {
       fields.parent().hide(speed, function() {$(this).css('display', 'none');});
-      fields.attr('disabled', 'disabled');
+      fields.webformProp('disabled', true);
     }
     else {
       fields.removeAttr('disabled');
