@@ -1,5 +1,46 @@
+#block-views-features-block{
+	margin: 0 auto;
+	display: block;
+	width: 80%;
+	padding: 2%;
+	.block__title {
+		padding: 1%;
+		margin: 1% 0;
+	}
+	.icongrid {
+		.views-row {
+			padding: 2%;
+		}
+		.views-field-field-one-sentence-summary {
+			display: none;
+		}
+	}
+}
+
+.hero {
+	display: inherit;
+	padding: 2% 4% 2% 7%;
+}
+
 .l-main {
-	padding: 2% 3%;
+	// padding: 2% 3%;
+
+	.l-region--blue {
+		background-color: $darkblue;
+	}
+
+	.l-region--blue-two {
+		background-color: $darkblue;	
+	}
+
+	.l-region--green {
+		background-color: $civigreen;
+	}
+
+}
+
+.l-region--blue {
+	display: inline-block;
 }
 
 .node--blog {
