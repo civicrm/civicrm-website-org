@@ -57,4 +57,12 @@
     }
   };
 
+  Drupal.behaviors.civicrmThemeOmsassToggleFeatureDescription = {
+    attach: function (context, settings) {
+      $('.views-row', context).click(function () {
+        $(this).children('.views-field-field-one-sentence-summary').toggle();
+      });
+    }
+  }
+
 })(jQuery);

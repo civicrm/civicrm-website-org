@@ -90,30 +90,18 @@
       <?php print render($page['highlighted']); ?>
       <?php //print $breadcrumb; ?>
       <a id="main-content"></a>
-      <?php print render($title_prefix); ?>
-      <?php if ($title): ?>
-        <h1 id="page-title"><?php print $title; ?></h1>
-      <?php endif; ?>
-      <?php print render($title_suffix); ?>
       <?php print $messages; ?>
       <?php print render($tabs); ?>
       <?php print render($page['help']); ?>
       <?php if ($action_links): ?>
         <ul class="action-links"><?php print render($action_links); ?></ul>
       <?php endif; ?>
-      <?php if ($hero_left || $hero_right): ?>
       <div class="hero">
         <?php print render($page['hero_left']); ?>
         <?php print render($page['hero_right']); ?>
       </div>
-      <?php endif; ?>
-      <?php print render($page['content']); ?>
       <?php if($page['blue']): ?>
       <?php print render($page['blue']); ?>
-      <?php endif; ?>
-
-      <?php if($page['blue_two']): ?>
-      <?php print render($page['blue_two']); ?>
       <?php endif; ?>
       <?php print $feed_icons; ?>
     </div>

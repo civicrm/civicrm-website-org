@@ -1,6 +1,6 @@
 
 body {
-	font-family: 'Source Sans Pro' !important;
+	font-family: 'Source Sans Pro';
 	line-height: 1.4 !important;
 	color: $grey;
 	font-size: 16px !important;
@@ -61,6 +61,13 @@ td, th {
 		}
 
 
+	}
+}
+
+#block-views-features-block {
+	text-align: center;
+	.block__title {
+		text-align: center;
 	}
 }
 
@@ -180,7 +187,7 @@ td, th {
 		}
 	}
 
-	.menu-name-menu-primary-menu {
+	.block--menu-menu-primary-menu {
 		a {
 			font-size: 1.3em; /* 20px @ 24px */
 			font-weight: bold;
@@ -193,6 +200,10 @@ td, th {
 			font-weight: normal;
 		}
 	}
+}
+
+.l-region--blue {
+	color: #fff;
 }
 
 .l-main {
