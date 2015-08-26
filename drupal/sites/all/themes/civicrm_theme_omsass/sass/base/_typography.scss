@@ -144,6 +144,22 @@ td, th {
 	@extend #page-title;
 }
 
+.breadcrumb {
+	a {
+		line-height: 1;
+	    margin-right: 20px;
+	    padding-right: 30px;
+	    background: url(images/breadcrumb-arrrow.png) no-repeat right center;
+	    color: #fff;
+	    text-transform: uppercase;
+	    font-size: 0.75em;
+	}
+
+	.last {
+		color: $civigreen;
+	}
+}
+
 .has-banner {
 	h1 {
 		color: $white;

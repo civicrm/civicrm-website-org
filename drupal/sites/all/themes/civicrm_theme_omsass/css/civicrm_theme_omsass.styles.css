@@ -462,34 +462,47 @@ td, th {
   text-align: center; }
 
 /* line 148, ../sass/base/_typography.scss */
+.breadcrumb a {
+  line-height: 1;
+  margin-right: 20px;
+  padding-right: 30px;
+  background: url(images/breadcrumb-arrrow.png) no-repeat right center;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 0.75em; }
+/* line 158, ../sass/base/_typography.scss */
+.breadcrumb .last {
+  color: #82c459; }
+
+/* line 164, ../sass/base/_typography.scss */
 .has-banner h1 {
   color: #fff; }
 
-/* line 154, ../sass/base/_typography.scss */
+/* line 170, ../sass/base/_typography.scss */
 .hp-events a {
   color: #fff; }
-/* line 158, ../sass/base/_typography.scss */
+/* line 174, ../sass/base/_typography.scss */
 .hp-events .pager {
   margin: 0;
   text-align: center;
   display: block;
   list-style-type: none; }
-/* line 165, ../sass/base/_typography.scss */
+/* line 181, ../sass/base/_typography.scss */
 .hp-events .pager-next, .hp-events .pager-previous {
   font-size: 3em;
   display: inline; }
 
-/* line 172, ../sass/base/_typography.scss */
+/* line 188, ../sass/base/_typography.scss */
 .hp-slide-text div {
   color: #fff; }
 
-/* line 177, ../sass/base/_typography.scss */
+/* line 193, ../sass/base/_typography.scss */
 .hp-events-date {
   text-align: center;
   text-transform: uppercase;
   line-height: 1; }
 
-/* line 184, ../sass/base/_typography.scss */
+/* line 200, ../sass/base/_typography.scss */
 .hp-slide-btn a {
   text-transform: uppercase;
   font-size: 1.57em;
@@ -497,108 +510,108 @@ td, th {
   font-weight: bold;
   color: #000; }
 
-/* line 192, ../sass/base/_typography.scss */
+/* line 208, ../sass/base/_typography.scss */
 .l-header {
   color: #fff; }
-  /* line 195, ../sass/base/_typography.scss */
+  /* line 211, ../sass/base/_typography.scss */
   .l-header .block__title {
     display: none; }
-  /* line 199, ../sass/base/_typography.scss */
+  /* line 215, ../sass/base/_typography.scss */
   .l-header .menu {
     text-align: right;
     line-height: 0; }
-    /* line 203, ../sass/base/_typography.scss */
+    /* line 219, ../sass/base/_typography.scss */
     .l-header .menu a {
       color: #fff;
       text-transform: uppercase;
       line-height: 1; }
-  /* line 211, ../sass/base/_typography.scss */
+  /* line 227, ../sass/base/_typography.scss */
   .l-header .block--menu-menu-primary-menu a {
     font-size: 1.3em;
     /* 20px @ 24px */
     font-weight: bold; }
-  /* line 218, ../sass/base/_typography.scss */
+  /* line 234, ../sass/base/_typography.scss */
   .l-header .menu-name-menu-secondary-menu a {
     font-weight: normal; }
 
-/* line 225, ../sass/base/_typography.scss */
+/* line 241, ../sass/base/_typography.scss */
 .l-region--blue, .l-region--blue-two, .l-region--darkgrey, .l-region--grey {
   color: #fff; }
 
-/* line 229, ../sass/base/_typography.scss */
+/* line 245, ../sass/base/_typography.scss */
 .l-region--grey {
   text-align: center; }
-  /* line 231, ../sass/base/_typography.scss */
+  /* line 247, ../sass/base/_typography.scss */
   .l-region--grey .block__title {
     text-align: center; }
 
 @media (min-width: 980px) {
-  /* line 236, ../sass/base/_typography.scss */
+  /* line 252, ../sass/base/_typography.scss */
   .l-main {
     font-size: 20px !important; } }
 
-/* line 242, ../sass/base/_typography.scss */
+/* line 258, ../sass/base/_typography.scss */
 .l-region--footer-first {
   text-align: center; }
   @media (min-width: 980px) {
-    /* line 242, ../sass/base/_typography.scss */
+    /* line 258, ../sass/base/_typography.scss */
     .l-region--footer-first {
       text-align: left; } }
-  /* line 248, ../sass/base/_typography.scss */
+  /* line 264, ../sass/base/_typography.scss */
   .l-region--footer-first a {
     color: #6c696a; }
-  /* line 252, ../sass/base/_typography.scss */
+  /* line 268, ../sass/base/_typography.scss */
   .l-region--footer-first .menu {
     text-align: center; }
     @media (min-width: 980px) {
-      /* line 252, ../sass/base/_typography.scss */
+      /* line 268, ../sass/base/_typography.scss */
       .l-region--footer-first .menu {
         text-align: left; } }
-    /* line 257, ../sass/base/_typography.scss */
+    /* line 273, ../sass/base/_typography.scss */
     .l-region--footer-first .menu li {
       font-size: 1.2em; }
-  /* line 261, ../sass/base/_typography.scss */
+  /* line 277, ../sass/base/_typography.scss */
   .l-region--footer-first .expanded {
     text-transform: uppercase;
     font-weight: bold; }
-  /* line 266, ../sass/base/_typography.scss */
+  /* line 282, ../sass/base/_typography.scss */
   .l-region--footer-first .leaf {
     text-transform: none;
     font-weight: normal;
     line-height: 2em; }
 
-/* line 275, ../sass/base/_typography.scss */
+/* line 291, ../sass/base/_typography.scss */
 .l-region--footer-first .footer-sm .block__title {
   font-size: 2em; }
 
-/* line 282, ../sass/base/_typography.scss */
+/* line 298, ../sass/base/_typography.scss */
 .node__title a {
   color: #6c696a; }
 
-/* line 288, ../sass/base/_typography.scss */
+/* line 304, ../sass/base/_typography.scss */
 .view-homepage-news a {
   color: #fff; }
-/* line 292, ../sass/base/_typography.scss */
+/* line 308, ../sass/base/_typography.scss */
 .view-homepage-news .views-field-view-node {
   font-weight: bold; }
 
-/* line 298, ../sass/base/_typography.scss */
+/* line 314, ../sass/base/_typography.scss */
 .view-rotating-partner-logos .partner-text {
   text-align: center; }
-/* line 302, ../sass/base/_typography.scss */
+/* line 318, ../sass/base/_typography.scss */
 .view-rotating-partner-logos a {
   text-indent: -8765px;
   line-height: 0;
   font-size: 0; }
 
-/* line 310, ../sass/base/_typography.scss */
+/* line 326, ../sass/base/_typography.scss */
 .view-service-providers a {
   font-weight: bold;
   text-transform: uppercase; }
-/* line 315, ../sass/base/_typography.scss */
+/* line 331, ../sass/base/_typography.scss */
 .view-service-providers .views-label {
   font-weight: bold; }
-/* line 319, ../sass/base/_typography.scss */
+/* line 335, ../sass/base/_typography.scss */
 .view-service-providers .contact-info {
   font-weight: bold; }
 
@@ -728,7 +741,7 @@ td, th {
 .breadcrumb {
   background-color: #231f20;
   margin: 0;
-  padding: 2% 8%;
+  padding: 1% 8%;
   list-style-type: none; }
 
 /* line 165, ../sass/components/_content.scss */
