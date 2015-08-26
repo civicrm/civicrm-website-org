@@ -123,6 +123,10 @@
       <?php if($page['grey']): ?>
       <?php print render($page['grey']); ?>
       <?php endif; ?>
+
+       <?php if($page['dark_grey']): ?>
+      <?php print render($page['dark_grey']); ?>
+      <?php endif; ?>
       <?php print $feed_icons; ?>
     </div>
 
