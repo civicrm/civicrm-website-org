@@ -43,21 +43,6 @@ regions[green] = Green
 regions[footer_first] = Footer First
 regions[footer_second] = Footer Second
 
-; ========================================
-; Zones
-; ========================================
-zones[header] = Header
-zones[breadcrumb] = Breadcrumb
-zones[content] = Content
-zones[footer_first] = Footer First
-zones[footer_second] = Footer Second
-zones[banner] = Banner
-zones[blue] = Blue
-zones[blue_two] = Blue Two (homepage)
-zones[grey] = Grey
-zones[dark_grey] = Dark Grey (homepage)
-zones[white] = White
-zones[green] = Green
 
 ; ========================================
 ; Settings
