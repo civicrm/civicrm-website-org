@@ -185,7 +185,7 @@ img, media {
 
 /* line 2, ../sass/base/_typography.scss */
 body {
-  font-family: 'Source Sans Pro';
+  font-family: "Source Sans Pro";
   line-height: 1.4 !important;
   color: #6c696a;
   font-size: 16px !important; }
@@ -415,59 +415,94 @@ td, th {
     display: none; }
 
 /* line 20, ../sass/components/_content.scss */
+#block-views-homepage-stats-block {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: 0 none; }
+  /* line 25, ../sass/components/_content.scss */
+  #block-views-homepage-stats-block .view-content {
+    padding-top: 60px; }
+  /* line 29, ../sass/components/_content.scss */
+  #block-views-homepage-stats-block .views-slideshow-pager-fields {
+    display: block;
+    position: absolute;
+    bottom: 30px;
+    width: 100%; }
+  /* line 36, ../sass/components/_content.scss */
+  #block-views-homepage-stats-block .views-slideshow-controls-text {
+    display: none; }
+  /* line 41, ../sass/components/_content.scss */
+  #block-views-homepage-stats-block .views-slideshow-pager-fields .views-slideshow-pager-field-item {
+    display: inline-block;
+    margin-right: 20px; }
+  /* line 46, ../sass/components/_content.scss */
+  #block-views-homepage-stats-block .views-slideshow-pager-fields .views-slideshow-pager-field-item.views-row-last {
+    margin-right: 0; }
+  /* line 50, ../sass/components/_content.scss */
+  #block-views-homepage-stats-block .views-slideshow-pager-fields .views-content-counter {
+    text-indent: -8765px;
+    width: 20px;
+    height: 20px;
+    background-color: #6c696a;
+    cursor: pointer; }
+  /* line 60, ../sass/components/_content.scss */
+  #block-views-homepage-stats-block .views-slideshow-controls-bottom .views-slideshow-pager-field-item.active .views-content-counter {
+    background-color: #929294; }
+
+/* line 66, ../sass/components/_content.scss */
 .hero {
   display: inherit;
   padding: 2% 4% 2% 7%; }
 
-/* line 28, ../sass/components/_content.scss */
+/* line 74, ../sass/components/_content.scss */
 .l-main .l-region--blue {
   background-color: #056186; }
-/* line 32, ../sass/components/_content.scss */
+/* line 78, ../sass/components/_content.scss */
 .l-main .l-region--blue-two {
   background-color: #056186; }
-/* line 36, ../sass/components/_content.scss */
+/* line 82, ../sass/components/_content.scss */
 .l-main .l-region--green {
   background-color: #82c459; }
 
-/* line 42, ../sass/components/_content.scss */
+/* line 88, ../sass/components/_content.scss */
 .l-region--blue {
   display: inline-block; }
 
-/* line 46, ../sass/components/_content.scss */
+/* line 92, ../sass/components/_content.scss */
 .node--blog {
   padding-bottom: 2em;
   border-bottom: 1px solid #b7b8b9;
   margin-bottom: 2em; }
 
-/* line 53, ../sass/components/_content.scss */
+/* line 99, ../sass/components/_content.scss */
 .links--inline li {
   border-right: 2px solid #6c696a;
   padding: 0 1em;
   line-height: 1;
   margin-right: 0; }
-/* line 60, ../sass/components/_content.scss */
+/* line 106, ../sass/components/_content.scss */
 .links--inline li:last-child {
   border-right: 0; }
 
-/* line 65, ../sass/components/_content.scss */
+/* line 111, ../sass/components/_content.scss */
 .more-info, .less-info {
   margin-top: 3%; }
-  /* line 67, ../sass/components/_content.scss */
+  /* line 113, ../sass/components/_content.scss */
   .more-info a, .less-info a {
     padding: 1em;
     background-color: #393536;
     color: #fff; }
 
-/* line 74, ../sass/components/_content.scss */
+/* line 120, ../sass/components/_content.scss */
 .more-info {
   margin-bottom: 5%; }
 
-/* line 78, ../sass/components/_content.scss */
+/* line 124, ../sass/components/_content.scss */
 .less-info {
   padding: 1.5em;
   border-top: 1px solid #ccc; }
 
-/* line 83, ../sass/components/_content.scss */
+/* line 129, ../sass/components/_content.scss */
 .view-service-providers {
   	/* .views-field-nothing {
   		text-align: center;
@@ -524,7 +559,7 @@ td, th {
   			margin-bottom: 5%;
   		}
   	} */ }
-  /* line 84, ../sass/components/_content.scss */
+  /* line 130, ../sass/components/_content.scss */
   .view-service-providers .views-row {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc; }

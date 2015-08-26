@@ -17,6 +17,52 @@
 	}
 }
 
+#block-views-homepage-stats-block {
+	padding-bottom: 0;
+	margin-bottom: 0;
+	border-bottom: 0 none;
+
+	.view-content {
+		padding-top: 60px;
+	}
+
+	.views-slideshow-pager-fields {
+		display: block;
+		position: absolute;
+		bottom: 30px;
+		width: 100%;
+	}
+
+	.views-slideshow-controls-text {
+		display: none;
+	}
+
+	.views-slideshow-pager-fields {
+		.views-slideshow-pager-field-item {
+			display: inline-block;
+			margin-right: 20px;
+		}
+
+		.views-slideshow-pager-field-item.views-row-last {
+			margin-right: 0;
+		}
+
+		.views-content-counter {
+			text-indent: -8765px;
+			width: 20px;
+			height: 20px;
+			background-color: #6c696a;
+			cursor: pointer;
+		}
+	}
+
+	.views-slideshow-controls-bottom {
+		.views-slideshow-pager-field-item.active .views-content-counter {
+			background-color: #929294;
+		}
+	}
+}
+
 .hero {
 	display: inherit;
 	padding: 2% 4% 2% 7%;
