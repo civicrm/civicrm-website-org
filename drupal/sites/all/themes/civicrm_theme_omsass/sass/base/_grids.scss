@@ -1,10 +1,58 @@
 @include add-grid(12);
 @include add-gutter(1/3);
 
+#block-views-get-started-block {
+	display: inline-block;
+	@include breakpoint($desktop) {
+		@include add-grid(3);
+		@include add-gutter(0);
+
+		.views-row-1 {
+			@include grid-span(1,1);
+		}
+
+		.views-row-2 {
+			@include grid-span(1,2);
+		}
+
+		.views-row-3 {
+			@include grid-span(1,3);
+		}
+	}
+}
+
+
+.left-two-thirds {
+	@include grid-span(2,1);
+}
+
+.left-third {
+	@include grid-span(1,1);
+}
+
+.right-third {
+	@include grid-span(1,3);
+}
+
+.right-two-thirds {
+	@include grid-span(2,2);
+}
+
 .front {
 	.hero {
 		display: inline-block;
+		clear: both;
 		@include add-grid(2);
+		
+		.l-region--hero-left {
+			@include grid-span(3,1,3);	
+		}
+
+		.l-region--hero-right {
+			@include grid-span(3,1,3);
+		}
+
+		@include breakpoint($desktop) {
 			.l-region--hero-left {
 				@include grid-span(2,1,3);	
 			}
@@ -12,7 +60,9 @@
 			.l-region--hero-right {
 				@include grid-span(1,3,3);
 			}
-		clear: both;
+		}
+		
+		
 	}
 }
 
@@ -59,6 +109,11 @@
 	width: 100%;
 	height: 20%;
 
+}
+
+.l-region--blue_two {
+	@add-grid(3);
+	@add-gutter(.25);
 }
 
 .l-region--footer-first {
@@ -206,7 +261,7 @@
 .icongrid {
 	// max-width: 90%;
 	.view-content {
-		@include layout(12,1/3) {
+		@include layout-at(('grid':12,'gutter':1/3),$tablet) {
 			.views-row {
 				&:nth-child(n){
 					    	@include float-span(4);

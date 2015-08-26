@@ -13,6 +13,7 @@
 		}
 		.views-field-field-one-sentence-summary {
 			display: none;
+			clear:both;
 		}
 	}
 }
@@ -27,12 +28,17 @@
 	}
 
 	.views-slideshow-pager-fields {
-		display: block;
-		position: absolute;
-		bottom: 30px;
-		width: 100%;
-	}
+		display: none;
 
+		@include breakpoint($desktop) {
+			display: block;
+			// position: absolute;
+			bottom: 30px;
+			width: 100%;
+		}
+		
+	}
+	
 	.views-slideshow-controls-text {
 		display: none;
 	}
@@ -63,9 +69,99 @@
 	}
 }
 
+#block-views-get-started-block {
+
+	.block__title {
+		text-align: center;
+	}
+
+	max-width: 95%;
+
+	.bluegreen {
+		background-color: $bluegreen;
+	}
+
+	.pink {
+		background-color: $pink;
+	}
+
+	.green {
+		background-color: $civigreen;
+	}
+	.views-row {
+		text-align: center;
+		padding: 5% 5% 0;
+		border-top: 1px solid $grey;	
+
+		@include breakpoint($desktop) {
+			border-top: none;
+			border-right: 1px solid $grey;	
+		}
+		
+	}
+
+	.views-row-first {
+		border-top: none;
+	}
+
+	.views-row-last {
+		border-right: none;
+	}
+
+	.views-field-field-option-number {
+		display: inline-block;
+		.field-content {
+			    width: 1.5em;
+    height: 1.5em;
+    border-radius: 2em;
+    font-size: 3.5em;
+    color: #fff;
+    font-weight: 700;
+		}
+		
+	}
+	
+	.views-field-field-button-link {
+		ul {
+			list-style-type: none;
+			-webkit-padding-start: 0;
+		}
+
+		li {
+			margin-bottom: 3%;
+			padding: 0.5em 0;
+			text-align: center;
+
+			a {
+				color: #fff;
+				text-transform: uppercase;
+				font-weight: 700;
+			}
+		}
+
+	}
+}
+
+
+.btn-grey {
+	display: inline-block;
+	padding:  1em;
+	background-color: $grey;
+	color: #fff;
+}
+
 .hero {
 	display: inherit;
 	padding: 2% 4% 2% 7%;
+
+	.l-region--hero-right {
+		border-bottom: 1px solid $darkgrey;
+		@include breakpoint($desktop) {
+			border-bottom: 0;
+			border-left: 1px solid $darkgrey;
+			padding-left: 4%;	
+		}
+	}
 }
 
 .l-main {
@@ -73,6 +169,7 @@
 
 	.l-region--blue {
 		background-color: $darkblue;
+		display: inline-block;
 	}
 
 	.l-region--blue-two {
@@ -85,9 +182,12 @@
 
 }
 
-.l-region--blue {
-	display: inline-block;
+.l-region--white {
+	text-align: center;
 }
+
+
+
 
 .node--blog {
 	padding-bottom: 2em;

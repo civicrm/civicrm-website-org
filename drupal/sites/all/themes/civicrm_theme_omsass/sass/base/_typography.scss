@@ -43,9 +43,12 @@ td, th {
     text-align: left;
 }
 
-// .submitted {
-// 	font-
-// }
+.btn-grey {
+
+	font-weight: bold;
+	text-transform: uppercase;
+	cursor: pointer;
+}
 
 #block-delta-blocks-breadcrumb {
 	li {
@@ -72,6 +75,7 @@ td, th {
 }
 
 #block-views-homepage-stats-block {
+	text-align: center;
 	a {
 		text-indent: -8765px;
 	}
