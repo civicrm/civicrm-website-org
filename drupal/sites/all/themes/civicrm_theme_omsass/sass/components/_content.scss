@@ -71,11 +71,12 @@
 
 #block-views-get-started-block {
 
+	max-width: 95%;
+	margin: 0 0 2% 0;
+
 	.block__title {
 		text-align: center;
 	}
-
-	max-width: 95%;
 
 	.bluegreen {
 		background-color: $bluegreen;
@@ -174,6 +175,32 @@
 			padding-left: 4%;	
 		}
 	}
+}
+
+.hp-events {
+	.views-row {
+		margin-bottom: 4%;
+	}
+
+	.pager-current {
+		display: none;
+	}
+}
+
+.hp-events-date {
+	border: 1px solid #fff;
+        /* width: 12%; */
+    padding: 2%;
+    display: inline-block;
+    /* float: left; */
+    // clear: left;
+    margin-right: 4%;
+    vertical-align: top;
+}
+
+.hp-events-title {
+	display: inline-block;
+	width: 75%;
 }
 
 .l-main {

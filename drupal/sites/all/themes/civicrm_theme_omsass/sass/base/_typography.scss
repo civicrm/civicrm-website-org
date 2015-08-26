@@ -154,6 +154,18 @@ td, th {
 	a {
 		color: $white;
 	}
+	
+	.pager {
+		margin: 0;
+		text-align: center;
+		display: block;
+		list-style-type: none;
+	}
+
+	.pager-next, .pager-previous {
+		font-size: 3em;	
+		display: inline;
+	}
 }
 
 .hp-slide-text {
