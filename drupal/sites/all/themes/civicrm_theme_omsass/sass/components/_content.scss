@@ -155,6 +155,12 @@
 	}
 }
 
+.breadcrumb {
+	background-color: $breadcrumbbg;
+	margin: 0;
+    padding: 2% 8%;
+    list-style-type: none;
+}
 
 .btn-grey {
 	display: inline-block;
