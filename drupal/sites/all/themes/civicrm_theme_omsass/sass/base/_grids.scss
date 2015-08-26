@@ -23,19 +23,19 @@
 
 
 .left-two-thirds {
-	@include grid-span(2,1);
+	@include breakpoint($desktop) {@include grid-span(2,1);}
 }
 
 .left-third {
-	@include grid-span(1,1);
+	@include breakpoint($desktop) {@include grid-span(1,1);}
 }
 
 .right-third {
-	@include grid-span(1,3);
+	@include breakpoint($desktop) {@include grid-span(1,3);}
 }
 
 .right-two-thirds {
-	@include grid-span(2,2);
+	@include breakpoint($desktop) {@include grid-span(2,2);}
 }
 
 .front {
@@ -129,17 +129,30 @@
 		}
 
 		.block--menu-block {
-			@include grid-span(12,1,15);
+			// @include grid-span(12,1,15);
 			clear: both;
-
-			.menu-level-1 > .menu > li {
-				&:nth-child(n){
-					@include float-span(3);
-  					clear:none;
+			@include layout(15,.25) {
+				.menu-level-1 > .menu > li {
+					&:nth-child(n){
+						@include float-span(15);
+	  					clear:none;
+					}
+					&:nth-child(1n+1) {
+						@include float-span(15,last);
+					}	
 				}
-				&:nth-child(5n+5) {
-					@include float-span(3,last);
-				}	
+			}
+			
+			@include layout-at(('grid':15,'gutter':.25),$desktop) {
+				.menu-level-1 > .menu > li {
+					&:nth-child(n){
+						@include float-span(3);
+	  					clear:none;
+					}
+					&:nth-child(5n+5) {
+						@include float-span(3,last);
+					}	
+				}
 			}
 		}
 	}
@@ -257,6 +270,27 @@
 		}
 	}
 	
+}
+
+.view-rotating-partner-logos {
+	.view-content {
+		.views-field-views-field-nothing {
+			// @include add-grid(2);
+			// @include add-gutter(0);
+
+			@include breakpoint($desktop) {
+				.partner-left {
+					@include grid-span(1,1,2)	
+				}
+
+				.partner-contact {
+					@include grid-span(1,2,2);
+				}
+				
+			}
+
+		}
+	}
 }
 
 .icongrid {

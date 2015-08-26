@@ -226,6 +226,13 @@ td, th {
 	color: #fff;
 }
 
+.l-region--grey {
+	text-align: center;
+	.block__title {
+		text-align: center;
+	}
+}
+
 .l-main {
 	@include breakpoint($desktop) {
 		font-size: 20px !important;
@@ -233,13 +240,22 @@ td, th {
 }
 
 .l-region--footer-first {
+	text-align: center;
+	@include breakpoint($desktop) {
+		text-align: left;
+	}
+
 	a {
 		color: $grey;
 	}
 	
 	.menu {
+		text-align: center;
+		@include breakpoint($desktop) {
+			text-align: left;
+		}
 		li {
-			font-size: .92em;
+			font-size: 1.2em;
 		}
 	}
 	.expanded {

@@ -214,10 +214,13 @@
 	.l-region--blue-two {
 		background-color: $darkblue;
 		display: inline-block;
+		text-align: center;
 
 		.blue-two-inner {
 			max-width: 95%;
 			margin: 0 auto;
+			display: inline-block;
+			text-align:left;
 		}	
 	}
 
@@ -231,10 +234,15 @@
 
 	.l-region--grey {
 		background-color: $grey;
+		width: 100%;
+		padding: 0 5%;
+		display: inline-block;
 	}
 
 	.l-region--dark-grey {
 		background-color: $darkgrey;
+		width: 100%;
+		display: inline-block;
 	}
 
 }
