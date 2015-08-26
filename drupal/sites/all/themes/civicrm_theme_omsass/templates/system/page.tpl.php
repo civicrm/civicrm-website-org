@@ -112,8 +112,16 @@
       <?php print render($page['blue']); ?>
       <?php endif; ?>
 
+      <?php if($page['white']): ?>
+      <?php print render($page['white']); ?>
+      <?php endif; ?>
+
       <?php if($page['blue_two']): ?>
       <?php print render($page['blue_two']); ?>
+      <?php endif; ?>
+
+      <?php if($page['grey']): ?>
+      <?php print render($page['grey']); ?>
       <?php endif; ?>
       <?php print $feed_icons; ?>
     </div>
