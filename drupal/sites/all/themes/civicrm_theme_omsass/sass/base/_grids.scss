@@ -107,11 +107,12 @@
 
 .l-region--blue {
 	width: 100%;
-	height: 20%;
+	// height: 20%;
 
 }
 
-.l-region--blue_two {
+.l-region--blue-two {
+	width: 100%;
 	@add-grid(3);
 	@add-gutter(.25);
 }

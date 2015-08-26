@@ -108,6 +108,12 @@
 		border-right: none;
 	}
 
+	.views-field-body {
+		@include breakpoint($desktop) {
+			min-height: 6em;
+		}
+	}
+
 	.views-field-field-option-number {
 		display: inline-block;
 		.field-content {
@@ -119,6 +125,12 @@
     font-weight: 700;
 		}
 		
+	}
+
+	.views-field-field-subtitle {
+		@include breakpoint($desktop) {
+			min-height: 8em;
+		}
 	}
 	
 	.views-field-field-button-link {
@@ -173,7 +185,13 @@
 	}
 
 	.l-region--blue-two {
-		background-color: $darkblue;	
+		background-color: $darkblue;
+		display: inline-block;
+
+		.blue-two-inner {
+			max-width: 95%;
+			margin: 0 auto;
+		}	
 	}
 
 	.l-region--green {

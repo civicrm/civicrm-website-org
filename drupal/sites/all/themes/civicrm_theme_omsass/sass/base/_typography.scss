@@ -72,6 +72,10 @@ td, th {
 	.block__title {
 		text-align: center;
 	}
+
+	.views-field-title {
+		text-decoration: uppercase;
+	}
 }
 
 #block-views-homepage-stats-block {
@@ -207,6 +211,10 @@ td, th {
 }
 
 .l-region--blue {
+	color: #fff;
+}
+
+.l-region--blue-two {
 	color: #fff;
 }
 
