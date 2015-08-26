@@ -101,7 +101,7 @@
       <?php if ($action_links): ?>
         <ul class="action-links"><?php print render($action_links); ?></ul>
       <?php endif; ?>
-      <?php if ($hero_left || $hero_right): ?>
+      <?php if ($page['hero_left'] || $page['hero_right']): ?>
       <div class="hero">
         <?php print render($page['hero_right']); ?>
         <?php print render($page['hero_left']); ?>
