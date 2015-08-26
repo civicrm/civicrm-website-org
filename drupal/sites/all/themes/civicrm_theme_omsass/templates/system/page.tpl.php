@@ -103,8 +103,8 @@
       <?php endif; ?>
       <?php if ($hero_left || $hero_right): ?>
       <div class="hero">
-        <?php print render($page['hero_left']); ?>
         <?php print render($page['hero_right']); ?>
+        <?php print render($page['hero_left']); ?>
       </div>
       <?php endif; ?>
       <?php print render($page['content']); ?>

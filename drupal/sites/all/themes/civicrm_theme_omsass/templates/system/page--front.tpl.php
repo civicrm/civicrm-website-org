@@ -97,11 +97,23 @@
         <ul class="action-links"><?php print render($action_links); ?></ul>
       <?php endif; ?>
       <div class="hero">
-        <?php print render($page['hero_left']); ?>
         <?php print render($page['hero_right']); ?>
+        <?php print render($page['hero_left']); ?>
       </div>
       <?php if($page['blue']): ?>
       <?php print render($page['blue']); ?>
+      <?php endif; ?>
+
+      <?php if($page['white']): ?>
+      <?php print render($page['white']); ?>
+      <?php endif; ?>
+
+      <?php if($page['blue_two']): ?>
+      <?php print render($page['blue_two']); ?>
+      <?php endif; ?>
+
+      <?php if($page['grey']): ?>
+      <?php print render($page['grey']); ?>
       <?php endif; ?>
       <?php print $feed_icons; ?>
     </div>

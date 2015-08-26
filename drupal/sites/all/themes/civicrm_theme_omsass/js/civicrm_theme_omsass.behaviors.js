@@ -65,4 +65,12 @@
     }
   }
 
+  Drupal.behaviors.civicrmThemeOmsassSetButtonLinkContainerClass = {
+    attach: function(context,settings) {
+      $('.views-field-field-button-link li', context).addClass(function() {
+        return $(this).children('a').attr('class');
+      });
+    }
+  }
+
 })(jQuery);
