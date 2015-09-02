@@ -491,6 +491,14 @@ function webform_schema() {
         'type' => 'text',
         'not null' => TRUE,
       ),
+      'status' => array(
+        'description' => 'Whether this email is enabled.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
     ),
     'primary key' => array('nid', 'eid'),
   );
@@ -734,13 +742,20 @@ function webform_install() {
     );
     $webform_type = node_type_set_defaults($webform_type);
     node_type_save($webform_type);
+    // Enable webform components by default on Webform nodes.
+    variable_set('webform_node_webform', TRUE);
+    // Now that a webform node type has been created, reset the cache of the
+    // node types that support webforms. This is needed for tests which will
+    // create nodes in the same execution.
+    drupal_static_reset('webform_node_types');
     if (variable_get('webform_install_add_body_field', FALSE)) {
       node_add_body_field($webform_type);
     }
-    // Enable webform components by default on Webform nodes.
-    variable_set('webform_node_webform', TRUE);
     // Disable comments by default on Webform nodes.
     variable_set('comment_webform', '0');
+  }
+  else {
+    variable_set('webform_node_types_primary', array());
   }
 
   // Note: MS SQL Server does not support size-limited indexes and the column
@@ -804,7 +819,7 @@ function webform_uninstall() {
   $query = new EntityFieldQuery();
   $results = $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'webform')
-    ->range(0,1)
+    ->range(0, 1)
     ->execute();
   $instances = field_info_instances('node', 'webform');
   unset($instances['body']);
@@ -1053,7 +1068,7 @@ function webform_update_7314() {
  */
 function webform_update_7315() {
   if (!db_field_exists('webform_last_download', 'requested')) {
-    db_add_field('webform_last_download', 'requested', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0,));
+    db_add_field('webform_last_download', 'requested', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0));
   }
 }
 
@@ -1948,7 +1963,7 @@ function webform_update_7416() {
       ->execute();
   }
   // Commit the transaction
-  unset ($txn);
+  unset($txn);
 
   // Now that every submission has a serial number, make serial numbers required.
   $spec['not null'] = TRUE;
@@ -2023,7 +2038,7 @@ function webform_update_7421() {
                           FALSE);
   variable_set('webform_email_html_capable', $capable);
   return $capable
-            ? t('An HTML-capable module is installed. The option to send HTML e-mail is enabled. ')
+            ? t('An HTML-capable module is installed. The option to send HTML e-mail is enabled.')
             : t('No commonly-known HTML capable module is installed. The option to send HTML e-mail is disabled.');
 }
 
@@ -2126,7 +2141,7 @@ function webform_update_7423() {
 
   // Rebuild the registry because this point release contains a new class: WebformConditionals.
   registry_rebuild();
-  
+
   return t('Webform database tables were successfully adjusted to allow more than one action for each conditional.');
 }
 
@@ -2260,3 +2275,22 @@ function webform_update_7429() {
   return t('Webforms will now resume draft submissions on the page where the submitter left off.');
 }
 
+/**
+ * Add a column to the emails table to allow disabling.
+ */
+function webform_update_7430() {
+  // Add status column to webform_emails.
+  if (!db_field_exists('webform_emails', 'status')) {
+    $spec = array(
+      'description' => 'Whether this email is enabled.',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 1,
+    );
+    db_add_field('webform_emails', 'status', $spec);
+  }
+
+  return t('Webform emails may now be disabled.');
+}

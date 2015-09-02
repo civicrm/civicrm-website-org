@@ -328,11 +328,6 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE, $subm
     '#translatable' => array('title', 'description', 'options'),
   );
 
-  // Add HTML5 required attribute, if needed and possible (not working on multiple checkboxes).
-  if ($component['required'] && ($component['extra']['aslist'] || !$component['extra']['multiple'])) {
-    $element['#attributes']['required'] = 'required';
-  }
-
   // Convert the user-entered options list into an array.
   $default_value = $filter ? webform_replace_tokens($component['value'], $node) : $component['value'];
   $options = _webform_select_options($component, !$component['extra']['aslist'], $filter);
@@ -345,11 +340,19 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE, $subm
     _webform_shuffle_options($options);
   }
 
+  // Add HTML5 required attribute, if needed and possible (not working on more than one checkboxes).
+  if ($component['required'] && ($component['extra']['aslist'] || !$component['extra']['multiple'] || count($options) == 1)) {
+    $element['#attributes']['required'] = 'required';
+  }
+
   // Add default options if using a select list with no default. This trigger's
   // Drupal 7's adding of the option for us. See @form_process_select().
   if ($component['extra']['aslist'] && !$component['extra']['multiple'] && $default_value === '') {
     $element['#empty_value'] = '';
-    $element['#empty_option'] = $component['extra']['empty_option'];
+    if (strlen($component['extra']['empty_option'])) {
+      $element['#empty_option'] =  $component['extra']['empty_option'];
+      $element['#translatable'][] = 'empty_option';
+    }
   }
 
   // Set the component options.
@@ -485,7 +488,7 @@ function webform_expand_select_ids($element) {
 /**
  * Implements _webform_display_component().
  */
-function _webform_display_select($component, $value, $format = 'html') {
+function _webform_display_select($component, $value, $format = 'html', $submission = array()) {
   // Sort values by numeric key. These may be in alphabetic order from the database query,
   // which is not numeric order for keys '10' and higher.
   $value = (array) $value;
@@ -737,6 +740,24 @@ function _webform_table_select($component, $value) {
   }
 
   return implode('<br />', $items);
+}
+
+/**
+ * Implements _webform_action_set_component().
+ */
+function _webform_action_set_select($component, &$element, &$form_state, $value) {
+  // Set the value as an array for multiple select or single value otherwise.
+  if ($element['#type'] == 'checkboxes') {
+    $checkbox_values = $element['#options'];
+    array_walk($checkbox_values, function(&$value, $key) use ($value) {
+      $value = (int)(strval($key) === $value);
+    });
+  }
+  else {
+    $value = $component['extra']['multiple'] ? array($value) : $value;
+  }
+  $element['#value'] = $value;
+  form_set_value($element, $value, $form_state);
 }
 
 /**

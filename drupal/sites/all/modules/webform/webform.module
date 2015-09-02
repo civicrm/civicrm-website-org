@@ -514,6 +514,9 @@ function webform_menu_email_load($eid, $nid) {
         $email['email'] = $_GET['email'];
       }
     }
+    if (isset($_GET['status'])) {
+      $email['status'] = $_GET['status'];
+    }
   }
 
   return $email;
@@ -1085,6 +1088,9 @@ function webform_webform_component_info() {
       ),
       'file' => 'components/number.inc',
       'conditional_type' => 'numeric',
+      'features' => array(
+        'conditional_action_set' => TRUE,
+      ),
     ),
     'pagebreak' => array(
       'label' => t('Page break'),
@@ -1392,10 +1398,13 @@ function webform_file_download($uri) {
  *   An array of node type names.
  */
 function webform_node_types() {
-  $types = array();
-  foreach (node_type_get_names() as $type => $name) {
-    if (variable_get('webform_node_' . $type, FALSE)) {
-      $types[] = $type;
+  $types = &drupal_static(__FUNCTION__, NULL);
+  if (!isset($types)) {
+    $types = array();
+    foreach (node_type_get_names() as $type => $name) {
+      if (variable_get('webform_node_' . $type, FALSE)) {
+        $types[] = $type;
+      }
     }
   }
   return $types;
@@ -2084,7 +2093,7 @@ function theme_webform_view_messages($variables) {
     $message = t('Submissions for this form are closed.');
   }
   elseif ($node->webform['confidential'] && user_is_logged_in()) {
-    $message = t('This form is confidential. You much <a href="!url">Log out</a> to submit it.',
+    $message = t('This form is confidential. You must <a href="!url">Log out</a> to submit it.',
                  array('!url' => url('/user/logout', array('query' => array('destination' => request_uri())))));
   }
   // If open and not allowed to submit the form, give an explanation.
@@ -2739,7 +2748,7 @@ function _webform_client_form_add_component($node, $component, $component_value,
   if ($format != 'form') {
     // This component is display only.
     $data = empty($input_values[$cid]) ? NULL : $input_values[$cid];
-    if ($display_element = webform_component_invoke($component['type'], 'display', $component, $data, $format)) {
+    if ($display_element = webform_component_invoke($component['type'], 'display', $component, $data, $format, $form['#submission'])) {
       // Set access based on the private property.
       $display_element += array('#access' => TRUE);
       $display_element['#access'] = $display_element['#access'] && $component_access;
@@ -2923,16 +2932,35 @@ function _webform_client_form_validate(&$elements, &$form_state, $form_id = NULL
     $sorter = webform_get_conditional_sorter($form_state['complete form']['#node']);
     $cid = $elements['#webform_component']['cid'];
     $page_num = $form_state['values']['details']['page_num'];
-    // Webform-specific enhancement, only validate the field if it was used in this submission.
-    // This both skips validation on the field and sets the value of the field to NULL, preventing any dangerous input.
-    // Short-circuit validation for a hidden component (hidden by rules dependent upon component on previous pages),
-    // or a component this is dependent upon values on the current page, but is hidden based upon their current values.
+    // Webform-specific enhancements:
+    // 1) Only validate the field if it was used in this submission.
+    //    This both skips validation on the field and sets the value of the
+    //    field to NULL, preventing any dangerous input. Short-circuit
+    //    validation for a hidden component (hidden by rules dependent upon
+    //    component on previous pages), or a component this is dependent upon
+    //    values on the current page, but is hidden based upon their current
+    //    values.
+    // 2) Only valididate if the field has not been set by conditionals.
+    //    The user will be unable to fix the validation without surmising the
+    //    logic and changing the trigger for the conditional. Also, it isn't
+    //    possible to set $element['#value'] without component-specific
+    //    knowledge of how the data is stored because $input_values is already
+    //    webform-normalized to contain values in arrays.
     if ($sorter->componentVisibility($cid, $page_num) != WebformConditionals::componentShown) {
       form_set_value($elements, NULL, $form_state);
       return;
     }
+    if ($sorter->componentSet($cid, $page_num)) {
+      $component = $elements['#webform_component'];
+      $value = $input_values[$cid];
+      $value = is_array($value) ? $value[0] : $value;
+      // webform_component_invoke cannot be called with reference arguments. Call directly.
+      // webform_component_invoke($component['type'], 'action_set', $component, $elements, $form_state, $value);
+      $function = '_webform_action_set_' . $component['type'];
+      $function($component, $elements, $form_state, $value);
+    }
 
-    // Check for changes in requires status made by conditionals.
+    // Check for changes in required status made by conditionals.
     $required = $sorter->componentRequired($cid, $page_num);
     if (isset($required)) {
       $elements['#required'] = $required;
@@ -3436,7 +3464,7 @@ function template_preprocess_webform_confirmation(&$vars) {
 
   // URL back to form (or same page for in-block confirmations).
   $vars['url'] = empty($node->webform_block)
-                    ? url('node/'. $node->nid)
+                    ? url('node/' . $node->nid)
                     : url(current_path(), array('query' => drupal_get_query_parameters()));
 
   // Progress bar.
@@ -3519,9 +3547,10 @@ function template_preprocess_webform_element(&$variables) {
   // Ensure defaults.
   $element += array(
     '#title_display' => 'before',
-    '#wrapper_attributes' => array(
-      'class' => array(),
-    ),
+    '#wrapper_attributes' => array(),
+  );
+  $element['#wrapper_attributes'] += array(
+    'class' => array(),
   );
 
   // All elements using this for display only are given the "display" type.
@@ -3573,13 +3602,6 @@ function theme_webform_element($variables) {
   $output = '<div ' . drupal_attributes($element['#wrapper_attributes']) . '>' . "\n";
   $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . webform_filter_xss($element['#field_prefix']) . '</span> ' : '';
   $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . webform_filter_xss($element['#field_suffix']) . '</span>' : '';
-
-  // managed_file uses a different id, make sure the label points to the correct id.
-  if (isset($element['#type']) && $element['#type'] === 'managed_file') {
-    if (!empty($variables['element']['#id'])) {
-      $variables['element']['#id'] .= '-upload';
-    }
-  }
 
   switch ($element['#title_display']) {
     case 'inline':
@@ -3869,7 +3891,7 @@ function webform_replace_tokens($string, $node = NULL, $submission = NULL, $emai
   $clear = is_bool($sanitize);
   $string = token_replace($string, $token_data, array('clear' => $clear, 'sanitize' => $sanitize === TRUE));
   if (!$clear) {
-    $string = webform_clear_tokens(check_markup($string, $sanitize));
+    $string = webform_replace_tokens_clear(check_markup($string, $sanitize));
   }
   return $string;
 }
@@ -3887,11 +3909,14 @@ function webform_replace_tokens($string, $node = NULL, $submission = NULL, $emai
  * there is no value provided. These tokens i.e. [current-page:query:*] needs to
  * be removed to not show up in the output.
  *
+ * Note: This function was previously named webform_clear_tokens, which
+ * conflicted with the webform_clear module, being called as hook_tokens.
+ *
  * @param string $text
  *   The text to have its tokens removed.
  * @see token_replace()
  */
-function webform_clear_tokens($text) {
+function webform_replace_tokens_clear($text) {
   if (empty($text)) {
     return $text;
   }
@@ -4362,14 +4387,16 @@ function webform_format_email_address($address, $name, $node = NULL, $submission
  *   TRUE if optional. FALSE if required.
  * @param boolean $allow_multiple
  *   TRUE if a list of emails is allowed. FALSE if only one.
+ * @param boolean $allow_tokens
+ *   TRUE if any token should be assumed to contain a valid e-mail address.
  * @param string $format
  *   'short', 'long', or NULL (for default) format. Long format has a name and
  *   the address in angle brackets.
  * @return integer|boolean
  *   The number of valid addresses found, or FALSE for an invalid email found.
  */
-function webform_email_validate(&$emails, $form_name, $allow_empty, $allow_multiple, $format = NULL) {
-  $nr_valid = webform_valid_email_address($emails, $format);
+function webform_email_validate(&$emails, $form_name, $allow_empty, $allow_multiple, $allow_tokens, $format = NULL) {
+  $nr_valid = webform_valid_email_address($emails, $allow_tokens, $format);
   if ($nr_valid === FALSE) {
     form_set_error($form_name, t('The entered e-mail address "@email" does not appear valid.', array('@email' => $emails)));
   }
@@ -4389,6 +4416,8 @@ function webform_email_validate(&$emails, $form_name, $allow_empty, $allow_multi
  *   An email address, a list of comma-separated email addresses. If all the
  *   addresses are valid, the list of trimmed, non-empty emails is returned by
  *   reference.
+ * @param boolean $allow_tokens
+ *   TRUE if any token should be assumed to contain a valid e-mail address.
  * @param string $format
  *   'short', 'long', or NULL (for default) format. Long format has a name and
  *   the address in angle brackets.
@@ -4396,10 +4425,17 @@ function webform_email_validate(&$emails, $form_name, $allow_empty, $allow_multi
  *   Returns FALSE if an invalid e-mail address was found, 0 if no email
  *   address(es) were found, or the number of valid e-mail addresses found.
  */
-function webform_valid_email_address(&$emails, $format = NULL) {
+function webform_valid_email_address(&$emails, $allow_tokens = FALSE, $format = NULL) {
   $email_array = array_filter(array_map('trim', explode(',', $emails)));
   $count = 0;
   foreach ($email_array as $email) {
+    if ($allow_tokens) {
+      foreach (token_scan($email) as $tokens) {
+        foreach ($tokens as $token) {
+          $email = str_replace($token, 'admin@example.com', $email);
+        }
+      }
+    }
     $matches = webform_parse_email_address($email, $format);
     if (!valid_email_address($matches['address'])) {
       return FALSE;

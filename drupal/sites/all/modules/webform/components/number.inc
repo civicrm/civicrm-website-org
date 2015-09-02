@@ -377,7 +377,7 @@ function _webform_render_number($component, $value = NULL, $filter = TRUE, $subm
 /**
  * Implements _webform_display_component().
  */
-function _webform_display_number($component, $value, $format = 'html') {
+function _webform_display_number($component, $value, $format = 'html', $submission = array()) {
   $empty = !isset($value[0]) || $value[0] === '';
   return array(
     '#title' => $component['name'],
@@ -477,7 +477,7 @@ function _webform_analysis_number($component, $sids = array(), $single = FALSE, 
   if ($advanced_stats && $population_count && $sum != 0) {
     // Standard deviation.
     $stddev = 0;
-    foreach($population as $value) {
+    foreach ($population as $value) {
       // Obtain the total of squared variances.
       $stddev += pow(($value - $average), 2);
     }
@@ -522,21 +522,21 @@ function _webform_analysis_number($component, $sids = array(), $single = FALSE, 
     $stddev = _webform_number_format($component, $stddev);
     $low = _webform_number_format($component, $population[0]);
     $high = _webform_number_format($component, end($population));
-    foreach($limit as $key => $value) {
+    foreach ($limit as $key => $value) {
       $limit[$key] = _webform_number_format($component, $value);
     }
 
     // Column headings (override potential theme uppercase, e.g. Seven in D7).
     $header = array(
       t('Normal Distribution'),
-      array('data' => '-4' . $sigma, 'style' => 'text-transform: lowercase;',),
-      array('data' => '-3' . $sigma, 'style' => 'text-transform: lowercase;',),
-      array('data' => '-2' . $sigma, 'style' => 'text-transform: lowercase;',),
-      array('data' => '-1' . $sigma, 'style' => 'text-transform: lowercase;',),
-      array('data' => '+1' . $sigma, 'style' => 'text-transform: lowercase;',),
-      array('data' => '+2' . $sigma, 'style' => 'text-transform: lowercase;',),
-      array('data' => '+3' . $sigma, 'style' => 'text-transform: lowercase;',),
-      array('data' => '+4' . $sigma, 'style' => 'text-transform: lowercase;',),
+      array('data' => '-4' . $sigma, 'style' => 'text-transform: lowercase;'),
+      array('data' => '-3' . $sigma, 'style' => 'text-transform: lowercase;'),
+      array('data' => '-2' . $sigma, 'style' => 'text-transform: lowercase;'),
+      array('data' => '-1' . $sigma, 'style' => 'text-transform: lowercase;'),
+      array('data' => '+1' . $sigma, 'style' => 'text-transform: lowercase;'),
+      array('data' => '+2' . $sigma, 'style' => 'text-transform: lowercase;'),
+      array('data' => '+3' . $sigma, 'style' => 'text-transform: lowercase;'),
+      array('data' => '+4' . $sigma, 'style' => 'text-transform: lowercase;'),
     );
 
     // Insert row labels.
@@ -562,6 +562,14 @@ function _webform_analysis_number($component, $sids = array(), $single = FALSE, 
  */
 function _webform_table_number($component, $value) {
   return isset($value[0]) ? _webform_number_format($component, $value[0]) : '';
+}
+
+/**
+ * Implements _webform_action_set_component().
+ */
+function _webform_action_set_number($component, &$element, &$form_state, $value) {
+  $element['#value'] = $value;
+  form_set_value($element, $value, $form_state);
 }
 
 /**

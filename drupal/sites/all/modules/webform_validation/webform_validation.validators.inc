@@ -76,7 +76,7 @@ function webform_validation_webform_validation_validators() {
       ),
       'custom_data' => array(
         'label' => t('Minimum number of words'),
-        'description' => t('Specify the minimum number of words that have to be entered to pass validation. Words are defined as strings of letters separated by spaces.')
+        'description' => t('Specify the minimum number of words that have to be entered to pass validation. Words are defined as strings of letters separated by spaces.'),
       ),
       'description' => t('Verifies that a user-entered value contains at least the specified number of words.'),
     ),
@@ -90,7 +90,7 @@ function webform_validation_webform_validation_validators() {
       ),
       'custom_data' => array(
         'label' => t('Maximum number of words'),
-        'description' => t('Specify the maximum number of words that have to be entered to pass validation. Words are defined as strings of letters separated by spaces.')
+        'description' => t('Specify the maximum number of words that have to be entered to pass validation. Words are defined as strings of letters separated by spaces.'),
       ),
       'description' => t('Verifies that a user-entered value contains at most the specified number of words.'),
     ),
@@ -123,6 +123,7 @@ function webform_validation_webform_validation_validators() {
         'textarea',
         'textfield',
         'time',
+        'boolean',
       ),
       'min_components' => 2,
       'description' => t('Verifies that all specified components contain equal values. If all components are of type email, they will get case-insensitive comparison.'),
@@ -159,6 +160,7 @@ function webform_validation_webform_validation_validators() {
         'textarea',
         'textfield',
         'time',
+        'boolean',
       ),
       'min_components' => 2,
       'description' => t('Verifies that none of the specified components contain the same value as another selected component in this submission. (To check that values are unique between submissions, use the unique validation option on the "Edit component" page for that component.) If all components are of type email, they will get case-insensitive comparison.'),
@@ -173,6 +175,7 @@ function webform_validation_webform_validation_validators() {
         'select',
         'textarea',
         'textfield',
+        'boolean',
       ),
       'custom_error' => TRUE,
       'custom_data' => array(
@@ -192,6 +195,7 @@ function webform_validation_webform_validation_validators() {
         'select',
         'textarea',
         'textfield',
+        'boolean',
       ),
       'custom_error' => TRUE,
       'description' => t('Verifies that the user-entered value is the default value for that component. Negate if you want not the default value.'),
@@ -206,7 +210,8 @@ function webform_validation_webform_validation_validators() {
         'select',
         'textarea',
         'textfield',
-        'time'
+        'time',
+        'boolean',
       ),
       'custom_data' => array(
         'label' => t('Number to be completed'),
@@ -373,7 +378,7 @@ function webform_validation_webform_validation_validators() {
       ),
       'description' => t('Validates that user-entered data doesn\'t contain any of the specified illegal words.'),
     ),
-   'username' => array(
+    'username' => array(
       'name' => t('Must match a username'),
       'negatable' => TRUE,
       'component_types' => array(
