@@ -277,7 +277,7 @@ function theme_webform_conditional_groups($variables) {
       }
       $even_odd = ($index + 1) % 2 ? 'odd' : 'even';
       $element[$key]['weight']['#attributes']['class'] = array('webform-conditional-weight');
-      $data = '<div class="webform-conditional-new">' . $data . t('Add a new condition: ') . drupal_render($element[$key]['new']) . '</div>';
+      $data = '<div class="webform-conditional-new">' . $data . t('Add a new condition:') . ' ' . drupal_render($element[$key]['new']) . '</div>';
       $output .= '<tr class="webform-conditional-new-row ' . $even_odd . '">';
       $output .= '<td>' . $data . '</td>';
       $output .= '<td>' . drupal_render($element[$key]['weight']) . '</td>';
@@ -1426,19 +1426,11 @@ function webform_conditional_value_datetime($input_values) {
  *   +N if $a is below (>) $b
  */
 function webform_compare_select($a, $b, $options) {
-  $options_array = array_keys($options);
+  // Select keys that are integer-like strings are numberic indices in PHP.
+  // Convert the array keys to an array of strings.
+  $options_array = array_map(function($i) {return (string) $i; }, array_keys($options));
   $a_position = array_search($a, $options_array, TRUE);
   $b_position = array_search($b, $options_array, TRUE);
-  if ($a_position === FALSE && $a_position === FALSE) {
-    return NULL;
-  }
-  elseif ($a_position === FALSE) {
-    return 1;
-  }
-  elseif ($b_position === FALSE) {
-    return -1;
-  }
-  else {
-    return $a_position - $b_position;
-  }
+  return ($a_position === FALSE || $a_position === FALSE) ? NULL : $a_position - $b_position;
+
 }

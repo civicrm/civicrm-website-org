@@ -6,9 +6,9 @@ files[] = block_titlelink.install
 files[] = block_titlelink.module
 files[] = README.txt
 
-; Information added by drupal.org packaging script on 2012-04-23
-version = "7.x-1.3"
+; Information added by Drupal.org packaging script on 2015-08-19
+version = "7.x-1.5"
 core = "7.x"
 project = "block_titlelink"
-datestamp = "1335213673"
+datestamp = "1439989140"
 

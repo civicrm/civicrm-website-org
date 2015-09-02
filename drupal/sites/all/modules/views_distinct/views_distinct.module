@@ -99,13 +99,16 @@ function views_distinct_form_views_ui_config_item_form_submit($form, &$form_stat
   $view_name = $form_state['view']->name;
   $display_name = $form_state['display_id'];
   $field_name = $form_state['id'];
-  $override_display_name = reset($form_state['values']['override']);
-
+  $override_display_name = FALSE;
+  // Only set $override_display_name if such a thing was submitted.
+  if (!empty($form_state['values']['override']) && is_array($form_state['values']['override'])) {
+    $override_display_name = reset($form_state['values']['override']);
+  }
   // Check if we're configuring this field for *this display only* or for all
   // displays (really, the "default" display):
-  if ($display_name != $override_display_name) {
+  if (!empty($override_display_name) && $display_name !== $override_display_name) {
     // In this case we are setting the configuration for a different display,
-    // so we'll actually store the setting on the overridde display name
+    // so we'll actually store the setting on the overridden display name
     // (probably this is "default"/All Displays). We also need to remove any
     // setting we've stored for the actual $display_name, since that no longer
     // applies (the user has chosen to NOT override the default settings,

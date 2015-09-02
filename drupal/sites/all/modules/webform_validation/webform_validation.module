@@ -152,12 +152,27 @@ function webform_validation_validate($form, &$form_state) {
     }
   }
 
+  // Webform 7.x-3.x does not define WEBFORM_CONDITIONAL_INCLUDE. Define if needed.
+  if (!defined('WebformConditionals::componentShown') && !defined('WEBFORM_CONDITIONAL_INCLUDE')) {
+    define('WEBFORM_CONDITIONAL_INCLUDE', 1);
+  }
+
   if ($rules) {
     $component_definitions = webform_validation_prefix_keys($node->webform['components']);
     // Remove hidden components.
     foreach ($component_definitions as $key => $component) {
-      if (isset($flat_values[$key]) && _webform_client_form_rule_check($node, $component, 0, $form_state['values']['submitted']) !== WEBFORM_CONDITIONAL_INCLUDE) {
-        unset($flat_values[$key]);
+      if (defined('WebformConditionals::componentShown')) {
+        if (webform_get_conditional_sorter($node)->componentVisibility($component['cid'], $component['page_num']) !== WebformConditionals::componentShown) {
+          unset($flat_values[$key]);
+        }
+      }
+      else {
+        // Old conditionals system removed in Webform 7.x-4.8.
+        // In Webform 7.x-3.x, _webform_client_form_rule_check() returns boolean.
+        // Cast to int so that the function behaves as it does in 7.x-4.x.
+        if (isset($flat_values[$key]) && (int) _webform_client_form_rule_check($node, $component, 0, $form_state['values']['submitted']) !== WEBFORM_CONDITIONAL_INCLUDE) {
+          unset($flat_values[$key]);
+        }
       }
     }
     foreach ($rules as $rule) {

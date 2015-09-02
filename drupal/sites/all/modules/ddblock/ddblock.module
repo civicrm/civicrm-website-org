@@ -2413,19 +2413,18 @@ function _ddblock_get_image_array($imagepath, $order, $max_image, $ignore_files,
  *   An array containing the teaser of nodes for the dynamic display block
  */
 function _ddblock_get_content_array($content_type, $nodes, $node_body_teaser) {
-  $sql = "SELECT nid " .
-         "FROM {node} " .
-         "WHERE status = 1 " .
-         "AND type = :content_type " .
-         "AND nid = :nodes";
-  $results = db_query($sql, array(
-    ':content_type' => $content_type,
-    ':nodes' => $nodes)
-  );
+  $nids = db_select('node', 'n')
+    ->fields('n', array('nid'))
+    ->condition('status', NODE_PUBLISHED)
+    ->condition('type', $content_type)
+    ->condition('nid', $nodes)
+    ->addTag('node_access')
+    ->execute()
+    ->fetchCol();
   $selected_nodes = array();
   $view_mode = ($node_body_teaser == 'teaser') ? 'teaser' : 'full';
-  while ($obj = $results->fetchObject()) {
-    $node = node_load($obj->nid);
+  foreach ($nids as $nid) {
+    $node = node_load($nid);
     $content = node_view($node, $view_mode);
     $selected_nodes[] = drupal_render($content);
   }
@@ -2454,18 +2453,17 @@ function _ddblock_get_file_sizes($path, $style_name) {
  *   An array containing node id's and node titles.
  */
 function _ddblock_get_content_type_nodes($content_type) {
-
-  $sql = "SELECT nid " .
-         "FROM {node} " .
-         "WHERE status=1 " .
-         "AND type= :content_type";
-  $results = db_query($sql, array(
-    ':content_type' => $content_type)
-  );
+  $nids = db_select('node', 'n')
+    ->fields('n', array('nid'))
+    ->condition('status', NODE_PUBLISHED)
+    ->condition('type', $content_type)
+    ->addTag('node_access')
+    ->execute()
+    ->fetchCol();
 
   $selected_nodes = array();
-  while ($obj = $results->fetchObject()) {
-    $node = node_load($obj->nid);
+  foreach ($nids as $nid) {
+    $node = node_load($nid);
     $selected_nodes[$node->nid] = check_plain($node->title);
   }
 
