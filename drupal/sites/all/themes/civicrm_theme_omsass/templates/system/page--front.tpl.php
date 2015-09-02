@@ -71,6 +71,9 @@
  */
 ?>
 <div class="l-page">
+  <?php if ($page['slideshow']): ?>
+  <?php print render($page['slideshow']); ?>
+  <?php endif; ?>
   <header class="l-header" role="banner">
     <div class="l-header-inner">
       <div class="l-branding">

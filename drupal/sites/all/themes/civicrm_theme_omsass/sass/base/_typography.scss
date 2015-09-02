@@ -140,23 +140,42 @@ td, th {
 	text-align: center;
 }
 
+.block--block-38 {
+	@include breakpoint($tablet) {
+		display: none;
+	}
+}
+
 .block-title, .block__title {
 	@extend #page-title;
 }
 
 .breadcrumb {
+	font-size: 0.75em;
+	text-transform: uppercase;
+
 	a {
 		line-height: 1;
 	    margin-right: 20px;
 	    padding-right: 30px;
 	    background: url(images/breadcrumb-arrrow.png) no-repeat right center;
 	    color: #fff;
-	    text-transform: uppercase;
-	    font-size: 0.75em;
 	}
 
-	.last {
+	li:last-child {
 		color: $civigreen;
+		text-transform: uppercase;
+	}
+}
+
+.field--name-field-section-heading {
+	@extend h2;
+	font-size: 1.5em;
+}
+
+.field--name-field-section-list-description {
+	p {
+		margin: 0 !important;
 	}
 }
 

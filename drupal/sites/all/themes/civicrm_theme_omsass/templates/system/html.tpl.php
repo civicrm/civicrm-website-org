@@ -56,8 +56,38 @@
 <head>
   <?php print $head; ?>
   <title><?php print $head_title; ?></title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <?php print $styles; ?>
   <?php print $scripts; ?>
+
+  <script>
+    (function ($) {
+  $(document).ready(function() {
+    $('.mmenu-nav').on('closed.mm', function() {
+      var mmenu = $(this);
+      if (mmenu.hasClass('mm-horizontal')) {
+        // For horizontal mmenu when slidingSubmenus option is set to Yes.
+        $('> .mm-panel', mmenu).addClass('mm-hidden').removeClass('mm-opened mm-subopened mm-highest mm-current');
+        $('#mm-5').removeClass('mm-hidden mm-subopened').addClass('mm-opened mm-current');
+      }
+      else {
+        // For vertical mmenu when slidingSubmenus option is set to No.
+        $('> .mm-panel .mm-opened', mmenu).removeClass('mm-opened');
+      }
+    });
+  
+    function fix_body_height(){
+    var h = $('#mmenu_right').outerHeight();
+    if( h < $(window).height() ){
+    h = $(window).height(); 
+    }
+    $('html.mm-opened, body').height(h);
+    }
+  });
+})(jQuery);
+
+
+  </script>
 </head>
 <body<?php print $attributes;?>>
   <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>

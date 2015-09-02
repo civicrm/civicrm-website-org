@@ -16,17 +16,26 @@
 	}
 
 	.l-region--menu {
-		display: none;
+		.menu-name-menu-secondary-menu, .block--menu-menu-primary-menu {
+			display: none;
+		}
 
 		@include breakpoint($tablet) {
-			display: inline;
+			.menu-name-menu-secondary-menu, .block--menu-menu-primary-menu {
+				display: inline;
+			}
+
+			.block--block-38 {
+				display: none;
+			}
+
 			width: 70%;
 		}		
 	}
 
 	.menu {
 		text-align: right;
-		padding: 0;
+		padding: 1% 0;
 		margin: 0;
 
 		li {
@@ -38,7 +47,4 @@
 		}
 	}
 
-	.menu-name-menu-secondary-menu {
-		margin-bottom: 1em;
-	}
 }

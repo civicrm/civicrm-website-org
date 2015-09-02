@@ -42,6 +42,7 @@ regions[white] = White
 regions[green] = Green
 regions[footer_first] = Footer First
 regions[footer_second] = Footer Second
+regions[slideshow] = Slideshow
 
 
 ; ========================================

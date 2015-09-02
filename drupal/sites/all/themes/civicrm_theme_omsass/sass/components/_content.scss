@@ -1,3 +1,12 @@
+#block-menu-menu-primary-menu
+{
+	.expanded {
+		ul {
+			display: none;
+		}
+	}
+}
+
 #block-views-features-block{
 	margin: 0 auto;
 	display: block;
@@ -160,6 +169,10 @@
 	margin: 0;
     padding: 1% 8%;
     list-style-type: none;
+
+    li {
+    	display: inline-block;
+    }
 }
 
 .btn-grey {
@@ -209,6 +222,17 @@
 	width: 75%;
 }
 
+.l-content {
+	max-width: 95%;
+	margin: auto;
+}
+
+.front {
+	.l-content {
+		max-width: 100%;
+	}
+}
+
 .l-main {
 	// padding: 2% 3%;
 
@@ -251,6 +275,11 @@
 		display: inline-block;
 	}
 
+}
+
+.l-region--slideshow {
+	width: 100%;
+	display: inline-block;
 }
 
 
