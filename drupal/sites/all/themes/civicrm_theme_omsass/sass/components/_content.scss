@@ -98,6 +98,7 @@
 	.green {
 		background-color: $civigreen;
 	}
+
 	.views-row {
 		text-align: center;
 		padding: 5% 5% 0;
@@ -164,6 +165,21 @@
 	}
 }
 
+#block-views-homepage-news-block {
+	padding: 0 10% 0 2%;
+	h1 {
+		font-size: 4.5rem;
+	}
+}
+
+#views_slideshow_cycle_main_homepage_stats-block {
+	display: inline-block;
+
+	img {
+		min-width: 300px;
+	}
+}
+
 .breadcrumb {
 	background-color: $breadcrumbbg;
 	margin: 0;
@@ -191,8 +207,13 @@
 		@include breakpoint($desktop) {
 			border-bottom: 0;
 			border-left: 1px solid $darkgrey;
-			padding-left: 4%;	
+			// padding-left: 4%;	
+			text-align: center;
 		}
+	}
+
+	.l-region--hero-left {
+		padding-right: 2%;
 	}
 }
 
@@ -247,8 +268,8 @@
 		text-align: center;
 
 		.blue-two-inner {
-			max-width: 95%;
-			margin: 0 auto;
+			// max-width: 95%;
+			margin: 0;
 			display: inline-block;
 			text-align:left;
 		}	
@@ -281,11 +302,6 @@
 	width: 100%;
 	display: inline-block;
 }
-
-
-
-
-
 
 .node--blog {
 	padding-bottom: 2em;
@@ -435,5 +451,31 @@
 .view-rotating-partner-logos .views-slideshow-controls-text-next a {
 	background: url(images/arrow-next-white.png) no-repeat 0 0;
 	right: 0;
+}
+
+.l-region--slideshow {
+	height: 1%;
+	overflow: hidden;
+
+	.hp-slide-img {
+		width: 100%;
+
+	}
+
+	.jcarousel-container {
+		height: 10%;
+		display: inline-block;
+	}
+
+
+	.jcarousel-skin-default .jcarousel-item {
+	 padding: 0;
+	 height: 10% !important;
+	 width: auto;
+	 overflow: hidden;
+	 border: 1px solid #CCC;
+	 list-style: none;
+	 background: #fff none;
+	 }
 }
 
