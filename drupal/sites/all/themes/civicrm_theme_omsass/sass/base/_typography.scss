@@ -293,15 +293,15 @@ td, th {
 			text-align: left;
 		}
 		li {
-			font-size: 1.2em;
+			font-size: 1.2rem;
 		}
 	}
-	.expanded {
+	.expanded, .parent-mlid-0 > .menu > li {
 		text-transform: uppercase;
 		font-weight: bold;
 	}
 
-	.leaf {
+	.expanded > .menu > .leaf {
 		text-transform: none;
 		font-weight: normal;
 		line-height: 2em;

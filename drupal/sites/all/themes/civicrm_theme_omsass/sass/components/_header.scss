@@ -23,6 +23,11 @@
 		@include breakpoint($tablet) {
 			.menu-name-menu-secondary-menu, .block--menu-menu-primary-menu {
 				display: inline;
+				.expanded {
+					ul {
+						display: none;
+					}
+				}
 			}
 
 			.block--block-38 {

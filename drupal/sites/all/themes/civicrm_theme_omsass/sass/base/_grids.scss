@@ -23,7 +23,7 @@
 
 
 .left-two-thirds {
-	@include breakpoint($desktop) {@include grid-span(2,1);}
+	@include breakpoint($desktop) {@include grid-span(2,1,$gutter: .25);}
 }
 
 .left-third {
@@ -273,23 +273,31 @@
 }
 
 .view-rotating-partner-logos {
-	.view-content {
-		.views-field-views-field-nothing {
-			// @include add-grid(2);
-			// @include add-gutter(0);
+	.views-row {
 
-			@include breakpoint($desktop) {
-				.partner-left {
-					@include grid-span(1,1,2)	
+		@include breakpoint($desktop) {
+			.partner-left {
+				@include grid-span(8,1,12);
+				@include add-grid(2);
+				@include add-gutter(0);	
+
+				.partner-img {
+					@include grid-span(1,1);
+					max-width: 50%;
 				}
 
-				.partner-contact {
-					@include grid-span(1,2,2);
+				.partner-text {
+					@include grid-span(1,2);
+					max-width: 50%;
 				}
-				
 			}
 
+			.partner-contact {
+				@include grid-span(4,9,12);
+			}
+			
 		}
+
 	}
 }
 
