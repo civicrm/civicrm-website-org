@@ -3,8 +3,20 @@
 	.l-region--footer-first {
 		background-color: $darkgrey;
 		padding: 1.5em;
+		
+		.block--menu-block {
+			display: inline-block;
+			text-align: center;
+			width: 100%;
+			margin-top: 5%;
+		}
 
 		.footer-sm {
+			h2 {
+				display: inline-block;
+				margin: 0;
+			}
+
 			.block__title {
 				float: left;
 				margin-top: 0;
@@ -19,6 +31,31 @@
 				    text-indent: -8765px;
 				    background: url(/sites/all/themes/civicrm_o4/images/civi-sprite.png) no-repeat -210px -2040px;
 				}
+			}
+
+			.social-icons {
+				display: inline-block;
+				margin: 0;
+				vertical-align: middle;
+
+				ul {
+					list-style-type: none;
+				}
+				
+				li {
+					display: inline-block;
+					width: 50px;
+					height: 50px;
+					margin: 0 0.3rem;
+				}
+
+				a {
+					color: transparent;
+					line-height: 50px;
+				    padding: 16px 0;
+				    vertical-align: bottom;
+				}
+
 			}
 		}
 
@@ -46,8 +83,12 @@
 
 	.l-region--footer-second {
 		padding: 1.5em;
+
+		p {
+			display: inline-block;
+		    vertical-align: middle;
+		    margin-right: 2%;
+		}
 	}
 	
-
-
 }

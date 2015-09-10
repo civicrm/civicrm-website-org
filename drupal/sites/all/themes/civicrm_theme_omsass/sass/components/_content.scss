@@ -355,6 +355,14 @@
 	}
 }
 
+.l-region--footer-second {
+	p {
+		display: inline-block;
+	    vertical-align: middle;
+	    margin-right: 2%;
+	}
+}
+
 .l-region--slideshow {
 	width: 100%;
 	display: inline-block;
@@ -501,7 +509,7 @@
 	text-indent: -8765px;
 	line-height: 0;
 	font-size: 0;
-	z-index: 99999;
+	z-index: 999;
 }
 .view-rotating-partner-logos .views-slideshow-controls-text-previous a {
 	background: url(images/arrow-prev-white.png) no-repeat 0 0;
@@ -544,6 +552,10 @@
 				li > a.flex-active {
 					background-color: $bluegreen;
 				}
+			}
+
+			.flex-direction-nav {
+				display: none;
 			}
 		}
 
