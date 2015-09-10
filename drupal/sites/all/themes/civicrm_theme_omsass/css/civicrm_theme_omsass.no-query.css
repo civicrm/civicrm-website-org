@@ -935,13 +935,29 @@ td, th {
     min-height: 40rem !important;
     margin: 0;
     border: none; }
-  /* line 522, ../sass/components/_content.scss */
-  .l-region--slideshow .flexslider .slides img {
-    height: 40rem !important; }
-  /* line 526, ../sass/components/_content.scss */
-  .l-region--slideshow .flexslider li {
-    min-height: 40rem;
-    padding: 0% 15% 5%; }
+    /* line 521, ../sass/components/_content.scss */
+    .l-region--slideshow .flexslider .slides img {
+      height: 40rem !important; }
+    /* line 525, ../sass/components/_content.scss */
+    .l-region--slideshow .flexslider .slides > li {
+      min-height: 40rem;
+      padding: 0% 15% 5%; }
+    /* line 530, ../sass/components/_content.scss */
+    .l-region--slideshow .flexslider .flex-control-paging {
+      bottom: 8px;
+      right: 5%;
+      text-align: right;
+      z-index: 999999; }
+      /* line 536, ../sass/components/_content.scss */
+      .l-region--slideshow .flexslider .flex-control-paging li > a {
+        background-color: #393536;
+        border-radius: 0;
+        -webkit-border-radius: 0;
+        height: 50px;
+        width: 50px; }
+      /* line 544, ../sass/components/_content.scss */
+      .l-region--slideshow .flexslider .flex-control-paging li > a.flex-active {
+        background-color: #00969b; }
 
 /* line 3, ../sass/components/_footer.scss */
 .l-footer .l-region--footer-first {
@@ -1008,6 +1024,10 @@ td, th {
       margin: 0 0.75em;
       padding: 0;
       vertical-align: top; }
+
+/* line 58, ../sass/components/_header.scss */
+.scroll-to-fixed-fixed {
+  width: 100% !important; }
 
 /* line 48, ../sass/sprites/_icons.scss */
 .icons-sprite {

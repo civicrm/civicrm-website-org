@@ -517,15 +517,34 @@
 		    min-height: 40rem !important;
 		    margin: 0;
 		    border: none;
-		}
 
-		.flexslider .slides img {
-		    height: 40rem !important;
-		}
+		    .slides img {
+			    height: 40rem !important;
+			}
 
-		.flexslider li {
-			min-height: 40rem;
-			padding: 0% 15% 5%;
+			.slides > li {
+				min-height: 40rem;
+				padding: 0% 15% 5%;
+			}
+
+			.flex-control-paging {
+				bottom: 8px;
+				right: 5%;
+				text-align: right;
+				z-index: 999999;
+
+				li > a {
+					background-color: $darkgrey;
+					border-radius: 0;
+					-webkit-border-radius: 0;
+					height: 50px;
+					width: 50px;
+				}
+
+				li > a.flex-active {
+					background-color: $bluegreen;
+				}
+			}
 		}
 
 	/* .hp-slide-img {

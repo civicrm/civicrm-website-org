@@ -63,7 +63,7 @@
   <script>
     (function ($) {
   $(document).ready(function() {
-    // $('.l-header').scrollToFixed();
+    $('.l-header').scrollToFixed();
     $('.mmenu-nav').on('closed.mm', function() {
       var mmenu = $(this);
       if (mmenu.hasClass('mm-horizontal')) {
