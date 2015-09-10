@@ -1,7 +1,7 @@
 .l-header {
 	background-color: $darkgrey;
 	height: 6em;
-	padding: 1.5em;
+	padding: 0.8em 1.5em;
 
 	.l-header-inner {
 		max-width: 90%;
@@ -9,6 +9,7 @@
 
 	.l-branding {
 		width: 50%;
+		margin-top: 0.5em;
 
 		@include breakpoint($tablet) {
 			width: auto;

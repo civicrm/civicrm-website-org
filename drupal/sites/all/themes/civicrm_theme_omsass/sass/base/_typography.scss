@@ -171,6 +171,20 @@ td, th {
 	}
 }
 
+.btn-grey {
+	color: #fff;
+}
+
+.btn-white {
+	a {
+		text-transform: uppercase;
+		font-size: 1.57rem; /* 22px @ 14px */
+		font-weight: bold;
+		color: $black;
+		text-shadow: none;
+	}
+}
+
 .field--name-field-section-heading {
 	@extend h2;
 	font-size: 1.5em;
@@ -206,11 +220,6 @@ td, th {
 	}
 }
 
-.hp-slide-text {
-	div {
-		color: $white;
-	}
-}
 
 .hp-events-date {
 	text-align: center;
@@ -218,14 +227,7 @@ td, th {
 	line-height: 1;
 }
 
-.hp-slide-btn {
-	a {
-		text-transform: uppercase;
-		font-size: 1.57em; /* 22px @ 14px */
-		font-weight: bold;
-		color: $black;
-	}
-}
+
 
 .l-header {
 	color: $white;
@@ -268,6 +270,26 @@ td, th {
 	text-align: center;
 	.block__title {
 		text-align: center;
+	}
+}
+
+.l-region--slideshow {
+
+	.flexslider {
+		li {
+			text-align: center;
+			color: #fff;
+			text-shadow: 2px 2px 2px #000;
+		}
+
+		h1 {
+			font-size: 4rem;
+		}
+
+		.teaser {
+			font-size: 2rem;
+			text-transform: none;
+		}
 	}
 }
 

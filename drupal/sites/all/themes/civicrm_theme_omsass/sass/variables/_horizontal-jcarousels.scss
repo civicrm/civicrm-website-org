@@ -1,0 +1,100 @@
+/*
+* jcarousel mixin
+* @author Lee Rowlands (rowlandsgroup.com)
+* @param $selector carousel selector)
+* @param $carousel_width 
+* @param $carousel_height
+* @param $carousel_padding 
+* @param $item_width 
+* @param $item_height 
+* @param $item_margin 
+* @param $button_width 
+* @param $button_height 
+* @param $button_image 
+* @param $button_top
+* @param $button_left 
+* @param $button_right 
+* @param $button_left_position (background position)
+* @param $button_right_position 
+* @param $button_left_position_hover 
+* @param $button_right_position_hover 
+* @param $button_left_position_disabled 
+* @param $button_right_position_disabled
+*/
+@mixin horizontal-jcarousel($selector, $carousel_width: 960px,
+  $carousel_height: 150px, $carousel_padding: 0 50px, $carousel_margin: auto,
+  $item_width: 160px, $item_height: 160px, $item_margin: 0 10px,
+  $button_width: 31px, $button_height: 71px,
+  $button_image: url(../images/carousel.png), $button_top: 10px,
+  $button_left: 42px, $button_right: 42px, $button_left_position: 0 -35px,
+  $button_right_position: 0 -106px, $button_left_position_hover: 0 -35px,
+  $button_right_position_hover: 0 -106px,
+  $button_left_position_disabled: 0 -35px,
+  $button_right_position_disabled: 0 -106px) {
+  #{$selector} {
+    .jcarousel-container-horizontal {
+      width: $carousel_width;
+      height: $carousel_height;
+      padding: $carousel_padding;
+      margin: $carousel_margin;
+    }
+    .jcarousel-clip-horizontal {
+      width: $carousel_width;
+    }
+    
+    .jcarousel-item {
+      padding: 0;
+      width: $item_width;
+      height: $item_height;
+      overflow: hidden;
+      border: none;
+      list-style: none;
+    }
+    .jcarousel-item-horizontal {
+      margin: $item_margin;
+    }
+    .jcarousel-next,
+    .jcarousel-prev {
+      display: block;
+      width: $button_width;
+      height: $button_height;
+      background-image: $button_image;
+    }
+    
+    /**
+     *  Horizontal Buttons
+     */
+    .jcarousel-prev-horizontal {
+      position: absolute;
+      top: $button_top;
+      left: $button_left;
+      background-position: $button_left_position;
+    }
+    .jcarousel-prev-horizontal:active,
+    .jcarousel-prev-horizontal:hover {
+      background-position: $button_left_position_hover
+    }
+    .jcarousel-prev-disabled-horizontal,
+    .jcarousel-prev-disabled-horizontal:hover,
+    .jcarousel-prev-disabled-horizontal:active {
+      cursor: default;
+      background-position: $button_left_position_disabled      
+    }
+    .jcarousel-next-horizontal {
+      position: absolute;
+      top: $button_top;
+      right: $button_right;
+      background-position: $button_right_position;
+    }
+    .jcarousel-next-horizontal:active,
+    .jcarousel-next-horizontal:hover {
+      background-position: $button_right_position_hover;
+    }
+    .jcarousel-next-disabled-horizontal,
+    .jcarousel-next-disabled-horizontal:hover,
+    .jcarousel-next-disabled-horizontal:active {
+      cursor: default;
+      background-position: $button_right_position_disabled      
+    }
+  }
+} 

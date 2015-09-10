@@ -1,3 +1,26 @@
+/*
+* jcarousel mixin
+* @author Lee Rowlands (rowlandsgroup.com)
+* @param $selector carousel selector)
+* @param $carousel_width 
+* @param $carousel_height
+* @param $carousel_padding 
+* @param $item_width 
+* @param $item_height 
+* @param $item_margin 
+* @param $button_width 
+* @param $button_height 
+* @param $button_image 
+* @param $button_top
+* @param $button_left 
+* @param $button_right 
+* @param $button_left_position (background position)
+* @param $button_right_position 
+* @param $button_left_position_hover 
+* @param $button_right_position_hover 
+* @param $button_left_position_disabled 
+* @param $button_right_position_disabled
+*/
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 /*! normalize.css v3.0.0 | HTML5 Display Definitions | MIT License | git.io/normalize */
 /* line 9, ../../../../../../../../../.rvm/gems/ruby-2.2.1/gems/compass-normalize-1.5/stylesheets/normalize/_html5.scss */
