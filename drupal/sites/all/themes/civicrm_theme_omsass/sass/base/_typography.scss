@@ -94,7 +94,8 @@ td, th {
 }
 
 #page-title {
-	font-size: 3.5em; /* 50px @ 24px */
+	font-size: 2.5em;
+	@include breakpoint($tablet) {font-size: 3.5em; /* 50px @ 24px */}
 	line-height: 1;
 	text-align: left;
 }
@@ -249,7 +250,7 @@ td, th {
 
 	.block--menu-menu-primary-menu {
 		a {
-			font-size: 1.3em; /* 20px @ 24px */
+			font-size: 1.3rem; /* 20px @ 24px */
 			font-weight: bold;
 		}
 	}
@@ -258,6 +259,20 @@ td, th {
 		a {
 			// font-size: 0.67em; /* 16px @ 24px */
 			font-weight: normal;
+		}
+	}
+}
+
+.l-header.before {
+	.block--menu-menu-primary-menu {
+		a { 
+			font-size: 1.1rem;
+		}
+	}
+
+	.menu-name-menu-secondary-menu {
+		a {
+			font-size: 0.8rem;
 		}
 	}
 }
@@ -283,11 +298,15 @@ td, th {
 		}
 
 		h1 {
-			font-size: 4rem;
+			font-size: 2.5rem;
+			@include breakpoint($desktop){font-size: 3rem;}
+			@include breakpoint($wide){font-size: 4rem;}
 		}
 
 		.teaser {
-			font-size: 2rem;
+			font-size: 1.2rem;
+			@include breakpoint($desktop){font-size: 1.5rem;}
+			@include breakpoint($wide){font-size: 2rem;}
 			text-transform: none;
 		}
 	}

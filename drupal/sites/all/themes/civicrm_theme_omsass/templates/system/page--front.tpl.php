@@ -69,12 +69,30 @@
  * @see template_process()
  * @see omega_preprocess_page()
  */
+
+$menu = render($page['menu']);
 ?>
 <div class="l-page">
+  <header class="l-header before" role="banner">
+    <div class="l-header-inner">
+      <div class="l-branding">
+        <?php if ($logo): ?>
+          <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home" class="site-logo"><img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" /></a>
+        <?php endif; ?>
+
+        <?php print render($page['branding']); ?>
+      </div>
+  
+      <div class="menubutton"><a class="mmenu-trigger"><i class="fa fa-bars"></i></a></div>
+    </div>
+  </header>
+
+
   <?php if ($page['slideshow']): ?>
   <?php print render($page['slideshow']); ?>
   <?php endif; ?>
-  <header class="l-header" role="banner">
+
+  <header class="l-header after" role="banner">
     <div class="l-header-inner">
       <div class="l-branding">
         <?php if ($logo): ?>
@@ -84,7 +102,7 @@
         <?php print render($page['branding']); ?>
       </div>
 
-      <?php print render($page['menu']); ?>
+      <?php print $menu; ?>
     </div>
   </header>
 

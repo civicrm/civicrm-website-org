@@ -22,7 +22,9 @@
 			display: none;
 		}
 
-		@include breakpoint($tablet) {
+
+
+		@include breakpoint($desktop-sm) {
 			.menu-name-menu-secondary-menu, .block--menu-menu-primary-menu {
 				display: inline;
 				.expanded {
@@ -36,7 +38,7 @@
 				display: none;
 			}
 
-			width: 70%;
+			// width: 70%;
 		}		
 	}
 
@@ -58,4 +60,34 @@
 
 .scroll-to-fixed-fixed {
 	width: 100% !important;
+}
+
+.l-header.before {
+	display: block;
+	
+	.l-header-inner {
+		max-width: 100%;
+	}
+
+	.menubutton {
+		float:right;
+		a {
+			font-size: 4rem;
+			color: #fff;
+		}
+
+		.fa {
+			vertical-align: top;
+		}
+	}
+
+	@include breakpoint($desktop-sm) {
+		display:none
+	}
+}
+
+.l-header.after {
+	display: none;
+
+	@include breakpoint($desktop-sm) {display:block}
 }

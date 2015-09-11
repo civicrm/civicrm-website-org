@@ -275,7 +275,7 @@
 .view-rotating-partner-logos {
 	.views-row {
 
-		@include breakpoint($desktop) {
+		@include breakpoint($desktop-sm) {
 			.partner-left {
 				@include grid-span(8,1,12);
 				@include add-grid(2);
@@ -304,6 +304,16 @@
 .icongrid {
 	// max-width: 90%;
 	.view-content {
+		@include layout(('grid':12,'gutter':1/3)) {
+			.views-row {
+				&:nth-child(n){
+					    	@include float-span(6);
+					  	}
+					  	&:nth-child(2n+2) {
+					    	@include float-span(6,last);
+					  	}
+			}
+		}
 		@include layout-at(('grid':12,'gutter':1/3),$tablet) {
 			.views-row {
 				&:nth-child(n){

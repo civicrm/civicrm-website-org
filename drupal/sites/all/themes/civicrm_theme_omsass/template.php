@@ -56,3 +56,17 @@ function civicrm_theme_omsass_flexslider_list_item(&$vars) {
   $listItem = sprintf("<li %s style=\"background: url('%s') no-repeat center center; background-size: cover;\"> %s %s</li>\n",drupal_attributes($vars['settings']['attributes']),$vars['backgroundImage'],$vars['item'],$vars['caption']);
   return $listItem;
 }
+
+
+/**
+ * Theme hook for the header block
+ */
+
+function civicrm_theme_omsass_theme($existing, $type, $theme, $path) {
+  return array(
+    'header' => array(
+      'template' => 'sites/all/themes/civicrm_theme_omsass/templates/header', // without the .tpl.php extension
+      'variables' => array(), // to define default values for passed variables
+     )
+  );
+}
