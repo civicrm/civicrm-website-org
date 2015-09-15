@@ -8,7 +8,8 @@
 			display: inline-block;
 			text-align: center;
 			width: 100%;
-			margin-top: 5%;
+			margin-top: 25%;
+			@include breakpoint($desktop-sm) {margin-top: 5%;}
 		}
 
 		.footer-sm {

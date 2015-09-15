@@ -179,7 +179,8 @@ td, th {
 .btn-white {
 	a {
 		text-transform: uppercase;
-		font-size: 1.57rem; /* 22px @ 14px */
+		font-size: 1.1rem;
+		@include breakpoint($tablet) {font-size: 1.57rem; /* 22px @ 14px */}
 		font-weight: bold;
 		color: $black;
 		text-shadow: none;
@@ -298,17 +299,19 @@ td, th {
 		}
 
 		h1 {
-			font-size: 2.5rem;
+			font-size: 1.8rem;
+			@include breakpoint($tablet){font-size: 2.5rem;}
 			@include breakpoint($desktop){font-size: 3rem;}
 			@include breakpoint($wide){font-size: 4rem;}
 		}
 
 		.teaser {
-			font-size: 1.2rem;
-			@include breakpoint($desktop){font-size: 1.5rem;}
+			font-size: 1rem;
+			@include breakpoint($tablet){font-size: 1.5rem;}
 			@include breakpoint($wide){font-size: 2rem;}
 			text-transform: none;
 		}
+
 	}
 }
 

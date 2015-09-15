@@ -1,3 +1,7 @@
+#block-search-form {
+	display:none;
+	@include breakpoint($desktop-sm) {display:block;}
+}
 #block-views-features-block{
 	margin: 0 auto;
 	display: block;
@@ -487,7 +491,7 @@
 	font-size: 0;
 	z-index: 999;
 
-	bottom: -65%;
+	bottom: -10%;
 	@include breakpoint($tablet) {bottom: -40%;}
 	@include breakpoint($desktop-sm) {top: 245px;}
 }
@@ -513,11 +517,13 @@
 		}
 
 		.slides > li {
-			padding: 0% 15% 5%;
-				min-height: 30rem;
-				max-height: 44rem;
+			padding: 0% 5% 5%;
+				// min-height: 30rem;
+				max-height: 30rem;
+				min-height: 26rem;
 
 			@include breakpoint($desktop-sm) {
+				padding: 0% 15% 5%;
 				min-height: 40rem;
 			}
 		}
@@ -529,7 +535,7 @@
 			z-index: 9999;
 			position: relative;
 			
-			margin-top: -16em;
+			margin-top: -2em;
 			@include breakpoint($tablet) {margin-top: -4em;}
 			@include breakpoint($desktop-sm) {margin-top: -3.2em;}
 

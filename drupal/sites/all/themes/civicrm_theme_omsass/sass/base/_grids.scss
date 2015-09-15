@@ -143,7 +143,7 @@
 				}
 			}
 			
-			@include layout-at(('grid':15,'gutter':.25),$desktop) {
+			@include layout-at(('grid':15,'gutter':.25),$desktop-sm) {
 				.menu-level-1 > .menu > li {
 					&:nth-child(n){
 						@include float-span(3);
