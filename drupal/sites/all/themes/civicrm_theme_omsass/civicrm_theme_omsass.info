@@ -40,6 +40,7 @@ regions[blue_two] = Blue Two (homepage)
 regions[grey] = Grey
 regions[dark_grey] = Dark Grey (homepage)
 regions[white] = White
+regions[white_two] = White Two
 regions[green] = Green
 regions[footer_first] = Footer First
 regions[footer_second] = Footer Second

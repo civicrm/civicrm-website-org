@@ -117,7 +117,7 @@
 
 	.views-field-body {
 		@include breakpoint($desktop) {
-			min-height: 6em;
+			min-height: 8.5em;
 		}
 	}
 
@@ -136,6 +136,9 @@
 
 	.views-field-field-subtitle {
 		@include breakpoint($desktop) {
+			min-height: 11.5em;
+		}
+		@include breakpoint($wide) {
 			min-height: 8em;
 		}
 	}
@@ -159,6 +162,17 @@
 		}
 
 	}
+}
+
+#block-views-get-started-block-1 {
+	text-align: left;
+	padding: 2% 5%;
+}
+
+#block-views-get-started-block-2 {
+	text-align: left;
+	border-left: 1px solid $darkgrey;
+	padding: 2% 5%;
 }
 
 #block-views-homepage-news-block {
@@ -315,6 +329,11 @@
 
 	.l-region--white {
 		text-align: center;
+	}
+
+	.l-region--white-two {
+		text-align: center;
+		display: inline-block;
 	}
 
 	.l-region--grey {
