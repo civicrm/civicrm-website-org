@@ -1222,7 +1222,7 @@ td, th {
     .l-region--slideshow .flexslider .slides > li {
       padding: 0% 5% 5%;
       max-height: 30rem;
-      min-height: 26rem; }
+      min-height: 29rem; }
       @media (min-width: 800px) {
         /* line 519, ../sass/components/_content.scss */
         .l-region--slideshow .flexslider .slides > li {
@@ -1407,8 +1407,9 @@ td, th {
     /* line 76, ../sass/components/_header.scss */
     .l-header.before .menubutton a {
       font-size: 4rem;
-      color: #fff; }
-    /* line 81, ../sass/components/_header.scss */
+      color: #fff;
+      line-height: 3rem; }
+    /* line 82, ../sass/components/_header.scss */
     .l-header.before .menubutton .fa {
       vertical-align: top; }
   @media (min-width: 900px) {
@@ -1416,11 +1417,11 @@ td, th {
     .l-header.before {
       display: none; } }
 
-/* line 91, ../sass/components/_header.scss */
+/* line 92, ../sass/components/_header.scss */
 .l-header.after {
   display: none; }
   @media (min-width: 900px) {
-    /* line 91, ../sass/components/_header.scss */
+    /* line 92, ../sass/components/_header.scss */
     .l-header.after {
       display: block; } }
 
