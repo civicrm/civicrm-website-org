@@ -251,7 +251,8 @@ td, th {
 
 	.block--menu-menu-primary-menu {
 		a {
-			font-size: 1.3rem; /* 20px @ 24px */
+			font-size: 1.15rem;
+			@include breakpoint($desktop-lg) {font-size: 1.3rem; /* 20px @ 24px */}
 			font-weight: bold;
 		}
 	}
