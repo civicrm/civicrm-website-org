@@ -343,6 +343,39 @@ tbody tr:hover{
 	}
 }
 
+.node-type-feature {
+	.l-content {
+		max-width: 100%;
+		// padding: 0 2.5%;
+		
+		#page-title {
+			padding: 0 2.5%;
+		}
+
+		.field {
+			padding: 0 2.5%;
+		}
+
+		.field--name-field-top-feature-heading {
+
+		}
+
+		.field--name-body {
+			background-color: $darkblue;
+			padding: 1% 2%;
+			margin-top: 2%;
+			margin-bottom: 2%;
+		}
+
+		.field--name-field-additional-resources {
+			@extend .field--name-body;
+			margin-bottom: 0;
+			background-color: $civigreen;
+			color: #fff;
+		}
+	}
+}
+
 .l-main {
 	// padding: 2% 3%;
 

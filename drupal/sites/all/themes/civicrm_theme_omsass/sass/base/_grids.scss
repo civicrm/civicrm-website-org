@@ -356,16 +356,40 @@
 		@include layout-at(('grid':12,'gutter':1/3),$tablet) {
 			.views-row {
 				&:nth-child(n){
-					    	@include float-span(4);
-					  	}
-					  	&:nth-child(3n+3) {
-					    	@include float-span(4,last);
-					  	}
+			    	@include float-span(4);
+			  	}
+			  	&:nth-child(3n+3) {
+			    	@include float-span(4,last);
+			  	}
 			}
 		}
 		
 	}
 	
+}
+
+.node-type-feature {
+	.field--name-field-top-three-features > .field__items {
+		@include add-grid(12);
+		@include add-gutter(1/3);
+	}
+	.field--name-field-top-three-features > .field__items > .field__item {
+		&:nth-child(n){
+	    	@include float-span(12);
+	  	}
+	  	&:nth-child(1n+1) {
+	    	@include float-span(12,last);
+	  	}
+
+	  	@include breakpoint($tablet) {
+	  		&:nth-child(n){
+		    	@include float-span(4);
+		  	}
+		  	&:nth-child(3n+3) {
+		    	@include float-span(4,last);
+		  	}
+	  	}
+	}
 }
 
 
