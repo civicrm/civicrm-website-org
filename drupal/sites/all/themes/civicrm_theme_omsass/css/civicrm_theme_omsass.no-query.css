@@ -788,80 +788,87 @@ tbody tr:hover {
   max-width: 100%; }
 
 /* line 347, ../sass/components/_content.scss */
+.not-front .icongrid {
+  text-align: center; }
+  /* line 349, ../sass/components/_content.scss */
+  .not-front .icongrid .views-field-field-icon {
+    margin-top: 5%; }
+
+/* line 356, ../sass/components/_content.scss */
 .node-type-feature .l-content {
   max-width: 100%; }
-  /* line 351, ../sass/components/_content.scss */
+  /* line 360, ../sass/components/_content.scss */
   .node-type-feature .l-content #page-title, .node-type-feature .l-content .block-title, .node-type-feature .l-content .block__title {
     padding: 0 2.5%; }
-  /* line 355, ../sass/components/_content.scss */
+  /* line 364, ../sass/components/_content.scss */
   .node-type-feature .l-content .field {
     padding: 0 2.5%; }
-  /* line 363, ../sass/components/_content.scss */
+  /* line 372, ../sass/components/_content.scss */
   .node-type-feature .l-content .field--name-body, .node-type-feature .l-content .field--name-field-additional-resources {
     background-color: #056186;
     padding: 1% 2%;
     margin-top: 2%;
     margin-bottom: 2%; }
-  /* line 370, ../sass/components/_content.scss */
+  /* line 379, ../sass/components/_content.scss */
   .node-type-feature .l-content .field--name-field-additional-resources {
     margin-bottom: 0;
     background-color: #82c459;
     color: #fff; }
 
-/* line 382, ../sass/components/_content.scss */
+/* line 391, ../sass/components/_content.scss */
 .l-main .l-region--blue {
   background-color: #056186;
   display: inline-block; }
-/* line 387, ../sass/components/_content.scss */
+/* line 396, ../sass/components/_content.scss */
 .l-main .l-region--blue-two {
   background-color: #056186;
   display: inline-block;
   text-align: center; }
-  /* line 392, ../sass/components/_content.scss */
+  /* line 401, ../sass/components/_content.scss */
   .l-main .l-region--blue-two .blue-two-inner {
     margin: 0;
     display: inline-block;
     text-align: left; }
-  /* line 399, ../sass/components/_content.scss */
+  /* line 408, ../sass/components/_content.scss */
   .l-main .l-region--blue-two .block {
     padding: 0 5%; }
-/* line 407, ../sass/components/_content.scss */
+/* line 416, ../sass/components/_content.scss */
 .l-main .l-region--green {
   background-color: #82c459; }
-/* line 411, ../sass/components/_content.scss */
+/* line 420, ../sass/components/_content.scss */
 .l-main .l-region--white {
   text-align: center; }
-/* line 415, ../sass/components/_content.scss */
+/* line 424, ../sass/components/_content.scss */
 .l-main .l-region--white-two {
   text-align: center;
   display: inline-block; }
-/* line 420, ../sass/components/_content.scss */
+/* line 429, ../sass/components/_content.scss */
 .l-main .l-region--grey {
   background-color: #6c696a;
   width: 100%;
   padding: 0 5%;
   display: inline-block;
   min-height: 50em; }
-/* line 432, ../sass/components/_content.scss */
+/* line 441, ../sass/components/_content.scss */
 .l-main .l-region--dark-grey {
   background-color: #393536;
   width: 100%;
   display: inline-block; }
 
-/* line 440, ../sass/components/_content.scss */
+/* line 449, ../sass/components/_content.scss */
 .l-region--slideshow {
   width: 100%;
   display: inline-block; }
-  /* line 444, ../sass/components/_content.scss */
+  /* line 453, ../sass/components/_content.scss */
   .l-region--slideshow .flexslider {
     margin: 0;
     border: none; }
-    /* line 452, ../sass/components/_content.scss */
+    /* line 461, ../sass/components/_content.scss */
     .l-region--slideshow .flexslider .slides > li {
       padding: 0% 5% 5%;
       max-height: 30rem;
       min-height: 29rem; }
-    /* line 464, ../sass/components/_content.scss */
+    /* line 473, ../sass/components/_content.scss */
     .l-region--slideshow .flexslider .flex-control-paging {
       bottom: 8px;
       right: 5%;
@@ -869,55 +876,55 @@ tbody tr:hover {
       z-index: 9999;
       position: relative;
       margin-top: -2em; }
-      /* line 475, ../sass/components/_content.scss */
+      /* line 484, ../sass/components/_content.scss */
       .l-region--slideshow .flexslider .flex-control-paging li > a {
         background-color: #393536;
         border-radius: 0;
         -webkit-border-radius: 0;
         height: 25px;
         width: 25px; }
-      /* line 489, ../sass/components/_content.scss */
+      /* line 498, ../sass/components/_content.scss */
       .l-region--slideshow .flexslider .flex-control-paging li > a.flex-active {
         background-color: #00969b; }
-    /* line 494, ../sass/components/_content.scss */
+    /* line 503, ../sass/components/_content.scss */
     .l-region--slideshow .flexslider .flex-direction-nav {
       display: none; }
 
-/* line 501, ../sass/components/_content.scss */
+/* line 510, ../sass/components/_content.scss */
 .node--blog {
   padding-bottom: 2em;
   border-bottom: 1px solid #b7b8b9;
   margin-bottom: 2em; }
 
-/* line 508, ../sass/components/_content.scss */
+/* line 517, ../sass/components/_content.scss */
 .links--inline li {
   border-right: 2px solid #6c696a;
   padding: 0 1em;
   line-height: 1;
   margin-right: 0; }
-/* line 515, ../sass/components/_content.scss */
+/* line 524, ../sass/components/_content.scss */
 .links--inline li:last-child {
   border-right: 0; }
 
-/* line 522, ../sass/components/_content.scss */
+/* line 531, ../sass/components/_content.scss */
 .more-info, .less-info {
   margin-top: 3%; }
-  /* line 524, ../sass/components/_content.scss */
+  /* line 533, ../sass/components/_content.scss */
   .more-info a, .less-info a {
     padding: 1em;
     background-color: #393536;
     color: #fff; }
 
-/* line 531, ../sass/components/_content.scss */
+/* line 540, ../sass/components/_content.scss */
 .more-info {
   margin-bottom: 5%; }
 
-/* line 535, ../sass/components/_content.scss */
+/* line 544, ../sass/components/_content.scss */
 .less-info {
   padding: 1.5em;
   border-top: 1px solid #ccc; }
 
-/* line 540, ../sass/components/_content.scss */
+/* line 549, ../sass/components/_content.scss */
 .view-service-providers {
   	/* .views-field-nothing {
   		text-align: center;
@@ -974,49 +981,49 @@ tbody tr:hover {
   			margin-bottom: 5%;
   		}
   	} */ }
-  /* line 541, ../sass/components/_content.scss */
+  /* line 550, ../sass/components/_content.scss */
   .view-service-providers .views-row {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc; }
 
-/* line 604, ../sass/components/_content.scss */
+/* line 613, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views_slideshow_cycle_slide {
   width: 100% !important;
   padding: 0 2%; }
 
-/* line 608, ../sass/components/_content.scss */
+/* line 617, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-text {
   text-align: center;
   padding: 0 3%; }
 
-/* line 615, ../sass/components/_content.scss */
+/* line 624, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-text h5,
 .view-rotating-partner-logos .partner-contact h5 {
   font-size: 1.29em;
   margin-top: 0;
   margin-bottom: 0.8%; }
 
-/* line 621, ../sass/components/_content.scss */
+/* line 630, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-contact {
   border-top: 1px solid #fff;
   padding-top: 5%; }
 
-/* line 633, ../sass/components/_content.scss */
+/* line 642, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-img {
   text-align: center; }
-  /* line 635, ../sass/components/_content.scss */
+  /* line 644, ../sass/components/_content.scss */
   .view-rotating-partner-logos .partner-img img {
     max-width: 180px; }
 
-/* line 639, ../sass/components/_content.scss */
+/* line 648, ../sass/components/_content.scss */
 .view-rotating-partner-logos .pad {
   padding: 20px; }
 
-/* line 642, ../sass/components/_content.scss */
+/* line 651, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-pause {
   display: none; }
 
-/* line 645, ../sass/components/_content.scss */
+/* line 654, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-previous a,
 .view-rotating-partner-logos .views-slideshow-controls-text-next a {
   position: absolute;
@@ -1029,12 +1036,12 @@ tbody tr:hover {
   z-index: 999;
   bottom: -10%; }
 
-/* line 660, ../sass/components/_content.scss */
+/* line 669, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-previous a {
   background: url(images/arrow-prev-white.png) no-repeat 0 0;
   left: 0; }
 
-/* line 664, ../sass/components/_content.scss */
+/* line 673, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-next a {
   background: url(images/arrow-next-white.png) no-repeat 0 0;
   right: 0; }

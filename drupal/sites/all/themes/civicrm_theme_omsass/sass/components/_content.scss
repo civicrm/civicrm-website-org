@@ -343,6 +343,15 @@ tbody tr:hover{
 	}
 }
 
+.not-front {
+	.icongrid {
+		text-align: center;
+		.views-field-field-icon {
+			margin-top: 5%;
+		}
+	}
+}
+
 .node-type-feature {
 	.l-content {
 		max-width: 100%;
