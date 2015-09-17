@@ -61,12 +61,14 @@
 	.block--menu-menu-home-page-menu {
 		.menu {
 			li {
-				a:active, a:hover {
+				a {
 					padding: 0 0 1.5rem 0;
+				}
+				a:hover {
 					background: url(../images/active-arrow.png) no-repeat center bottom;
 				}
 
-				.active {
+				.selected {
 					background: url(../images/active-arrow.png) no-repeat center bottom;
 				}
 			}

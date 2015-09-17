@@ -84,11 +84,26 @@
     }
     $('html.mm-opened, body').height(h);
     }
+
+    <?php if (drupal_get_path_alias(current_path()) == 'nw-home'): ?>  
+    bodyPos = $('body').scrollTop();
+    if(bodyPos > $('#block-views-features-block').position().top ) {
+      $('.block--menu-menu-home-page-menu a').removeClass('selected');
+      $('.block--menu-menu-home-page-menu a[href="/#features"]').addClass('selected');
+    } else $('.block--menu-menu-home-page-menu a[href="/#features"]').removeClass('selected');
+
+    if($('body').scrollTop() > $('#block-views-get-started-block').position().top) {
+      $('.block--menu-menu-home-page-menu a').removeClass('selected');
+      $('.block--menu-menu-home-page-menu a[href="/#features"]').addClass('selected');
+    }
+    <?php endif; ?>
   });
 })(jQuery);
 
-
   </script>
+
+  
+
 </head>
 <body<?php print $attributes;?>>
   <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>
