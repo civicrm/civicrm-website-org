@@ -58,6 +58,23 @@
 		}
 	}
 
+	.block--menu-menu-home-page-menu {
+		.menu {
+			li {
+				a:active, a:hover {
+					padding: 0 0 1.5rem 0;
+					background: url(../images/active-arrow.png) no-repeat center bottom;
+				}
+
+				.active {
+					background: url(../images/active-arrow.png) no-repeat center bottom;
+				}
+			}
+
+
+		}
+	}
+
 }
 
 .scroll-to-fixed-fixed {
