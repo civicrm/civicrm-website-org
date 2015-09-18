@@ -49,25 +49,25 @@
       clear: none; } }
 
 /* line 24, ../sass/base/_grids.scss */
-#block-views-get-started-block-1, #block-views-get-started-block-2 {
+#block-views-get-started-block-1 {
   display: inline-block; }
   @media (min-width: 980px) {
     /* line 30, ../sass/base/_grids.scss */
-    #block-views-get-started-block-1 .views-row-1, #block-views-get-started-block-2 .views-row-1 {
+    #block-views-get-started-block-1 .views-row-1 {
       width: 33.33333%;
       float: left;
       margin-right: -100%;
       margin-left: 0;
       clear: none; }
     /* line 34, ../sass/base/_grids.scss */
-    #block-views-get-started-block-1 .views-row-2, #block-views-get-started-block-2 .views-row-2 {
+    #block-views-get-started-block-1 .views-row-2 {
       width: 33.33333%;
       float: left;
       margin-right: -100%;
       margin-left: 33.33333%;
       clear: none; }
     /* line 38, ../sass/base/_grids.scss */
-    #block-views-get-started-block-1 .views-row-3, #block-views-get-started-block-2 .views-row-3 {
+    #block-views-get-started-block-1 .views-row-3 {
       width: 33.33333%;
       float: right;
       margin-left: 0;
@@ -981,26 +981,26 @@ tbody tr:hover {
       font-weight: 700; }
 
 /* line 177, ../sass/components/_content.scss */
-#block-views-get-started-block-1 .views-row, #block-views-get-started-block-2 .views-row {
+#block-views-get-started-block-1 .views-row {
   border-top: none;
   padding-top: 0; }
   @media (min-width: 980px) {
     /* line 177, ../sass/components/_content.scss */
-    #block-views-get-started-block-1 .views-row, #block-views-get-started-block-2 .views-row {
+    #block-views-get-started-block-1 .views-row {
       border-right: none; } }
   /* line 185, ../sass/components/_content.scss */
-  #block-views-get-started-block-1 .views-row .views-field-title, #block-views-get-started-block-2 .views-row .views-field-title {
+  #block-views-get-started-block-1 .views-row .views-field-title {
     min-height: 5rem; }
   @media (min-width: 1024px) {
     /* line 189, ../sass/components/_content.scss */
-    #block-views-get-started-block-1 .views-row .views-field-body, #block-views-get-started-block-2 .views-row .views-field-body {
+    #block-views-get-started-block-1 .views-row .views-field-body {
       min-height: 20rem; } }
   @media (min-width: 1220px) {
     /* line 189, ../sass/components/_content.scss */
-    #block-views-get-started-block-1 .views-row .views-field-body, #block-views-get-started-block-2 .views-row .views-field-body {
+    #block-views-get-started-block-1 .views-row .views-field-body {
       min-height: 13rem; } }
 /* line 196, ../sass/components/_content.scss */
-#block-views-get-started-block-1 h3, #block-views-get-started-block-2 h3 {
+#block-views-get-started-block-1 h3 {
   margin-bottom: 0; }
 
 /* line 204, ../sass/components/_content.scss */

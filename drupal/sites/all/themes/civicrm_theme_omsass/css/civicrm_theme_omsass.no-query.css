@@ -27,7 +27,7 @@
   display: inline-block; }
 
 /* line 24, ../sass/base/_grids.scss */
-#block-views-get-started-block-1, #block-views-get-started-block-2 {
+#block-views-get-started-block-1 {
   display: inline-block; }
 
 /* line 44, ../sass/base/_grids.scss */
@@ -656,14 +656,14 @@ tbody tr:hover {
       font-weight: 700; }
 
 /* line 177, ../sass/components/_content.scss */
-#block-views-get-started-block-1 .views-row, #block-views-get-started-block-2 .views-row {
+#block-views-get-started-block-1 .views-row {
   border-top: none;
   padding-top: 0; }
   /* line 185, ../sass/components/_content.scss */
-  #block-views-get-started-block-1 .views-row .views-field-title, #block-views-get-started-block-2 .views-row .views-field-title {
+  #block-views-get-started-block-1 .views-row .views-field-title {
     min-height: 5rem; }
 /* line 196, ../sass/components/_content.scss */
-#block-views-get-started-block-1 h3, #block-views-get-started-block-2 h3 {
+#block-views-get-started-block-1 h3 {
   margin-bottom: 0; }
 
 /* line 204, ../sass/components/_content.scss */
