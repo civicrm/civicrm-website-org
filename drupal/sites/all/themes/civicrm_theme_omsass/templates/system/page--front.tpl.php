@@ -129,12 +129,20 @@ $menu = render($page['menu']);
       <?php print render($page['white']); ?>
       <?php endif; ?>
 
+      <?php if($page['black']): ?>
+      <?php print render($page['black']); ?>
+      <?php endif; ?>
+
       <?php if($page['white_two']): ?>
       <?php print render($page['white_two']); ?>
       <?php endif; ?>
 
       <?php if($page['blue_two']): ?>
       <?php print render($page['blue_two']); ?>
+      <?php endif; ?>
+
+      <?php if($page['green']): ?>
+      <?php print render($page['green']); ?>
       <?php endif; ?>
 
       <?php if($page['grey']): ?>

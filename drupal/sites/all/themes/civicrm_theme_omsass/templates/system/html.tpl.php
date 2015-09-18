@@ -71,7 +71,7 @@
       // Scroll the window, stop any previous animation, stop on user manual scroll
       // Check https://github.com/flesler/jquery.scrollTo for more customizability
       console.log(this.hash);
-      $(window).scrollTo(this.hash, {duration:1000, interrupt:true});
+      $(window).scrollTo(this.hash, {duration:1000, interrupt:true, offset:-96});
     });
 
     $('.l-header').scrollToFixed();

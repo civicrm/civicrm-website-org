@@ -159,8 +159,11 @@
 .l-region--footer-first {
 	@include layout(12) {
 		.footer-sm {
-			@include grid-span(10,1);
-			clear:right;
+			@include breakpoint($desktop-sm) {
+				@include grid-span(10,1);
+				clear:right;	
+			}
+			
 		}
 
 		.block--search-form {

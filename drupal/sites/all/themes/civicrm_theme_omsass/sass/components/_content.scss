@@ -229,7 +229,7 @@ tbody tr:hover{
 #block-views-homepage-news-block {
 	padding: 0 10% 5% 5%;
 	@include breakpoint($tablet) {padding: 0 10% 0 2%;}
-	min-height: 33em; 
+	@include breakpoint($desktop-sm) {min-height: 33em; }
 
 	h1 {
 		font-size: 4.5rem;
@@ -413,6 +413,12 @@ tbody tr:hover{
 	.l-region--blue {
 		background-color: $darkblue;
 		display: inline-block;
+	}
+
+	.l-region--black {
+		background-color: #000;
+		// display: inline-block;
+		min-height: 20rem;
 	}
 
 	.l-region--blue-two {
