@@ -107,7 +107,7 @@
 
         if(bodyPos > jQuery('#block-views-get-started-block').position().top && bodyPos < jQuery('#block-views-get-started-block').outerHeight()+jQuery('#block-views-get-started-block').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
-          jQuery('..block--menu-menu-primary-menu-home-page a[href="/#get-started"]').addClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').addClass('selected');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').removeClass('selected');
 
         if(bodyPos > jQuery('#block-views-get-started-block-1').position().top && bodyPos < jQuery('#block-views-get-started-block-1').outerHeight()+jQuery('#block-views-get-started-block-1').position().top) {

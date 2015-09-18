@@ -200,6 +200,7 @@ tbody tr:hover{
 
 #block-views-get-started-block-2 {
 	@extend #block-views-get-started-block;
+	clear: both;
 
 	.views-row {
 		border-top: none;	
