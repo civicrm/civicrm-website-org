@@ -693,12 +693,12 @@ blockquote, .node-type-feature .l-content .field--name-body, .node-type-feature 
       text-transform: uppercase;
       line-height: 1; }
   /* line 262, ../sass/base/_typography.scss */
-  .l-header .block--menu-menu-primary-menu a, .l-header .block--menu-menu-home-page-menu a {
+  .l-header .block--menu-menu-primary-menu a, .l-header .block--menu-menu-home-page-menu a, .l-header .block--menu-menu-primary-menu-home-page a {
     font-size: 1.15rem;
     font-weight: bold; }
     @media (min-width: 1024px) {
       /* line 262, ../sass/base/_typography.scss */
-      .l-header .block--menu-menu-primary-menu a, .l-header .block--menu-menu-home-page-menu a {
+      .l-header .block--menu-menu-primary-menu a, .l-header .block--menu-menu-home-page-menu a, .l-header .block--menu-menu-primary-menu-home-page a {
         font-size: 1.3rem;
         /* 20px @ 24px */ } }
   /* line 270, ../sass/base/_typography.scss */

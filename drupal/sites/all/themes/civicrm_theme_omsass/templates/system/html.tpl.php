@@ -101,24 +101,24 @@
       bodyPos = jQuery('body').scrollTop() + jQuery('.l-header').outerHeight();
 
         if(bodyPos > jQuery('.l-region--blue').position().top && bodyPos < jQuery('.l-region--blue').outerHeight()+jQuery('.l-region--blue').position().top) {
-          jQuery('.block--menu-menu-home-page-menu a').removeClass('selected');
-          jQuery('.block--menu-menu-home-page-menu a[href="/#features"]').addClass('selected');
-        } else jQuery('.block--menu-menu-home-page-menu a[href="/#features"]').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').addClass('selected');
+        } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').removeClass('selected');
 
         if(bodyPos > jQuery('#block-views-get-started-block').position().top && bodyPos < jQuery('#block-views-get-started-block').outerHeight()+jQuery('#block-views-get-started-block').position().top) {
-          jQuery('.block--menu-menu-home-page-menu a').removeClass('selected');
-          jQuery('.block--menu-menu-home-page-menu a[href="/#get-started"]').addClass('selected');
-        } else jQuery('.block--menu-menu-home-page-menu a[href="/#get-started"]').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
+          jQuery('..block--menu-menu-primary-menu-home-page a[href="/#get-started"]').addClass('selected');
+        } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').removeClass('selected');
 
         if(bodyPos > jQuery('#block-views-get-started-block-1').position().top && bodyPos < jQuery('#block-views-get-started-block-1').outerHeight()+jQuery('#block-views-get-started-block-1').position().top) {
-          jQuery('.block--menu-menu-home-page-menu a').removeClass('selected');
-          jQuery('.block--menu-menu-home-page-menu a[href="/#get-involved"]').addClass('selected');
-        } else jQuery('.block--menu-menu-home-page-menu a[href="/#get-involved"]').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').addClass('selected');
+        } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').removeClass('selected');
 
         if(bodyPos > jQuery('#block-views-get-started-block-2').position().top && bodyPos < jQuery('#block-views-get-started-block-2').outerHeight()+jQuery('#block-views-get-started-block-2').position().top) {
-          jQuery('.block--menu-menu-home-page-menu a').removeClass('selected');
-          jQuery('.block--menu-menu-home-page-menu a[href="/#support-us"]').addClass('selected');
-        } else jQuery('.block--menu-menu-home-page-menu a[href="/#support-us"]').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').addClass('selected');
+        } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').removeClass('selected');
 
 
     });

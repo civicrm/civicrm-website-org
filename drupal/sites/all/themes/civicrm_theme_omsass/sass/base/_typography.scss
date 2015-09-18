@@ -258,7 +258,7 @@ blockquote {
 		}
 	}
 
-	.block--menu-menu-primary-menu, .block--menu-menu-home-page-menu {
+	.block--menu-menu-primary-menu, .block--menu-menu-home-page-menu, .block--menu-menu-primary-menu-home-page {
 		a {
 			font-size: 1.15rem;
 			@include breakpoint($desktop-lg) {font-size: 1.3rem; /* 20px @ 24px */}
