@@ -43,7 +43,6 @@
  *
  * @ingroup themeable
  */
-
 if ($block->subject)
   $namedAnchor = strtolower(str_replace(' ', '-', $block->subject));
 
@@ -59,4 +58,6 @@ if ($block->subject)
   <div<?php print $content_attributes; ?>>
     <?php print $content; ?>
   </div>
+</div>
+
 </div>

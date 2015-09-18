@@ -59,10 +59,21 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <?php print $styles; ?>
   <?php print $scripts; ?>
+  <script src="//cdn.jsdelivr.net/jquery.scrollto/2.1.0/jquery.scrollTo.min.js"></script>
 
   <script>
     (function ($) {
   $(document).ready(function() {
+    // Bind to the click of all links with a #hash in the href
+    $('a[href^="/#"]').click(function(e) {
+      // Prevent the jump and the #hash from appearing on the address bar
+      e.preventDefault();
+      // Scroll the window, stop any previous animation, stop on user manual scroll
+      // Check https://github.com/flesler/jquery.scrollTo for more customizability
+      console.log(this.hash);
+      $(window).scrollTo(this.hash, {duration:1000, interrupt:true});
+    });
+
     $('.l-header').scrollToFixed();
     $('.mmenu-nav').on('closed.mm', function() {
       var mmenu = $(this);
@@ -86,16 +97,31 @@
     }
 
     <?php if (drupal_get_path_alias(current_path()) == 'nw-home'): ?>  
-    bodyPos = $('body').scrollTop();
-    if(bodyPos > $('#block-views-features-block').position().top ) {
-      $('.block--menu-menu-home-page-menu a').removeClass('selected');
-      $('.block--menu-menu-home-page-menu a[href="/#features"]').addClass('selected');
-    } else $('.block--menu-menu-home-page-menu a[href="/#features"]').removeClass('selected');
+    jQuery(window).scroll(function() {
+      bodyPos = jQuery('body').scrollTop() + jQuery('.l-header').outerHeight();
 
-    if($('body').scrollTop() > $('#block-views-get-started-block').position().top) {
-      $('.block--menu-menu-home-page-menu a').removeClass('selected');
-      $('.block--menu-menu-home-page-menu a[href="/#features"]').addClass('selected');
-    }
+        if(bodyPos > jQuery('.l-region--blue').position().top && bodyPos < jQuery('.l-region--blue').outerHeight()+jQuery('.l-region--blue').position().top) {
+          jQuery('.block--menu-menu-home-page-menu a').removeClass('selected');
+          jQuery('.block--menu-menu-home-page-menu a[href="/#features"]').addClass('selected');
+        } else jQuery('.block--menu-menu-home-page-menu a[href="/#features"]').removeClass('selected');
+
+        if(bodyPos > jQuery('#block-views-get-started-block').position().top && bodyPos < jQuery('#block-views-get-started-block').outerHeight()+jQuery('#block-views-get-started-block').position().top) {
+          jQuery('.block--menu-menu-home-page-menu a').removeClass('selected');
+          jQuery('.block--menu-menu-home-page-menu a[href="/#get-started"]').addClass('selected');
+        } else jQuery('.block--menu-menu-home-page-menu a[href="/#get-started"]').removeClass('selected');
+
+        if(bodyPos > jQuery('#block-views-get-started-block-1').position().top && bodyPos < jQuery('#block-views-get-started-block-1').outerHeight()+jQuery('#block-views-get-started-block-1').position().top) {
+          jQuery('.block--menu-menu-home-page-menu a').removeClass('selected');
+          jQuery('.block--menu-menu-home-page-menu a[href="/#get-involved"]').addClass('selected');
+        } else jQuery('.block--menu-menu-home-page-menu a[href="/#get-involved"]').removeClass('selected');
+
+        if(bodyPos > jQuery('#block-views-get-started-block-2').position().top && bodyPos < jQuery('#block-views-get-started-block-2').outerHeight()+jQuery('#block-views-get-started-block-2').position().top) {
+          jQuery('.block--menu-menu-home-page-menu a').removeClass('selected');
+          jQuery('.block--menu-menu-home-page-menu a[href="/#support-us"]').addClass('selected');
+        } else jQuery('.block--menu-menu-home-page-menu a[href="/#support-us"]').removeClass('selected');
+
+
+    });
     <?php endif; ?>
   });
 })(jQuery);

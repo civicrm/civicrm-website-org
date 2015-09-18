@@ -62,13 +62,32 @@
 		.menu {
 			li {
 				a {
-					padding: 0 0 1.5rem 0;
+					padding: 0 0 1.8rem 0;
 				}
 				a:hover {
 					background: url(../images/active-arrow.png) no-repeat center bottom;
 				}
 
 				.selected {
+					background: url(../images/active-arrow.png) no-repeat center bottom;
+				}
+			}
+
+
+		}
+	}
+
+	.block--menu-menu-primary-menu {
+		.menu {
+			li {
+				a {
+					padding: 0 0 1.8rem 0;
+				}
+				a:hover {
+					background: url(../images/active-arrow.png) no-repeat center bottom;
+				}
+
+				.active {
 					background: url(../images/active-arrow.png) no-repeat center bottom;
 				}
 			}
