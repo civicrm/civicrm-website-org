@@ -1594,7 +1594,7 @@ tbody tr:hover {
       vertical-align: top; }
   /* line 64, ../sass/components/_header.scss */
   .l-header .block--menu-menu-home-page-menu .menu li a, .l-header .block--menu-menu-primary-menu-home-page .menu li a {
-    padding: 0 0 1.8rem 0; }
+    padding: 0 0 1.5rem 0; }
   /* line 67, ../sass/components/_header.scss */
   .l-header .block--menu-menu-home-page-menu .menu li a:hover, .l-header .block--menu-menu-primary-menu-home-page .menu li a:hover {
     background: url(../images/active-arrow.png) no-repeat center bottom; }
@@ -1603,7 +1603,7 @@ tbody tr:hover {
     background: url(../images/active-arrow.png) no-repeat center bottom; }
   /* line 83, ../sass/components/_header.scss */
   .l-header .block--menu-menu-primary-menu .menu li a {
-    padding: 0 0 1.8rem 0; }
+    padding: 0 0 1.5rem 0; }
   /* line 86, ../sass/components/_header.scss */
   .l-header .block--menu-menu-primary-menu .menu li a:hover {
     background: url(../images/active-arrow.png) no-repeat center bottom; }
