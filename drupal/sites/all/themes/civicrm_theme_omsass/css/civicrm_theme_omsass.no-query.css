@@ -505,29 +505,33 @@ blockquote, .node-type-feature .l-content .field--name-body, .node-type-feature 
   font-size: 2rem; }
 
 /* line 397, ../sass/base/_typography.scss */
+.page-casestudy-node .l-region--green {
+  color: #fff; }
+
+/* line 403, ../sass/base/_typography.scss */
 .view-homepage-news a {
   color: #fff; }
-/* line 401, ../sass/base/_typography.scss */
+/* line 407, ../sass/base/_typography.scss */
 .view-homepage-news .views-field-view-node {
   font-weight: bold; }
 
-/* line 407, ../sass/base/_typography.scss */
+/* line 413, ../sass/base/_typography.scss */
 .view-rotating-partner-logos .partner-text {
   text-align: center; }
-/* line 411, ../sass/base/_typography.scss */
+/* line 417, ../sass/base/_typography.scss */
 .view-rotating-partner-logos a {
   text-indent: -8765px;
   line-height: 0;
   font-size: 0; }
 
-/* line 419, ../sass/base/_typography.scss */
+/* line 425, ../sass/base/_typography.scss */
 .view-service-providers a {
   font-weight: bold;
   text-transform: uppercase; }
-/* line 424, ../sass/base/_typography.scss */
+/* line 430, ../sass/base/_typography.scss */
 .view-service-providers .views-label {
   font-weight: bold; }
-/* line 428, ../sass/base/_typography.scss */
+/* line 434, ../sass/base/_typography.scss */
 .view-service-providers .contact-info {
   font-weight: bold; }
 
@@ -898,40 +902,56 @@ tbody tr:hover {
       display: none; }
 
 /* line 538, ../sass/components/_content.scss */
-.node--blog {
-  padding-bottom: 2em;
-  border-bottom: 1px solid #b7b8b9;
-  margin-bottom: 2em; }
+.less-info {
+  padding: 1.5em;
+  border-top: 1px solid #ccc; }
 
-/* line 545, ../sass/components/_content.scss */
+/* line 544, ../sass/components/_content.scss */
 .links--inline li {
   border-right: 2px solid #6c696a;
   padding: 0 1em;
   line-height: 1;
   margin-right: 0; }
-/* line 552, ../sass/components/_content.scss */
+/* line 551, ../sass/components/_content.scss */
 .links--inline li:last-child {
   border-right: 0; }
 
-/* line 559, ../sass/components/_content.scss */
+/* line 556, ../sass/components/_content.scss */
 .more-info, .less-info {
   margin-top: 3%; }
-  /* line 561, ../sass/components/_content.scss */
+  /* line 558, ../sass/components/_content.scss */
   .more-info a, .less-info a {
     padding: 1em;
     background-color: #393536;
     color: #fff; }
 
-/* line 568, ../sass/components/_content.scss */
+/* line 565, ../sass/components/_content.scss */
 .more-info {
   margin-bottom: 5%; }
 
-/* line 572, ../sass/components/_content.scss */
-.less-info {
-  padding: 1.5em;
-  border-top: 1px solid #ccc; }
+/* line 569, ../sass/components/_content.scss */
+.node--blog {
+  padding-bottom: 2em;
+  border-bottom: 1px solid #b7b8b9;
+  margin-bottom: 2em; }
 
-/* line 577, ../sass/components/_content.scss */
+/* line 576, ../sass/components/_content.scss */
+.page-casestudy-node .l-content {
+  max-width: 100%; }
+  /* line 579, ../sass/components/_content.scss */
+  .page-casestudy-node .l-content #page-title, .page-casestudy-node .l-content .block-title, .page-casestudy-node .l-content .block__title {
+    padding: 0 2%; }
+  /* line 583, ../sass/components/_content.scss */
+  .page-casestudy-node .l-content .field-content {
+    padding: 0 2%; }
+  /* line 587, ../sass/components/_content.scss */
+  .page-casestudy-node .l-content .views-label {
+    padding: 0 2%; }
+  /* line 591, ../sass/components/_content.scss */
+  .page-casestudy-node .l-content .l-region--green {
+    padding: 2%; }
+
+/* line 597, ../sass/components/_content.scss */
 .view-service-providers {
   	/* .views-field-nothing {
   		text-align: center;
@@ -988,49 +1008,49 @@ tbody tr:hover {
   			margin-bottom: 5%;
   		}
   	} */ }
-  /* line 578, ../sass/components/_content.scss */
+  /* line 598, ../sass/components/_content.scss */
   .view-service-providers .views-row {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc; }
 
-/* line 641, ../sass/components/_content.scss */
+/* line 661, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views_slideshow_cycle_slide {
   width: 100% !important;
   padding: 0 2%; }
 
-/* line 645, ../sass/components/_content.scss */
+/* line 665, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-text {
   text-align: center;
   padding: 0 3%; }
 
-/* line 652, ../sass/components/_content.scss */
+/* line 672, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-text h5,
 .view-rotating-partner-logos .partner-contact h5 {
   font-size: 1.29em;
   margin-top: 0;
   margin-bottom: 0.8%; }
 
-/* line 658, ../sass/components/_content.scss */
+/* line 678, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-contact {
   border-top: 1px solid #fff;
   padding-top: 5%; }
 
-/* line 670, ../sass/components/_content.scss */
+/* line 690, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-img {
   text-align: center; }
-  /* line 672, ../sass/components/_content.scss */
+  /* line 692, ../sass/components/_content.scss */
   .view-rotating-partner-logos .partner-img img {
     max-width: 180px; }
 
-/* line 676, ../sass/components/_content.scss */
+/* line 696, ../sass/components/_content.scss */
 .view-rotating-partner-logos .pad {
   padding: 20px; }
 
-/* line 679, ../sass/components/_content.scss */
+/* line 699, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-pause {
   display: none; }
 
-/* line 682, ../sass/components/_content.scss */
+/* line 702, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-previous a,
 .view-rotating-partner-logos .views-slideshow-controls-text-next a {
   position: absolute;
@@ -1043,12 +1063,12 @@ tbody tr:hover {
   z-index: 999;
   bottom: -10%; }
 
-/* line 697, ../sass/components/_content.scss */
+/* line 717, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-previous a {
   background: url(images/arrow-prev-white.png) no-repeat 0 0;
   left: 0; }
 
-/* line 701, ../sass/components/_content.scss */
+/* line 721, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-next a {
   background: url(images/arrow-next-white.png) no-repeat 0 0;
   right: 0; }

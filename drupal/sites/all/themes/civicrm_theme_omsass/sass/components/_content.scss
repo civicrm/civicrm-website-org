@@ -535,10 +535,9 @@ tbody tr:hover{
 
 }
 
-.node--blog {
-	padding-bottom: 2em;
-    border-bottom: 1px solid #b7b8b9;
-    margin-bottom: 2em;
+.less-info {
+	padding: 1.5em;
+	border-top: 1px solid #ccc;
 }
 
 .links--inline {
@@ -554,8 +553,6 @@ tbody tr:hover{
 	}
 }
 
-
-
 .more-info, .less-info {
 	margin-top: 3%;
 	a {
@@ -569,9 +566,32 @@ tbody tr:hover{
 	margin-bottom: 5%;
 }
 
-.less-info {
-	padding: 1.5em;
-	border-top: 1px solid #ccc;
+.node--blog {
+	padding-bottom: 2em;
+    border-bottom: 1px solid #b7b8b9;
+    margin-bottom: 2em;
+}
+
+.page-casestudy-node {
+	.l-content {
+		max-width: 100%;
+
+		#page-title {
+			padding: 0 2%;
+		}
+
+		.field-content {
+			padding: 0 2%;
+		}
+
+		.views-label {
+			padding: 0 2%;
+		}
+
+		.l-region--green {
+			padding: 2%;
+		}
+	}
 }
 
 .view-service-providers {
