@@ -49,7 +49,9 @@ if ($block->subject)
 
 
 ?>
+<?php if (isset($namedAnchor)): ?>
 <a id="<?php print $namedAnchor; ?>"></a>
+<?php endif; ?>
 <div<?php print $attributes; ?>>
   <?php print render($title_prefix); ?>
   <?php if ($block->subject): ?>

@@ -594,6 +594,40 @@ tbody tr:hover{
 	}
 }
 
+.quicktabs_main.quicktabs-style-sky {
+	border: 0;
+	background-color: transparent;
+}
+
+ul.quicktabs-tabs.quicktabs-style-sky {
+	display: inline-block;
+	margin-left: 10%;
+
+	
+
+	li a, li.active a, li.active a:visited {
+		top: -3.18em;
+		background: #fff;
+		color: $darkgrey;
+		border-bottom: 0;
+		border-color: $grey;
+	}
+}
+
+.node-type-sectioned-page {
+	#page-title {
+		padding: 0 5%;
+	}
+
+	.l-content {
+		max-width: 100%;
+
+		.section {
+			padding: 5%;
+		}
+	}
+}
+
 .view-service-providers {
 	.views-row {
 		border-top: 1px solid #ccc;

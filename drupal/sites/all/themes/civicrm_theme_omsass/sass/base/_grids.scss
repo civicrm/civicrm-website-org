@@ -205,6 +205,25 @@
 	@include add-gutter(.25);	
 }
 
+.section-nw-become-a-partner {
+	.view-section-list-formatter {
+		.view-display-id-block_1 {
+			.view-content {
+				@include layout-at(('grid':12,'gutter':1/3),$desktop-sm) {
+					div {
+						&:nth-child(n){
+					    	@include float-span(4);
+					  	}
+					  	&:nth-child(3n+3) {
+					    	@include float-span(4,last);
+					  	}
+					}
+				}
+			}
+		} 
+	}
+}
+
 .view-service-providers {
 	.views-field-nothing {
 		@include add-grid(2);
