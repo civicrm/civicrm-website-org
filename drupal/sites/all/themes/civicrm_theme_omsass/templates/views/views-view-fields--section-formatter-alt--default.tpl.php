@@ -23,19 +23,19 @@
  *
  * @ingroup views_templates
  */
-$excluded_fields = array('field_image','field_section_image_position','field_section_color');
+$excluded_fields = array('field_image','field_section_image_position','field_color');
 $inlineStyles = array();
 $classes = array();
 
-if (isset($fields['field_section_color']->content))
-	$classes[] = sprintf('l-region--%s', $fields['field_section_color']->content);
+
+if (isset($fields['field_color']->content))
+	$classes[] = sprintf('l-region--%s', $fields['field_color']->content);
 
 if (isset($fields['field_section_image_position']) && $fields['field_section_image_position']->content == 'background') {
 	preg_match('/src="([^"]*)"/',$fields['field_image']->content, $matches);
 	$imageUrl = $matches[1];
 	$inlineStyles = array_merge($inlineStyles, array("background: url($imageUrl) no-repeat top left",'background-size: cover','color: #fff'));
 }
-
 ?>
 
 <div class="section <?php (empty($classes)) ?: print(implode(' ',$classes)); ?>" <?php (empty($inlineStyles)) ?: printf('style="%s"',implode('; ',$inlineStyles)); ?>>
