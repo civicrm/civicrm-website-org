@@ -477,10 +477,12 @@ tbody tr:hover{
 .l-region--slideshow {
 	width: 100%;
 	display: inline-block;
+	height: 100vh;
 
 	.flexslider {
 	    margin: 0;
 	    border: none;
+	    height: 100%;
 
 	    .slides img {
 		    // height: 40rem !important;
@@ -488,13 +490,13 @@ tbody tr:hover{
 
 		.slides > li {
 			padding: 0% 5% 5%;
-				// min-height: 30rem;
-				max-height: 30rem;
-				min-height: 29rem;
+				// max-height: 30rem;
+				// min-height: 29rem;
+				height: 85vh;
 
 			@include breakpoint($desktop-sm) {
 				padding: 0% 15% 5%;
-				min-height: 43rem;
+				// min-height: 43rem;
 			}
 		}
 
