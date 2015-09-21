@@ -136,6 +136,10 @@ $menu = render($page['menu']);
       <?php print render($page['white']); ?>
       <?php endif; ?>
 
+      <?php if($page['black']): ?>
+      <?php print render($page['black']); ?>
+      <?php endif; ?>
+
       <?php if($page['white_two']): ?>
       <?php print render($page['white_two']); ?>
       <?php endif; ?>
