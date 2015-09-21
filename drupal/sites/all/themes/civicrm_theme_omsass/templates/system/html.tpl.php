@@ -98,10 +98,10 @@
 
     <?php if (drupal_get_path_alias(current_path()) == 'nw-home'): ?>  
     jQuery(window).scroll(function() {
-      if (jQuery('body').scrollTop() == 0)
-        jQuery('.l-header.after').css({'position':'fixed','bottom':0});
-      else if (!jQuery('.l-header').hasClass('scroll-to-fixed-fixed'))
-        jQuery('.l-header.after').css({'position':'static'});
+      if (jQuery('body').scrollTop() <= 96)
+        jQuery('.front .l-header.after').css({'position':'fixed','bottom':0});
+      else if (!jQuery('.front .l-header.after').hasClass('scroll-to-fixed-fixed'))
+        jQuery('.front .l-header.after').css({'position':'static'});
       bodyPos = jQuery('body').scrollTop() + jQuery('.l-header').outerHeight();
 
         if(bodyPos > jQuery('.l-region--blue').position().top && bodyPos < jQuery('.l-region--blue').outerHeight()+jQuery('.l-region--blue').position().top) {

@@ -21,6 +21,7 @@ tbody tr:hover{
 	display:none;
 	@include breakpoint($desktop-sm) {display:block;}
 }
+
 #block-views-features-block{
 	margin: 0 auto;
 	display: block;
@@ -475,6 +476,10 @@ tbody tr:hover{
 
 }
 
+.l-page {
+	max-width: 1900px;
+}
+
 .l-region--slideshow {
 	width: 100%;
 	display: inline-block;
@@ -493,7 +498,7 @@ tbody tr:hover{
 			padding: 0% 5% 5%;
 				// max-height: 30rem;
 				// min-height: 29rem;
-				height: 88vh;
+				height: 100vh;
 
 			@include breakpoint($desktop-sm) {
 				padding: 0% 15% 5%;
@@ -508,9 +513,9 @@ tbody tr:hover{
 			z-index: 9999;
 			position: relative;
 			
-			margin-top: -2em;
-			@include breakpoint($tablet) {margin-top: -4em;}
-			@include breakpoint($desktop-sm) {margin-top: -6.2em;}
+			margin-top: -8em;
+			@include breakpoint($tablet) {margin-top: -10em;}
+			@include breakpoint($desktop-sm) {margin-top: -12.2em;}
 
 			li > a {
 				background-color: $darkgrey;
@@ -575,7 +580,7 @@ tbody tr:hover{
     margin-bottom: 2em;
 }
 
-.page-casestudy-node, .page-nw-casestudy-node {
+.page-casestudy-node, .page-nw-casestudy-node, .view-civi-case-study {
 	.l-content {
 		max-width: 100%;
 

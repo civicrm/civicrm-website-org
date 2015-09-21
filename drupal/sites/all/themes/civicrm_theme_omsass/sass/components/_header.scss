@@ -131,6 +131,12 @@
 
 .l-header.after {
 	display: none;
-
-	@include breakpoint($desktop-sm2) {display: block; position: fixed; bottom: 0; width: 100%;}
+	@include breakpoint($desktop-sm2) {display: block;}
 }
+
+.front {
+	.l-header.after {
+		@include breakpoint($desktop-sm) {position: fixed; bottom: 0; width: 100%;}
+	}
+}
+
