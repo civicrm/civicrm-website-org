@@ -91,7 +91,7 @@ global $user;
     });
   
     function fix_body_height(){
-    var h = $('#mmenu_right').outerHeight();
+    var h = $('#mmenu_right').outerHeight(true);
     if( h < $(window).height() ){
     h = $(window).height(); 
     }
@@ -101,39 +101,40 @@ global $user;
 
     <?php if (drupal_get_path_alias(current_path()) == 'nw-home'): ?>  
     jQuery(window).scroll(function() {
-      if (jQuery('body').scrollTop() <= 96)
+      console.log(jQuery(document).scrollTop())
+      if (jQuery(document).scrollTop() <= 96)
         jQuery('.front .l-header.after').css({'position':'fixed','bottom':0});
       else if (!jQuery('.front .l-header.after').hasClass('scroll-to-fixed-fixed'))
         jQuery('.front .l-header.after').css({'position':'static'});
-      bodyPos = jQuery('body').scrollTop() + jQuery('.l-header').outerHeight();
+      bodyPos = jQuery(document).scrollTop() + jQuery('.l-header').outerHeight(true);
 
-        if(bodyPos > jQuery('.l-region--blue').position().top && bodyPos < jQuery('.l-region--blue').outerHeight()+jQuery('.l-region--blue').position().top) {
+        if(bodyPos > jQuery('.l-region--blue').position().top && bodyPos < jQuery('.l-region--blue').outerHeight(true)+jQuery('.l-region--blue').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').addClass('selected');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').removeClass('selected');
 
-        if(bodyPos > jQuery('#block-views-get-started-block').position().top && bodyPos < jQuery('#block-views-get-started-block').outerHeight()+jQuery('#block-views-get-started-block').position().top) {
+        if(bodyPos > jQuery('#block-views-get-started-block').position().top && bodyPos < jQuery('#block-views-get-started-block').outerHeight(true)+jQuery('#block-views-get-started-block').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').addClass('selected');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').removeClass('selected');
 
-        if(bodyPos > jQuery('#block-views-get-started-block-1').position().top && bodyPos < jQuery('#block-views-get-started-block-1').outerHeight()+jQuery('#block-views-get-started-block-1').position().top) {
+        if(bodyPos > jQuery('#block-views-get-started-block-1').position().top && bodyPos < jQuery('#block-views-get-started-block-1').outerHeight(true)+jQuery('#block-views-get-started-block-1').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').addClass('selected');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').removeClass('selected');
 
-        if(bodyPos > jQuery('#block-views-get-started-block-2').position().top && bodyPos < jQuery('#block-views-get-started-block-2').outerHeight()+jQuery('#block-views-get-started-block-2').position().top) {
+        if(bodyPos > jQuery('#block-views-get-started-block-2').position().top && bodyPos < jQuery('#block-views-get-started-block-2').outerHeight(true)+jQuery('#block-views-get-started-block-2').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').addClass('selected');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').removeClass('selected');
 
-        <?php if($user->uid): ?>
-          $('.menu a[href="/user"]').html('Logout');
-          $('.menu a[href="/user"]').attr('href','/user/logout');
-        <?php endif;?>
-
     });
     <?php endif; ?>
+
+    <?php if($user->uid): ?>
+      $('.menu a[href="/user"]').html('Logout');
+      $('.menu a[href="/user"]').attr('href','/user/logout');
+    <?php endif;?>
   });
 })(jQuery);
 

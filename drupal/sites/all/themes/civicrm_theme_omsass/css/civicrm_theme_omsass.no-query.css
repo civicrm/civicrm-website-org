@@ -914,7 +914,7 @@ tbody tr:hover {
       text-align: right;
       z-index: 9999;
       position: relative;
-      margin-top: -8em; }
+      bottom: 8rem; }
       /* line 530, ../sass/components/_content.scss */
       .l-region--slideshow .flexslider .flex-control-paging li > a {
         background-color: #393536;

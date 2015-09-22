@@ -1335,15 +1335,15 @@ tbody tr:hover {
       text-align: right;
       z-index: 9999;
       position: relative;
-      margin-top: -8em; }
+      bottom: 8rem; }
       @media (min-width: 740px) {
         /* line 519, ../sass/components/_content.scss */
         .l-region--slideshow .flexslider .flex-control-paging {
-          margin-top: -10em; } }
+          bottom: 10rem; } }
       @media (min-width: 800px) {
         /* line 519, ../sass/components/_content.scss */
         .l-region--slideshow .flexslider .flex-control-paging {
-          margin-top: -12.2em; } }
+          bottom: 13rem; } }
       /* line 530, ../sass/components/_content.scss */
       .l-region--slideshow .flexslider .flex-control-paging li > a {
         background-color: #393536;

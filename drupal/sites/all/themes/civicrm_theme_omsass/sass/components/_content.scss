@@ -523,9 +523,9 @@ tbody tr:hover{
 			z-index: 9999;
 			position: relative;
 			
-			margin-top: -8em;
-			@include breakpoint($tablet) {margin-top: -10em;}
-			@include breakpoint($desktop-sm) {margin-top: -12.2em;}
+			bottom: 8rem;
+			@include breakpoint($tablet) {bottom: 10rem;}
+			@include breakpoint($desktop-sm) {bottom: 13rem;}
 
 			li > a {
 				background-color: $darkgrey;
