@@ -70,20 +70,3 @@ function civicrm_theme_omsass_theme($existing, $type, $theme, $path) {
      )
   );
 }
-
-/**
- * Adjust Log in link for authenticated/anonymous users
- */
-
-function civicrm_theme_omsass_translated_menu_link_alter(&$item, $map) {
-  var_dump($item);
-  if ($item['menu_name'] == 'your-menu') {
-    if ($item['link_title'] == 'Awesome Menu Link') {
-      $item['access'] = TRUE;
-      $item['href'] = 'new/link/path';
-    }
-    else {
-      $item['access'] = FALSE;      
-    }
-  }
-}
