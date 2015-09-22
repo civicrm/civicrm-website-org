@@ -523,7 +523,7 @@ tbody tr:hover{
 			z-index: 9999;
 			position: relative;
 			
-			bottom: 8rem;
+			bottom: 12rem;
 			@include breakpoint($tablet) {bottom: 10rem;}
 			@include breakpoint($desktop-sm) {bottom: 13rem;}
 

@@ -63,6 +63,7 @@
 			li {
 				a {
 					padding: 0 0 1.3rem 0;
+					@include breakpoint($ipad-landscape) {padding: 0 0 1.05rem 0;}
 					@include breakpoint($desktop) {padding: 0 0 1.8rem 0;}
 				}
 				a:hover {
@@ -83,6 +84,7 @@
 			li {
 				a {
 					padding: 0 0 1.3rem 0;
+					@include breakpoint($ipad-landscape) {padding: 0 0 1.05rem 0;}
 					@include breakpoint($wide) {padding: 0 0 1.8rem 0;}
 				}
 				a:hover {

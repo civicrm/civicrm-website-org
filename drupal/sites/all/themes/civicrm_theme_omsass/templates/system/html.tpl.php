@@ -73,7 +73,8 @@ global $user;
       // Scroll the window, stop any previous animation, stop on user manual scroll
       // Check https://github.com/flesler/jquery.scrollTo for more customizability
       console.log(this.hash);
-      $(window).scrollTo(this.hash, {duration:1000, interrupt:true, offset:-96});
+      $(window).scrollTo(this.hash, {duration:1000, interrupt:true, offset:-96, axis:'y'});
+      window.location.hash = this.hash;
     });
 
     $('.l-header').scrollToFixed();
@@ -101,7 +102,6 @@ global $user;
 
     <?php if (drupal_get_path_alias(current_path()) == 'nw-home'): ?>  
     jQuery(window).scroll(function() {
-      console.log(jQuery(document).scrollTop())
       if (jQuery(document).scrollTop() <= 96)
         jQuery('.front .l-header.after').css({'position':'fixed','bottom':0});
       else if (!jQuery('.front .l-header.after').hasClass('scroll-to-fixed-fixed'))
@@ -111,21 +111,29 @@ global $user;
         if(bodyPos > jQuery('.l-region--blue').position().top && bodyPos < jQuery('.l-region--blue').outerHeight(true)+jQuery('.l-region--blue').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').addClass('selected');
+          hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').attr('href');
+          window.location.hash = hash.replace(/^\/#/, '');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').removeClass('selected');
 
         if(bodyPos > jQuery('#block-views-get-started-block').position().top && bodyPos < jQuery('#block-views-get-started-block').outerHeight(true)+jQuery('#block-views-get-started-block').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').addClass('selected');
+          hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').attr('href');
+          window.location.hash = hash.replace(/^\/#/, '');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').removeClass('selected');
 
         if(bodyPos > jQuery('#block-views-get-started-block-1').position().top && bodyPos < jQuery('#block-views-get-started-block-1').outerHeight(true)+jQuery('#block-views-get-started-block-1').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').addClass('selected');
+          hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').attr('href');
+          window.location.hash = hash.replace(/^\/#/, '');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').removeClass('selected');
 
         if(bodyPos > jQuery('#block-views-get-started-block-2').position().top && bodyPos < jQuery('#block-views-get-started-block-2').outerHeight(true)+jQuery('#block-views-get-started-block-2').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').addClass('selected');
+          hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').attr('href');
+          window.location.hash = hash.replace(/^\/#/, '');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').removeClass('selected');
 
     });

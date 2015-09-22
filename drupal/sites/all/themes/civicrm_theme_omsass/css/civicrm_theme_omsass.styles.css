@@ -1335,7 +1335,7 @@ tbody tr:hover {
       text-align: right;
       z-index: 9999;
       position: relative;
-      bottom: 8rem; }
+      bottom: 12rem; }
       @media (min-width: 740px) {
         /* line 519, ../sass/components/_content.scss */
         .l-region--slideshow .flexslider .flex-control-paging {
@@ -1734,66 +1734,74 @@ ul.quicktabs-tabs.quicktabs-style-sky {
   /* line 64, ../sass/components/_header.scss */
   .l-header .block--menu-menu-home-page-menu .menu li a, .l-header .block--menu-menu-primary-menu-home-page .menu li a {
     padding: 0 0 1.3rem 0; }
+    @media (min-width: 980px) and (orientation: landscape) {
+      /* line 64, ../sass/components/_header.scss */
+      .l-header .block--menu-menu-home-page-menu .menu li a, .l-header .block--menu-menu-primary-menu-home-page .menu li a {
+        padding: 0 0 1.05rem 0; } }
     @media (min-width: 980px) {
       /* line 64, ../sass/components/_header.scss */
       .l-header .block--menu-menu-home-page-menu .menu li a, .l-header .block--menu-menu-primary-menu-home-page .menu li a {
         padding: 0 0 1.8rem 0; } }
-  /* line 68, ../sass/components/_header.scss */
+  /* line 69, ../sass/components/_header.scss */
   .l-header .block--menu-menu-home-page-menu .menu li a:hover, .l-header .block--menu-menu-primary-menu-home-page .menu li a:hover {
     background: url(../images/active-arrow.png) no-repeat center bottom; }
-  /* line 72, ../sass/components/_header.scss */
+  /* line 73, ../sass/components/_header.scss */
   .l-header .block--menu-menu-home-page-menu .menu li .selected, .l-header .block--menu-menu-primary-menu-home-page .menu li .selected {
     background: url(../images/active-arrow.png) no-repeat center bottom; }
-  /* line 84, ../sass/components/_header.scss */
+  /* line 85, ../sass/components/_header.scss */
   .l-header .block--menu-menu-primary-menu .menu li a {
     padding: 0 0 1.3rem 0; }
+    @media (min-width: 980px) and (orientation: landscape) {
+      /* line 85, ../sass/components/_header.scss */
+      .l-header .block--menu-menu-primary-menu .menu li a {
+        padding: 0 0 1.05rem 0; } }
     @media (min-width: 1220px) {
-      /* line 84, ../sass/components/_header.scss */
+      /* line 85, ../sass/components/_header.scss */
       .l-header .block--menu-menu-primary-menu .menu li a {
         padding: 0 0 1.8rem 0; } }
-  /* line 88, ../sass/components/_header.scss */
+  /* line 90, ../sass/components/_header.scss */
   .l-header .block--menu-menu-primary-menu .menu li a:hover {
     background: url(../images/active-arrow.png) no-repeat center bottom; }
-  /* line 92, ../sass/components/_header.scss */
+  /* line 94, ../sass/components/_header.scss */
   .l-header .block--menu-menu-primary-menu .menu li .active {
     background: url(../images/active-arrow.png) no-repeat center bottom; }
 
-/* line 103, ../sass/components/_header.scss */
+/* line 105, ../sass/components/_header.scss */
 .scroll-to-fixed-fixed {
   width: 100% !important; }
 
-/* line 107, ../sass/components/_header.scss */
+/* line 109, ../sass/components/_header.scss */
 .l-header.before {
   display: block; }
-  /* line 110, ../sass/components/_header.scss */
+  /* line 112, ../sass/components/_header.scss */
   .l-header.before .l-header-inner {
     max-width: 100%; }
-  /* line 114, ../sass/components/_header.scss */
+  /* line 116, ../sass/components/_header.scss */
   .l-header.before .menubutton {
     float: right; }
-    /* line 116, ../sass/components/_header.scss */
+    /* line 118, ../sass/components/_header.scss */
     .l-header.before .menubutton a {
       font-size: 4rem;
       color: #fff;
       line-height: 3rem; }
-    /* line 122, ../sass/components/_header.scss */
+    /* line 124, ../sass/components/_header.scss */
     .l-header.before .menubutton .fa {
       vertical-align: top; }
   @media (min-width: 900px) {
-    /* line 107, ../sass/components/_header.scss */
+    /* line 109, ../sass/components/_header.scss */
     .l-header.before {
       display: none; } }
 
-/* line 132, ../sass/components/_header.scss */
+/* line 134, ../sass/components/_header.scss */
 .l-header.after {
   display: none; }
   @media (min-width: 900px) {
-    /* line 132, ../sass/components/_header.scss */
+    /* line 134, ../sass/components/_header.scss */
     .l-header.after {
       display: block; } }
 
 @media (min-width: 800px) {
-  /* line 138, ../sass/components/_header.scss */
+  /* line 140, ../sass/components/_header.scss */
   .front .l-header.after {
     position: fixed;
     bottom: 0;
