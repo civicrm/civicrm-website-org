@@ -11,6 +11,20 @@ a {
 	color: $midblue;
 }
 
+article {
+	header {
+		text-align: center;
+		color: #fff;
+		h1 {
+			a {
+				color: #fff !important;
+				font-size: 4rem;
+			}
+		}	
+	}
+	
+}
+
 h1, h2, h3, h4, h5 {
 	text-transform: uppercase;
     font-weight: 700;

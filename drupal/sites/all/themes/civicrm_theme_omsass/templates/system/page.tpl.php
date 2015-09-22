@@ -107,7 +107,7 @@ $menu = render($page['menu']);
 
   <div class="l-main">
     <?php print $breadcrumb; ?>
-    <div class="l-content" role="main">
+    <div class="l-content" role="main" style="<?php print(empty($inlineStyles)) ?: implode('; ', $inlineStyles); ?>">
       <?php print render($page['highlighted']); ?>
       <a id="main-content"></a>
       <?php print render($title_prefix); ?>

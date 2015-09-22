@@ -1,3 +1,7 @@
+dd {
+	margin: 0;
+}
+
 table td, table th{
   padding:8px 16px;
   font-size:90%
@@ -609,7 +613,7 @@ tbody tr:hover{
 
 ul.quicktabs-tabs.quicktabs-style-sky {
 	display: inline-block;
-	margin-left: 10%;
+	// margin-left: 10%;
 
 	
 
@@ -634,6 +638,19 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 			padding: 5%;
 		}
 	}
+
+	.view-section-list-formatter {
+		margin-bottom: 20%;
+		@include breakpoint($tablet) {
+			margin-bottom: auto;
+		}
+	}
+}
+
+.pageheader {
+	display: inline-block; 
+	width: 100%;
+	min-height: 40vh;
 }
 
 .view-service-providers {
