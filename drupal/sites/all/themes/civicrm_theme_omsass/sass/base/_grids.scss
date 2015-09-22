@@ -61,12 +61,20 @@
 	}
 }
 
+.left-half {
+	@include breakpoint($desktop) {@include grid-span(6,1,12,$gutter: .25);}
+}
+
 .left-two-thirds {
 	@include breakpoint($desktop) {@include grid-span(2,1,$gutter: .25);}
 }
 
 .left-third {
 	@include breakpoint($desktop) {@include grid-span(1,1);}
+}
+
+.right-half {
+	@include breakpoint($desktop) {@include grid-span(6,7,12,$gutter: .25);}	
 }
 
 .right-third {
@@ -76,6 +84,7 @@
 .right-two-thirds {
 	@include breakpoint($desktop) {@include grid-span(2,2);}
 }
+
 
 .front {
 	.hero {
@@ -146,8 +155,6 @@
 
 .l-region--blue {
 	width: 100%;
-	// height: 20%;
-
 }
 
 .l-region--blue-two {

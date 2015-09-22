@@ -423,8 +423,14 @@ tbody tr:hover{
 
 	.l-region--black {
 		background-color: #000;
-		// display: inline-block;
+		display: inline-block;
 		min-height: 20rem;
+
+		.left-half {
+			// max-width: 30%;
+			padding: 5%;
+			color: #fff;
+		}
 	}
 
 	.l-region--blue-two {
