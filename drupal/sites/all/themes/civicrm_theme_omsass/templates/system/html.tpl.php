@@ -72,9 +72,8 @@ global $user;
       e.preventDefault();
       // Scroll the window, stop any previous animation, stop on user manual scroll
       // Check https://github.com/flesler/jquery.scrollTo for more customizability
-      console.log(this.hash);
       $(window).scrollTo(this.hash, {duration:1000, interrupt:true, offset:-96, axis:'y'});
-      window.location.hash = this.hash;
+      // window.location.hash = this.hash;
     });
 
     $('.l-header').scrollToFixed();
@@ -112,28 +111,28 @@ global $user;
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').addClass('selected');
           hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').attr('href');
-          window.location.hash = hash.replace(/^\/#/, '');
+          // window.location.hash = hash.replace(/^\/#/, '');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').removeClass('selected');
 
         if(bodyPos > jQuery('#block-views-get-started-block').position().top && bodyPos < jQuery('#block-views-get-started-block').outerHeight(true)+jQuery('#block-views-get-started-block').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').addClass('selected');
           hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').attr('href');
-          window.location.hash = hash.replace(/^\/#/, '');
+          // window.location.hash = hash.replace(/^\/#/, '');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').removeClass('selected');
 
         if(bodyPos > jQuery('#block-views-get-started-block-1').position().top && bodyPos < jQuery('#block-views-get-started-block-1').outerHeight(true)+jQuery('#block-views-get-started-block-1').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').addClass('selected');
           hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').attr('href');
-          window.location.hash = hash.replace(/^\/#/, '');
+          // window.location.hash = hash.replace(/^\/#/, '');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').removeClass('selected');
 
         if(bodyPos > jQuery('#block-views-get-started-block-2').position().top && bodyPos < jQuery('#block-views-get-started-block-2').outerHeight(true)+jQuery('#block-views-get-started-block-2').position().top) {
           jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').addClass('selected');
           hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').attr('href');
-          window.location.hash = hash.replace(/^\/#/, '');
+          // window.location.hash = hash.replace(/^\/#/, '');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').removeClass('selected');
 
     });

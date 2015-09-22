@@ -1313,13 +1313,13 @@ tbody tr:hover {
 /* line 493, ../sass/components/_content.scss */
 .l-region--slideshow {
   width: 100%;
-  display: inline-block;
+  display: block;
   height: 100vh; }
   /* line 498, ../sass/components/_content.scss */
   .l-region--slideshow .flexslider {
     margin: 0;
     border: none;
-    height: 100%; }
+    height: 100vh; }
     /* line 507, ../sass/components/_content.scss */
     .l-region--slideshow .flexslider .slides > li {
       padding: 0% 5% 5%;
