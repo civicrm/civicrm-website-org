@@ -42,6 +42,8 @@
  * @see template_process()
  * @see omega_preprocess_html()
  */
+
+global $user;
 ?><!DOCTYPE html>
 <?php if (omega_extension_enabled('compatibility') && omega_theme_get_setting('omega_conditional_classes_html', TRUE)): ?>
   <!--[if IEMobile 7]><html class="no-js ie iem7" lang="<?php print $language->language; ?>" dir="<?php print $language->dir; ?>"><![endif]-->
@@ -96,6 +98,7 @@
     $('html.mm-opened, body').height(h);
     }
 
+
     <?php if (drupal_get_path_alias(current_path()) == 'nw-home'): ?>  
     jQuery(window).scroll(function() {
       if (jQuery('body').scrollTop() <= 96)
@@ -124,6 +127,10 @@
           jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').addClass('selected');
         } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').removeClass('selected');
 
+        <?php if($user->uid): ?>
+          $('.menu a[href="/user"]').html('Logout');
+          $('.menu a[href="/user"]').attr('href','/user/logout');
+        <?php endif;?>
 
     });
     <?php endif; ?>
