@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the CiviCRM Case Study feature.
- */
-
-include_once('ccrm_case_study.features.inc');

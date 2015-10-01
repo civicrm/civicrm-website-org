@@ -1,4 +1,4 @@
-name = CiviCRM-omSass
+name = New CiviCRM theme
 description = SASS and Singularity Grid driven theme for Omega 4+
 base theme = omega
 screenshot = screenshot.png
