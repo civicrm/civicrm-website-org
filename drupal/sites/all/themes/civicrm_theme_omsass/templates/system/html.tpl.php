@@ -42,6 +42,8 @@
  * @see template_process()
  * @see omega_preprocess_html()
  */
+
+global $user;
 ?><!DOCTYPE html>
 <?php if (omega_extension_enabled('compatibility') && omega_theme_get_setting('omega_conditional_classes_html', TRUE)): ?>
   <!--[if IEMobile 7]><html class="no-js ie iem7" lang="<?php print $language->language; ?>" dir="<?php print $language->dir; ?>"><![endif]-->
@@ -59,10 +61,21 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <?php print $styles; ?>
   <?php print $scripts; ?>
+  <script src="//cdn.jsdelivr.net/jquery.scrollto/2.1.0/jquery.scrollTo.min.js"></script>
 
   <script>
     (function ($) {
   $(document).ready(function() {
+    // Bind to the click of all links with a #hash in the href
+    $('a[href^="/#"]').click(function(e) {
+      // Prevent the jump and the #hash from appearing on the address bar
+      e.preventDefault();
+      // Scroll the window, stop any previous animation, stop on user manual scroll
+      // Check https://github.com/flesler/jquery.scrollTo for more customizability
+      $(window).scrollTo(this.hash, {duration:1000, interrupt:true, offset:-96, axis:'y'});
+      // window.location.hash = this.hash;
+    });
+
     $('.l-header').scrollToFixed();
     $('.mmenu-nav').on('closed.mm', function() {
       var mmenu = $(this);
@@ -78,17 +91,64 @@
     });
   
     function fix_body_height(){
-    var h = $('#mmenu_right').outerHeight();
+    var h = $('#mmenu_right').outerHeight(true);
     if( h < $(window).height() ){
     h = $(window).height(); 
     }
     $('html.mm-opened, body').height(h);
     }
+
+
+    <?php if (drupal_get_path_alias(current_path()) == 'nw-home'): ?>  
+    jQuery(window).scroll(function() {
+      if (jQuery(document).scrollTop() <= 96)
+        jQuery('.front .l-header.after').css({'position':'fixed','bottom':0});
+      else if (!jQuery('.front .l-header.after').hasClass('scroll-to-fixed-fixed'))
+        jQuery('.front .l-header.after').css({'position':'static'});
+      bodyPos = jQuery(document).scrollTop() + jQuery('.l-header').outerHeight(true);
+
+        if(bodyPos > jQuery('.l-region--blue').position().top && bodyPos < jQuery('.l-region--blue').outerHeight(true)+jQuery('.l-region--blue').position().top) {
+          jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').addClass('selected');
+          hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').attr('href');
+          // window.location.hash = hash.replace(/^\/#/, '');
+        } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#features"]').removeClass('selected');
+
+        if(bodyPos > jQuery('#block-views-get-started-block').position().top && bodyPos < jQuery('#block-views-get-started-block').outerHeight(true)+jQuery('#block-views-get-started-block').position().top) {
+          jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').addClass('selected');
+          hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').attr('href');
+          // window.location.hash = hash.replace(/^\/#/, '');
+        } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-started"]').removeClass('selected');
+
+        if(bodyPos > jQuery('#block-views-get-started-block-1').position().top && bodyPos < jQuery('#block-views-get-started-block-1').outerHeight(true)+jQuery('#block-views-get-started-block-1').position().top) {
+          jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').addClass('selected');
+          hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').attr('href');
+          // window.location.hash = hash.replace(/^\/#/, '');
+        } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#get-involved"]').removeClass('selected');
+
+        if(bodyPos > jQuery('#block-views-get-started-block-2').position().top && bodyPos < jQuery('#block-views-get-started-block-2').outerHeight(true)+jQuery('#block-views-get-started-block-2').position().top) {
+          jQuery('.block--menu-menu-primary-menu-home-page a').removeClass('selected');
+          jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').addClass('selected');
+          hash = jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').attr('href');
+          // window.location.hash = hash.replace(/^\/#/, '');
+        } else jQuery('.block--menu-menu-primary-menu-home-page a[href="/#support-us"]').removeClass('selected');
+
+    });
+    <?php endif; ?>
+
+    <?php if($user->uid): ?>
+      $('.menu a[href="/user"]').html('Logout');
+      $('.menu a[href="/user"]').attr('href','/user/logout');
+    <?php endif;?>
   });
 })(jQuery);
 
-
   </script>
+
+  
+
 </head>
 <body<?php print $attributes;?>>
   <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>

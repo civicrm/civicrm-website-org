@@ -1,7 +1,31 @@
+dd {
+	margin: 0;
+}
+
+table td, table th{
+  padding:8px 16px;
+  font-size:90%
+}
+
+table th{
+  font-weight:bold;
+  border-bottom: 1px solid;
+}
+
+table tr.odd, table tr.even{
+  background-color: white;   
+}
+
+tbody tr:hover{
+  background-color: #eee;   
+}
+
+
 #block-search-form {
 	display:none;
 	@include breakpoint($desktop-sm) {display:block;}
 }
+
 #block-views-features-block{
 	margin: 0 auto;
 	display: block;
@@ -83,18 +107,6 @@
 		text-align: center;
 	}
 
-	.bluegreen {
-		background-color: $bluegreen;
-	}
-
-	.pink {
-		background-color: $pink;
-	}
-
-	.green {
-		background-color: $civigreen;
-	}
-
 	.views-row {
 		text-align: center;
 		padding: 5% 5% 0;
@@ -165,20 +177,64 @@
 }
 
 #block-views-get-started-block-1 {
-	text-align: left;
-	padding: 2% 5%;
+	@extend #block-views-get-started-block;
+
+	.views-row {
+		border-top: none;	
+		padding-top: 0;
+
+		@include breakpoint($desktop) {
+			border-right: none;	
+		}
+
+		.views-field-title {
+			min-height: 5rem;
+		}
+
+		.views-field-body {
+			@include breakpoint($desktop-lg) {min-height: 20rem;}
+			@include breakpoint($wide) {min-height: 13rem;}
+		}
+		
+	}
+
+	h3 {
+		margin-bottom: 0;
+	}
 }
 
 #block-views-get-started-block-2 {
-	text-align: left;
-	border-left: 1px solid $darkgrey;
-	padding: 2% 5%;
+	@extend #block-views-get-started-block;
+	clear: both;
+
+	.views-row {
+		border-top: none;	
+		padding-top: 0;
+
+		@include breakpoint($desktop) {
+			border-right: none;	
+		}
+
+		.views-field-title {
+			min-height: 5rem;
+		}
+
+		.views-field-body {
+			@include breakpoint($desktop-lg) {min-height: 20rem;}
+			@include breakpoint($wide) {min-height: 13rem;}
+		}
+		
+	}
+
+	h3 {
+		margin-bottom: 0;
+	}
 }
 
 #block-views-homepage-news-block {
 	padding: 0 10% 5% 5%;
 	@include breakpoint($tablet) {padding: 0 10% 0 2%;}
-	min-height: 33em; 
+	@include breakpoint($desktop-sm) {min-height: 33em; }
 
 	h1 {
 		font-size: 4.5rem;
@@ -225,6 +281,25 @@
 	background-color: #fff;
 	box-shadow: 2px 2px 2px #000;
 	margin-top: 4%;
+}
+
+.button-primary {
+	@extend .btn-grey;
+	background-color: $bluegreen;
+	padding: 0.5rem 1rem;
+
+}
+
+.bluegreen {
+	background-color: $bluegreen;
+}
+
+.pink {
+	background-color: $pink;
+}
+
+.green {
+	background-color: $civigreen;
 }
 
 .hero {
@@ -295,12 +370,67 @@
 	}
 }
 
+.not-front {
+	.icongrid {
+		text-align: center;
+		.views-field-field-icon {
+			margin-top: 5%;
+		}
+	}
+}
+
+.node-type-feature {
+	.l-content {
+		max-width: 100%;
+		// padding: 0 2.5%;
+		
+		#page-title {
+			padding: 0 2.5%;
+		}
+
+		.field {
+			padding: 0 2.5%;
+		}
+
+		.field--name-field-top-feature-heading {
+
+		}
+
+		.field--name-body {
+			background-color: $darkblue;
+			padding: 1% 2%;
+			margin-top: 2%;
+			margin-bottom: 2%;
+			width: 100%;
+		}
+
+		.field--name-field-additional-resources {
+			@extend .field--name-body;
+			margin-bottom: 0;
+			background-color: $civigreen;
+			color: #fff;
+		}
+	}
+}
+
 .l-main {
 	// padding: 2% 3%;
 
 	.l-region--blue {
 		background-color: $darkblue;
 		display: inline-block;
+	}
+
+	.l-region--black {
+		background-color: #000;
+		display: inline-block;
+		min-height: 20rem;
+
+		.left-half {
+			// max-width: 30%;
+			padding: 5%;
+			color: #fff;
+		}
 	}
 
 	.l-region--blue-two {
@@ -356,11 +486,76 @@
 
 }
 
+.l-page {
+	max-width: 1900px;
+}
 
-.node--blog {
-	padding-bottom: 2em;
-    border-bottom: 1px solid #b7b8b9;
-    margin-bottom: 2em;
+.l-region--slideshow {
+	width: 100%;
+	display: block;
+	height: 100vh;
+
+	.flexslider {
+	    margin: 0;
+	    border: none;
+	    height: 100vh;
+
+	    .slides img {
+		    // height: 40rem !important;
+		}
+
+		.slides > li {
+			padding: 0% 5% 5%;
+				// max-height: 30rem;
+				// min-height: 29rem;
+				height: 100vh;
+
+			@include breakpoint($desktop-sm) {
+				padding: 0% 15% 5%;
+				// min-height: 43rem;
+			}
+		}
+
+		.flex-control-paging {
+			bottom: 8px;
+			right: 5%;
+			text-align: right;
+			z-index: 9999;
+			position: relative;
+			
+			bottom: 12rem;
+			@include breakpoint($tablet) {bottom: 10rem;}
+			@include breakpoint($desktop-sm) {bottom: 13rem;}
+
+			li > a {
+				background-color: $darkgrey;
+				border-radius: 0;
+				-webkit-border-radius: 0;
+				
+				height: 25px;
+				width: 25px;	
+				@include breakpoint($desktop-sm) {
+					height: 50px;
+					width: 50px;	
+				}
+				
+			}
+
+			li > a.flex-active {
+				background-color: $bluegreen;
+			}
+		}
+
+		.flex-direction-nav {
+			display: none;
+		}
+	}
+
+}
+
+.less-info {
+	padding: 1.5em;
+	border-top: 1px solid #ccc;
 }
 
 .links--inline {
@@ -389,9 +584,79 @@
 	margin-bottom: 5%;
 }
 
-.less-info {
-	padding: 1.5em;
-	border-top: 1px solid #ccc;
+.node--blog {
+	padding-bottom: 2em;
+    border-bottom: 1px solid #b7b8b9;
+    margin-bottom: 2em;
+}
+
+.page-casestudy-node, .page-nw-casestudy-node, .view-civi-case-study {
+	.l-content {
+		max-width: 100%;
+
+		#page-title {
+			padding: 0 2%;
+		}
+
+		.field-content {
+			padding: 0 2%;
+		}
+
+		.views-label {
+			padding: 0 2%;
+		}
+
+		.l-region--green {
+			padding: 2%;
+		}
+	}
+}
+
+.quicktabs_main.quicktabs-style-sky {
+	border: 0;
+	background-color: transparent;
+}
+
+ul.quicktabs-tabs.quicktabs-style-sky {
+	display: inline-block;
+	// margin-left: 10%;
+
+	
+
+	li a, li.active a, li.active a:visited {
+		top: -3.18em;
+		background: #fff;
+		color: $darkgrey;
+		border-bottom: 0;
+		border-color: $grey;
+	}
+}
+
+.node-type-sectioned-page {
+	#page-title {
+		padding: 0 5%;
+	}
+
+	.l-content {
+		max-width: 100%;
+
+		.section {
+			padding: 5%;
+		}
+	}
+
+	.view-section-list-formatter {
+		margin-bottom: 20%;
+		@include breakpoint($tablet) {
+			margin-bottom: auto;
+		}
+	}
+}
+
+.pageheader {
+	display: inline-block; 
+	width: 100%;
+	min-height: 40vh;
 }
 
 .view-service-providers {
@@ -523,63 +788,4 @@
 	right: 0;
 }
 
-.l-region--slideshow {
-	width: 100%;
-	display: inline-block;
 
-	.flexslider {
-	    margin: 0;
-	    border: none;
-
-	    .slides img {
-		    // height: 40rem !important;
-		}
-
-		.slides > li {
-			padding: 0% 5% 5%;
-				// min-height: 30rem;
-				max-height: 30rem;
-				min-height: 29rem;
-
-			@include breakpoint($desktop-sm) {
-				padding: 0% 15% 5%;
-				min-height: 43rem;
-			}
-		}
-
-		.flex-control-paging {
-			bottom: 8px;
-			right: 5%;
-			text-align: right;
-			z-index: 9999;
-			position: relative;
-			
-			margin-top: -2em;
-			@include breakpoint($tablet) {margin-top: -4em;}
-			@include breakpoint($desktop-sm) {margin-top: -3.2em;}
-
-			li > a {
-				background-color: $darkgrey;
-				border-radius: 0;
-				-webkit-border-radius: 0;
-				
-				height: 25px;
-				width: 25px;	
-				@include breakpoint($desktop-sm) {
-					height: 50px;
-					width: 50px;	
-				}
-				
-			}
-
-			li > a.flex-active {
-				background-color: $bluegreen;
-			}
-		}
-
-		.flex-direction-nav {
-			display: none;
-		}
-	}
-
-}

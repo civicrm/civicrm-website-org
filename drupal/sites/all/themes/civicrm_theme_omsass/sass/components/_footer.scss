@@ -8,7 +8,8 @@
 			display: inline-block;
 			text-align: center;
 			width: 100%;
-			margin-top: 25%;
+			margin-top: 5%;
+			@include breakpoint($desktop-sm) {margin-top: 25%;}
 			@include breakpoint($desktop-sm) {margin-top: 5%;}
 		}
 
@@ -37,6 +38,7 @@
 			.social-icons {
 				display: inline-block;
 				margin: 0;
+				padding: 0;
 				vertical-align: middle;
 
 				ul {
@@ -65,7 +67,8 @@
 
 			li {
 				list-style: none;
-				margin-right: 2em;
+				margin-right: 0;
+				@include breakpoint($desktop-sm) {margin-right: 2em;}
 			}
 			.expanded {
 				float: left;

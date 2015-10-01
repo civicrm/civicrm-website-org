@@ -11,6 +11,20 @@ a {
 	color: $midblue;
 }
 
+article {
+	header {
+		text-align: center;
+		color: #fff;
+		h1 {
+			a {
+				color: #fff !important;
+				font-size: 4rem;
+			}
+		}	
+	}
+	
+}
+
 h1, h2, h3, h4, h5 {
 	text-transform: uppercase;
     font-weight: 700;
@@ -41,6 +55,11 @@ input.form-submit {
 td, th {
     font-weight: normal;
     text-align: left;
+}
+
+blockquote {
+	font-size: 1.5rem;
+	font-style: italic;
 }
 
 .btn-grey {
@@ -253,7 +272,7 @@ td, th {
 		}
 	}
 
-	.block--menu-menu-primary-menu {
+	.block--menu-menu-primary-menu, .block--menu-menu-home-page-menu, .block--menu-menu-primary-menu-home-page {
 		a {
 			font-size: 1.15rem;
 			@include breakpoint($desktop-lg) {font-size: 1.3rem; /* 20px @ 24px */}
@@ -368,6 +387,39 @@ td, th {
 .node__title {
 	a {
 		color: $grey;
+	}
+}
+
+.node-type-feature {
+	.l-content {
+		.field--name-field-top-feature-heading {
+			@extend h2;
+		}
+
+		.field--name-body {
+			@extend blockquote;
+			color: #fff;
+		}
+
+		.field__label {
+			font-size: 2rem;
+		}
+	}
+}
+
+.page-casestudy-node, .page-nw-casestudy-node {
+	.l-region--green {
+		color: #fff;
+	}
+}
+
+.section-nw-become-a-partner {
+	.quicktabs_main {
+		.node__title {
+			a {
+				color: #fff;
+			}
+		}
 	}
 }
 
