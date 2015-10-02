@@ -109,7 +109,7 @@ tbody tr:hover{
 
 	.views-row {
 		text-align: center;
-		padding: 5% 5% 0;
+		padding: 0 5% 0;
 		border-top: 1px solid $grey;	
 
 		@include breakpoint($desktop) {
@@ -787,5 +787,3 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 	background: url(images/arrow-next-white.png) no-repeat 0 0;
 	right: 0;
 }
-
-
