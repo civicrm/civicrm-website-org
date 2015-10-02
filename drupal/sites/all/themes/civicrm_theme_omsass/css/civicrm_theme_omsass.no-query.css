@@ -279,7 +279,7 @@ td, th {
   text-align: left; }
 
 /* line 60, ../sass/base/_typography.scss */
-blockquote, .node-type-feature .l-content .field--name-body, .node-type-feature .l-content .field--name-field-additional-resources {
+blockquote, .node-type-feature .l-content .field--name-body, .node-type-feature .l-content .field--name-field-additional-resources, p.quote {
   font-size: 1.5rem;
   font-style: italic; }
 
@@ -634,7 +634,7 @@ tbody tr:hover {
   /* line 110, ../sass/components/_content.scss */
   #block-views-get-started-block .views-row, #block-views-get-started-block-1 .views-row, #block-views-get-started-block-2 .views-row {
     text-align: center;
-    padding: 5% 5% 0;
+    padding: 2% 5% 0;
     border-top: 1px solid #6c696a; }
   /* line 122, ../sass/components/_content.scss */
   #block-views-get-started-block .views-row-first, #block-views-get-started-block-1 .views-row-first, #block-views-get-started-block-2 .views-row-first {
@@ -1196,7 +1196,7 @@ ul.quicktabs-tabs.quicktabs-style-sky {
       /* line 75, ../sass/components/_footer.scss */
       .l-footer .l-region--footer-first .menu .expanded ul {
         margin-top: 0; }
-  /* line 13, ../../../../../../../../../.rvm/gems/ruby-2.2.1/gems/toolkit-2.9.0/stylesheets/toolkit/_clearfix.scss */
+  /* line 13, ../../../../../../../../lib/gems/2.1.0/gems/toolkit-2.9.0/stylesheets/toolkit/_clearfix.scss */
   .l-footer .l-region--footer-first:after {
     content: "";
     display: table;
