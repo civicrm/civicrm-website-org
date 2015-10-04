@@ -562,7 +562,7 @@ td, th {
   text-align: left; }
 
 /* line 60, ../sass/base/_typography.scss */
-blockquote, .node-type-feature .l-content .field--name-body, .node-type-feature .l-content .field--name-field-additional-resources, p.quote {
+p.quote, blockquote, .node-type-feature .l-content .field--name-body, .node-type-feature .l-content .field--name-field-additional-resources {
   font-size: 1.5rem;
   font-style: italic; }
 
@@ -884,6 +884,10 @@ blockquote, .node-type-feature .l-content .field--name-body, .node-type-feature 
 .view-service-providers .contact-info {
   font-weight: bold; }
 
+/* line 463, ../sass/base/_typography.scss */
+#civicrm-menu #crm-qsearch input {
+  color: #333333; }
+
 /* line 1, ../sass/components/_content.scss */
 dd {
   margin: 0; }
@@ -984,7 +988,7 @@ tbody tr:hover {
   /* line 110, ../sass/components/_content.scss */
   #block-views-get-started-block .views-row, #block-views-get-started-block-1 .views-row, #block-views-get-started-block-2 .views-row {
     text-align: center;
-    padding: 2% 5% 0;
+    padding: 0 5% 0;
     border-top: 1px solid #6c696a; }
     @media (min-width: 980px) {
       /* line 110, ../sass/components/_content.scss */
