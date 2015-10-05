@@ -224,7 +224,7 @@ tbody tr:hover{
 	input[type="email"] {
 		line-height: 2.2rem;
 	}
-	
+
 }
 
 /* #block-views-get-started-block-1 {
@@ -318,6 +318,7 @@ tbody tr:hover{
 	margin: 0;
     padding: 1% 8%;
     list-style-type: none;
+    width: 100vw;
 
     li {
     	display: inline-block;
@@ -538,7 +539,7 @@ tbody tr:hover{
 }
 
 .l-region--slideshow {
-	width: 100%;
+	width: 100vw;
 	display: block;
 	height: 100vh;
 
@@ -553,9 +554,11 @@ tbody tr:hover{
 
 		.slides > li {
 			padding: 0% 5% 5%;
-				// max-height: 30rem;
-				// min-height: 29rem;
-				height: 100vh;
+			// max-height: 30rem;
+			// min-height: 29rem;
+			height: 100vh;
+
+			div {max-width: 1000px; margin: 0 auto;}
 
 			@include breakpoint($desktop-sm) {
 				padding: 0% 15% 5%;
