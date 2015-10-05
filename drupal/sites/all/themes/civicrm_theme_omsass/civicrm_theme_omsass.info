@@ -18,6 +18,7 @@ stylesheets[all][] = css/civicrm_theme_omsass.no-query.css
 ; ========================================
 scripts[] = js/civicrm_theme_omsass.behaviors.js
 scripts[] = ../../libraries/ScrollToFixed/jquery-scrolltofixed-min.js
+scripts[] = js/jquery.matchHeight.js
 
 ; ========================================
 ; Regions
