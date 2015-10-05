@@ -423,6 +423,14 @@ tbody tr:hover{
 .front {
 	.l-content {
 		max-width: 100%;
+
+		@include colorRegion('white') {
+			text-align: center;
+		}
+
+		@include colorRegion('white-two') {
+			text-align: center;
+		}
 	}
 }
 
@@ -432,6 +440,18 @@ tbody tr:hover{
 		.views-field-field-icon {
 			margin-top: 5%;
 		}
+	}
+
+	@include colorRegion('white') {
+		padding: 2% 5%;
+	}
+
+	@include colorRegion('white-two') {
+		padding: 2% 5%;
+	}
+
+	@include colorRegion('green') {
+		padding: 2% 5%;
 	}
 }
 
@@ -508,14 +528,6 @@ tbody tr:hover{
 
 	@include colorRegion('green') {
 		background-color: $civigreen;
-	}
-
-	@include colorRegion('white') {
-		text-align: center;
-	}
-
-	@include colorRegion('white-two') {
-		text-align: center;
 	}
 
 	@include colorRegion('grey') {
