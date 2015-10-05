@@ -427,12 +427,20 @@ tbody tr:hover{
 .front {
 	.l-content {
 		max-width: 100%;
+	}
 
-		@include colorRegion('white') {
-			text-align: center;
-		}
+	.block__title {
+		padding-left: 0;
+	}
 
-		@include colorRegion('white-two') {
+	@include colorRegion('white') {
+		text-align: center;
+	}
+
+	@include colorRegion('white-two') {
+		text-align: center;
+
+		.white-two-inner {
 			text-align: center;
 		}
 	}
