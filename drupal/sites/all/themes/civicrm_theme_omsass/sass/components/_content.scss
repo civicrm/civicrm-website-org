@@ -216,6 +216,14 @@ tbody tr:hover{
 		}
 
 	}
+
+	input {
+		float: left;
+	}
+
+	input[type="text"] {
+		line-height: 2.2rem;
+	}
 }
 
 /* #block-views-get-started-block-1 {
