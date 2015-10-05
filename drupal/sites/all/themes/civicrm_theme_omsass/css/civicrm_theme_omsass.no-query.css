@@ -689,7 +689,7 @@ tbody tr:hover {
   #block-views-get-started-block input, #block-views-get-started-block-1 input, #block-views-get-started-block-2 input {
     float: left; }
   /* line 224, ../sass/components/_content.scss */
-  #block-views-get-started-block input[type="text"], #block-views-get-started-block-1 input[type="text"], #block-views-get-started-block-2 input[type="text"] {
+  #block-views-get-started-block input[type="email"], #block-views-get-started-block-1 input[type="email"], #block-views-get-started-block-2 input[type="email"] {
     line-height: 2.2rem; }
 
 /* #block-views-get-started-block-1 {
