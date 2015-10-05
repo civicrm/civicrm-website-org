@@ -1125,6 +1125,7 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 
 /* line 751, ../sass/components/_content.scss */
 .view-service-providers {
+  padding: 5%;
   	/* .views-field-nothing {
   		text-align: center;
   		@include breakpoint($tablet) {
@@ -1143,90 +1144,88 @@ ul.quicktabs-tabs.quicktabs-style-sky {
   			}
   		}
   
-  	} */
-  	/* .views-field-nothing-1 {
-  		text-align: center;
-  		@include breakpoint($tablet) {
-  			text-align: left;
-  		}
-  		.display-name {
-  			max-width: 100%;
-  		}
-  
-  		.name-logo {
-  			max-width: 100%;
-  			clear:both;
-  			img {
-  				max-width: 50%;
-  			}
-  		}
-  
-  		.contact-div {
-  			max-width: 100%;
-  			clear: both;
-  			margin-bottom: 5%;
-  		}
-  
-  		.civi-image {
-  			max-width: 100%;
-  			clear: both;
-  			margin-bottom: 5%;
-  
-  		}
-  
-  		.more-info {
-  			max-width: 100%;
-  			clear: both;
-  			margin-bottom: 5%;
-  		}
   	} */ }
-  /* line 752, ../sass/components/_content.scss */
+  /* line 754, ../sass/components/_content.scss */
   .view-service-providers .views-row {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc; }
+  /* line 779, ../sass/components/_content.scss */
+  .view-service-providers .views-field-nothing-1 {
+    		/* @include breakpoint($tablet) {
+    			text-align: left;
+    		}
+    		.display-name {
+    			max-width: 100%;
+    		}
+    
+    		.name-logo {
+    			max-width: 100%;
+    			clear:both;
+    			img {
+    				max-width: 50%;
+    			}
+    		}
+    
+    		.contact-div {
+    			max-width: 100%;
+    			clear: both;
+    			margin-bottom: 5%;
+    		}
+    
+    		.civi-image {
+    			max-width: 100%;
+    			clear: both;
+    			margin-bottom: 5%;
+    
+    		} */ }
+    /* line 809, ../sass/components/_content.scss */
+    .view-service-providers .views-field-nothing-1 .more-info {
+      max-width: 100%;
+      clear: both;
+      margin-bottom: 5%; }
 
-/* line 815, ../sass/components/_content.scss */
+/* line 817, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views_slideshow_cycle_slide {
   width: 100% !important;
   padding: 0 2%; }
 
-/* line 819, ../sass/components/_content.scss */
+/* line 821, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-text {
   text-align: center;
   padding: 0 3%; }
 
-/* line 826, ../sass/components/_content.scss */
+/* line 828, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-text h5,
 .view-rotating-partner-logos .partner-contact h5 {
   font-size: 1.29em;
   margin-top: 0;
   margin-bottom: 0.8%; }
 
-/* line 832, ../sass/components/_content.scss */
+/* line 834, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-contact {
   border-top: 1px solid #fff;
   padding-top: 5%; }
 
-/* line 844, ../sass/components/_content.scss */
+/* line 846, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-img {
   text-align: center; }
-  /* line 846, ../sass/components/_content.scss */
+  /* line 848, ../sass/components/_content.scss */
   .view-rotating-partner-logos .partner-img img {
     max-width: 180px; }
 
-/* line 850, ../sass/components/_content.scss */
+/* line 852, ../sass/components/_content.scss */
 .view-rotating-partner-logos .pad {
   padding: 20px; }
 
-/* line 854, ../sass/components/_content.scss */
+/* line 856, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-bottom {
   position: relative; }
 
-/* line 860, ../sass/components/_content.scss */
+/* line 862, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-pause {
   display: none; }
 
-/* line 863, ../sass/components/_content.scss */
+/* line 865, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-previous a,
 .view-rotating-partner-logos .views-slideshow-controls-text-next a {
   position: absolute;
@@ -1238,12 +1237,12 @@ ul.quicktabs-tabs.quicktabs-style-sky {
   font-size: 0;
   z-index: 999; }
 
-/* line 878, ../sass/components/_content.scss */
+/* line 880, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-previous a {
   background: url(images/arrow-prev-white.png) no-repeat 0 0;
   left: 0; }
 
-/* line 882, ../sass/components/_content.scss */
+/* line 884, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-next a {
   background: url(images/arrow-next-white.png) no-repeat 0 0;
   right: 0; }

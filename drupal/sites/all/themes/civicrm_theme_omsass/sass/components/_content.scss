@@ -749,6 +749,8 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 }	
 
 .view-service-providers {
+	padding: 5%;
+
 	.views-row {
 		border-top: 1px solid #ccc;
 		border-bottom: 1px solid #ccc;	
@@ -774,9 +776,9 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 
 	} */
 
-	/* .views-field-nothing-1 {
-		text-align: center;
-		@include breakpoint($tablet) {
+	.views-field-nothing-1 {
+		// text-align: center;
+		/* @include breakpoint($tablet) {
 			text-align: left;
 		}
 		.display-name {
@@ -802,14 +804,14 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 			clear: both;
 			margin-bottom: 5%;
 
-		}
+		} */
 
 		.more-info {
 			max-width: 100%;
 			clear: both;
 			margin-bottom: 5%;
 		}
-	} */
+	} 
 }
 
 .view-rotating-partner-logos .views_slideshow_cycle_slide {
