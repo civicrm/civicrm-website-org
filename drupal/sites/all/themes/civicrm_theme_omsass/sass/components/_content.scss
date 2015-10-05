@@ -42,6 +42,10 @@ dd {
 	margin: 0;
 }
 
+header {
+	padding: 0 5%;
+}
+
 table td, table th{
   padding:8px 16px;
   font-size:90%
@@ -703,7 +707,7 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 		max-width: 100%;
 
 		.section {
-			padding: 5%;
+			padding: 0 5%;
 		}
 	}
 
@@ -838,6 +842,13 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 .view-rotating-partner-logos .pad {
 	padding: 20px;
 }
+
+.view-rotating-partner-logos .views-slideshow-controls-bottom {
+	position: relative;
+
+	@include breakpoint($tablet) {bottom: 8em;}
+}
+
 .view-rotating-partner-logos .views-slideshow-controls-text-pause {
 	display: none;
 }
@@ -852,9 +863,9 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 	font-size: 0;
 	z-index: 999;
 
-	bottom: -10%;
-	@include breakpoint($tablet) {bottom: -40%;}
-	@include breakpoint($desktop-sm) {top: 245px;}
+	// bottom: -10%;
+	@include breakpoint($tablet) {/*bottom: -40%;*/}
+	@include breakpoint($desktop-sm) {/*top: 245px;*/}
 }
 .view-rotating-partner-logos .views-slideshow-controls-text-previous a {
 	background: url(images/arrow-prev-white.png) no-repeat 0 0;
