@@ -147,6 +147,10 @@ $menu = render($page['menu']);
       <?php if($page['blue_two']): ?>
       <?php print render($page['blue_two']); ?>
       <?php endif; ?>
+      
+      <?php if($page['green']): ?>
+      <?php print render($page['green']); ?>
+      <?php endif; ?>
 
       <?php if($page['grey']): ?>
       <?php print render($page['grey']); ?>

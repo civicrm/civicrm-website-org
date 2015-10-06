@@ -76,6 +76,10 @@ global $user;
       // window.location.hash = this.hash;
     });
 
+    $('.view-get-started .views-row').matchHeight();
+    $('.view-get-started .views-row .views-field-title').matchHeight();
+    $('.view-get-started .views-row .views-field-subtitle').matchHeight();
+    $('.view-get-started .views-row .views-field-body').matchHeight();
     $('.l-header').scrollToFixed();
     $('.mmenu-nav').on('closed.mm', function() {
       var mmenu = $(this);

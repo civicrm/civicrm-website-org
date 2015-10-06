@@ -13,12 +13,19 @@ a {
 
 article {
 	header {
+		h1 {
+			a {
+				font-size: 4rem;
+			}
+		}	
+	}
+
+	.pageheader {
 		text-align: center;
 		color: #fff;
 		h1 {
 			a {
 				color: #fff !important;
-				font-size: 4rem;
 			}
 		}	
 	}

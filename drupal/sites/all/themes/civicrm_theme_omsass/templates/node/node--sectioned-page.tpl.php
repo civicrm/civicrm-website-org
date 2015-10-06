@@ -80,16 +80,25 @@
 
 $imageUrl = file_create_url($field_image['und'][0]['uri']);
 $headerBody = $body[0]['value'];
-unset($content['body']);
+
 
 ?>
 <article<?php print $attributes; ?>>
+    <?php if(!is_null($field_image['und'][0]['uri'])): ?>
+    <?php unset($content['body']); ?>
     <header style="background: url('<?php print($imageUrl); ?>') no-repeat top left; background-size: cover" class="pageheader">
       <?php print render($title_prefix); ?>
         <h1<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>" rel="bookmark"><?php print $title; ?></a></h1>
         <?php print($headerBody); ?>
       <?php print render($title_suffix); ?>
     </header>
+    <?php else: ?>
+    <header>
+      <?php print render($title_prefix); ?>
+        <h1<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>" rel="bookmark"><?php print $title; ?></a></h1>
+      <?php print render($title_suffix); ?>
+    </header>
+    <?php endif; ?>
 
   <?php if ($display_submitted): ?>
     <footer class="node__submitted">
