@@ -868,6 +868,7 @@ tbody tr:hover {
 
 /* line 422, ../sass/components/_content.scss */
 .l-content {
+  max-width: 1900px;
   margin: auto; }
 
 /* line 428, ../sass/components/_content.scss */
@@ -980,10 +981,6 @@ tbody tr:hover {
   width: 100vw;
   display: inline-block;
   background-color: #393536; }
-
-/* line 561, ../sass/components/_content.scss */
-.l-page {
-  max-width: 1900px; }
 
 /* line 565, ../sass/components/_content.scss */
 .l-region--slideshow {
