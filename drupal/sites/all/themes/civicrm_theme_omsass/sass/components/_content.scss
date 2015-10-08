@@ -42,9 +42,6 @@ dd {
 	margin: 0;
 }
 
-header {
-	padding: 0 5%;
-}
 
 table td, table th{
   padding:8px 16px;
@@ -302,7 +299,7 @@ tbody tr:hover{
 }
 
 #page-title {
-	padding-left: 2.5%;
+	padding-left: $edgepadding;
 }
 
 #views_slideshow_cycle_main_homepage_stats-block {
@@ -317,10 +314,14 @@ tbody tr:hover{
 	width: 100% !important;
 }
 
+.page-node article{
+    padding: 0 $edgepadding;
+};
+
 .breadcrumb {
 	background-color: $breadcrumbbg;
 	margin: 0;
-    padding: 1% 8%;
+    padding: 1% $edgepadding;
     list-style-type: none;
     width: 100vw;
 
@@ -364,7 +365,7 @@ tbody tr:hover{
 
 .hero {
 	display: inherit;
-	padding: 2% 4% 2% 7%;
+	padding: 2% $edgepadding;
 
 	.l-region--hero-right {
 		border-bottom: 1px solid $darkgrey;
@@ -446,6 +447,14 @@ tbody tr:hover{
 	}
 }
 
+.messages {
+    margin: 1em $edgepadding;
+}
+
+.l-content>ul.tabs, .view-blog-news, .view-civi-case-study  {
+    padding: 0 $edgepadding;
+}
+
 .not-front {
 	.icongrid {
 		text-align: center;
@@ -455,17 +464,20 @@ tbody tr:hover{
 	}
 
 	@include colorRegion('white') {
-		padding: 2% 5%;
+		padding: 2% $edgepadding;
 	}
 
 	@include colorRegion('white-two') {
-		padding: 2% 5%;
+		padding: 2% $edgepadding;
 	}
 
 	@include colorRegion('green') {
-		padding: 2% 5%;
+		padding: 2% $edgepadding;
 	}
 }
+
+
+
 
 .node-type-feature {
 	.l-content {
@@ -473,11 +485,11 @@ tbody tr:hover{
 		// padding: 0 2.5%;
 		
 		#page-title {
-			padding: 0 2.5%;
+			padding: 0 $edgepadding;
 		}
 
 		.field {
-			padding: 0 2.5%;
+			padding: 0 $edgepadding;
 		}
 
 		.field--name-field-top-feature-heading {
@@ -486,7 +498,7 @@ tbody tr:hover{
 
 		.field--name-body {
 			background-color: $darkblue;
-			padding: 1% 2%;
+			padding: 1% $edgepadding;
 			margin-top: 2%;
 			margin-bottom: 2%;
 			width: 100vw;
@@ -559,7 +571,11 @@ tbody tr:hover{
 }
 
 .l-page {
-	max-width: 1900px;
+	//max-width: 1900px;
+}
+
+.field-collection-view {
+    border-bottom: none;
 }
 
 .l-region--slideshow {
@@ -582,7 +598,11 @@ tbody tr:hover{
 			// min-height: 29rem;
 			height: 100vh;
 
-			div {max-width: 1000px; margin: 0 auto;}
+			div {
+                max-width: 850px;
+                margin-left: auto;
+                margin-right: auto;
+            }
 
 			@include breakpoint($desktop-sm) {
 				padding: 0% 15% 5%;
@@ -715,7 +735,7 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 		max-width: 100%;
 
 		.section {
-			padding: 0 5%;
+			padding: 0 $edgepadding;
 		}
 	}
 
