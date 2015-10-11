@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Submitted By module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function submitted_by_uninstall() {
+  // Remove any variables that we have set.
+  foreach (node_type_get_names() as $type => $name) {
+    variable_del('submitted_by_' . $type);
+    variable_del('submitted_by_comment_node_' . $type);
+  }
+}
+
+/**
+ * Set up submitted varaiables.
+ */
+function submitted_by_install() {
+  // Get all node type.
+  $node_types = node_type_get_types();
+  // Get info about view_modes.
+  $entity_info = entity_get_info('node');
+  foreach ($entity_info['view modes'] as $mode => $info) {
+    $strings[$mode] = SUBMITTED_BY_NODE_TEXT;
+  }
+
+  // Save the node type and comment settings.
+  foreach ($node_types as $node_type) {
+    variable_set('submitted_by_' . $node_type->type, $strings);
+    variable_set('submitted_by_comment_node_' . $node_type->type, SUBMITTED_BY_COMMENT_NODE_TEXT);
+  }
+}
+
+
+/**
+ * Set up submitted varaiables.
+ */
+function submitted_by_update_7001() {
+  // Get all node type.
+  $node_types = node_type_get_types();
+  // Get info about view_modes.
+  $entity_info = entity_get_info('node');
+  foreach ($entity_info['view modes'] as $mode => $info) {
+    $strings[$mode] = SUBMITTED_BY_NODE_TEXT;
+  }
+
+  // Save the node type and comment settings.
+  foreach ($node_types as $node_type) {
+    // If varaiable are not set, then only save the variable.
+    if (variable_get('submitted_by_' . $node_type->type, array()) == array()) {
+      variable_set('submitted_by_' . $node_type->type, $strings);
+    }
+    if (variable_get('submitted_by_comment_node_' . $node_type->type, NULL) == NULL) {
+      variable_set('submitted_by_comment_node_' . $node_type->type, SUBMITTED_BY_COMMENT_NODE_TEXT);
+    }
+  }
+}
