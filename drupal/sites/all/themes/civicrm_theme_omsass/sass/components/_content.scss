@@ -71,7 +71,7 @@ tbody tr:hover{
 	margin: 0 auto;
 	display: block;
 	width: 100%;
-	@include breakpoint($desktop-sm) {width: 80%;}
+	@include breakpoint($desktop-sm) {width: 100%;}
 	padding: 2%;
 	.block__title {
 		padding: 1%;
