@@ -180,6 +180,9 @@ function _extdir_pages_single_inner($filterExpr, $xmlFile) {
       throw new Exception('Failed to read extension XML: file not found: ');
     }
     $xml = simplexml_load_file($release->field_extension_release_xml[LANGUAGE_NONE][0]['uri']);
+    if (!is_a($xml, 'SimpleXMLElement')) {
+      continue;
+    }
     _extdir_pages_xml_cleanup($extension, $release, $xml);
     $count++;
   }
