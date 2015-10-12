@@ -123,6 +123,76 @@ function extdir_pages_xml($filterExpr, $xmlFile) {
 }
 
 /**
+ * (Page Callback)
+ *
+ * Query appropriate extensions and return a JSON file containing
+ * XML info files on all of them. Partially based on extdir_pages_listing.
+ */
+function extdir_pages_single($filterExpr) {
+  $filters = _extdir_pages_filters_parse($filterExpr);
+  list($query, $helper) = _extdir_pages_filters_query($filters);
+  $helper->innerJoinFieldAPI('extension', 'field_extension_fq_name');
+  $query->fields('field_extension_fq_name', array('field_extension_fq_name_value'));
+  $query->distinct();
+
+  $extensions = array();
+  foreach ($query->execute() as $row) {
+    $xml_name = $row->field_extension_fq_name_value . '.xml';
+    $xml_str = _extdir_pages_single_inner($filterExpr, $xml_name);
+    if (!empty($xml_str) && $xml_str != MENU_NOT_FOUND) {
+      $extensions[$row->field_extension_fq_name_value] = $xml_str;
+    }
+  }
+
+  drupal_add_http_header('Content-Type', 'application/json');
+  print json_encode($extensions);
+  return NULL;
+}
+
+/**
+ * Called by extdir_pages_single, gets metadata for one extension.
+ * Adapted from extdir_pages_xml.
+ *
+ * @param string $filterExpr
+ * @param string $xmlFile
+ * @return SimpleXMLElement (or MENU_NOT_FOUND on error)
+ * @throws Exception
+ */
+function _extdir_pages_single_inner($filterExpr, $xmlFile) {
+  $filters = _extdir_pages_filters_parse($filterExpr);
+  if (!preg_match('/^(.*)\.xml$/', $xmlFile, $matches)) {
+    return MENU_NOT_FOUND;
+  }
+  $filters['field_extension_fq_name_value'] = $matches[1];
+
+  list($query, $helper) = _extdir_pages_filters_query($filters);
+  $query->fields('field_extension_nr_crm', array('entity_id', 'field_extension_nr_crm_nid'));
+  $helper->innerJoinFieldAPI('release', 'field_extension_release_vc');
+  $query->orderBy('field_extension_release_vc_value', 'DESC');
+  // $query->orderBy('extrelease.title', 'DESC'); // FIXME dictionary sort != version sort
+  $query->range(0,1);
+
+  $count = 0;
+  foreach ($query->execute() as $row) {
+    $extension = node_load($row->field_extension_nr_crm_nid);
+    $release = node_load($row->entity_id);
+    if (!file_exists($release->field_extension_release_xml[LANGUAGE_NONE][0]['uri'])) {
+      throw new Exception('Failed to read extension XML: file not found: ');
+    }
+    $xml = simplexml_load_file($release->field_extension_release_xml[LANGUAGE_NONE][0]['uri']);
+    _extdir_pages_xml_cleanup($extension, $release, $xml);
+    $count++;
+  }
+
+  if ($count == 0) {
+    return MENU_NOT_FOUND;
+  } else {
+    $output = $xml->asXML();
+    return $output;
+  }
+}
+
+/**
  * Modify a raw uploaded XML document, mixing in details
  * from the extension and release.
  *

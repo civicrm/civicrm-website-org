@@ -19,6 +19,13 @@ function extdir_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'extdir.pages.inc',
   );
+  $items['extdir/%/single'] = array(
+    'page callback' => 'extdir_pages_single',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'extdir.pages.inc',
+  );
   $items['extdir/%/%'] = array(
     'page callback' => 'extdir_pages_xml',
     'page arguments' => array(1,2),
