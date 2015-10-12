@@ -210,13 +210,14 @@ tbody tr:hover{
 
 		li {
 			margin-bottom: 3%;
-			padding: 0.5em 0;
 			text-align: center;
 
 			a {
 				color: #fff;
 				text-transform: uppercase;
 				font-weight: 700;
+				display: block;
+				padding: 0.5em 0;
 			}
 		}
 
