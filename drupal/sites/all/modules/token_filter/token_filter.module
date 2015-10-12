@@ -21,10 +21,10 @@ function token_filter_filter_info() {
  */
 function _token_filter_filter_tokens($text, $filter, $format, $langcode, $cache, $cache_id) {
   $data = array();
-  $options = array();
+  $options = array('clear' => TRUE);
 
   // Attempt to fetch the entity that is being viewed via a backtrace to the
-  // field_attach_view($entity_type, $entity) function and parameters §if found.
+  // field_attach_view($entity_type, $entity) function and parameters Â§if found.
   $backtrace = debug_backtrace();
   foreach ($backtrace as $caller) {
     if ($caller['function'] == 'field_attach_view') {
