@@ -478,6 +478,10 @@ tbody tr:hover{
 	@include colorRegion('green') {
 		padding: 2% $edgepadding;
 	}
+
+	.view {
+		padding: 0 $edgepadding;
+	}
 }
 
 
@@ -735,14 +739,18 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 }
 
 .node-type-sectioned-page {
-	#page-title {
-		padding: 0 5%;
+	#page-title, .node__title {
+		padding: 0 $edgepadding;
 	}
 
 	.l-content {
 		max-width: 100%;
 
 		.section {
+			padding: 0 $edgepadding;
+		}
+
+		.field--name-body {
 			padding: 0 $edgepadding;
 		}
 	}
@@ -752,6 +760,18 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 		@include breakpoint($tablet) {
 			margin-bottom: auto;
 		}
+	}
+
+	.view, article {
+		padding: 0;
+	}
+
+
+}
+
+.page-user {
+	article {
+		padding: 0 $edgepadding;
 	}
 }
 
@@ -763,6 +783,14 @@ ul.quicktabs-tabs.quicktabs-style-sky {
 
 .field-content {
 	padding: 0 2.5% 1%; 
+}
+
+form ul.token-input-list {
+	width: 100%;
+
+	li input {
+		width: 100%;
+	}
 }
 
 .views-field-field-image {
