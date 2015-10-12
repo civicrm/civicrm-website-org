@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * Implements hook_civicrm_buildForm.
+ *
+ * Alters contribution forms to hide "site id" field and populate it from the url.
+ *
+ * @param string $formName
+ * @param CRM_Core_Form $form
+ */
+function civicrm_org_members_civicrm_buildForm($formName, &$form) {
+  if ($formName == 'CRM_Contribute_Form_Contribution_Main' && $form->elementExists('onbehalf[custom_193]')) {
+    $form->removeElement('onbehalf[custom_193]');
+    $form->addElement('hidden', 'onbehalf[custom_193]');
+    $sid = CRM_Utils_Array::value('sid', $_GET);
+    if ($sid && preg_match('/^[a-zA-Z0-9]{32}$/', $sid)) {
+      $form->setDefaults(array('onbehalf[custom_193]' => $sid));
+    }
+  }
+}

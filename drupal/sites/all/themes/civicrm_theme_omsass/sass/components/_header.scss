@@ -58,7 +58,7 @@
 		}
 	}
 
-	.block--menu-menu-home-page-menu, .block--menu-menu-primary-menu-home-page {
+    .block--menu-menu-home-page-menu, .block--menu-menu-primary-menu-home-page {
 		.menu {
 			li {
 				a {
@@ -66,6 +66,14 @@
 					@include breakpoint($ipad-landscape) {padding: 0 0 1.05rem 0;}
 					@include breakpoint($desktop) {padding: 0 0 1.5rem 0;}
 				}
+			}
+
+
+		}
+	}
+    .block--menu-menu-home-page-menu {
+		.menu {
+			li {
 				a:hover {
 					background: url(../images/active-arrow.png) no-repeat center bottom;
 				}
@@ -141,4 +149,3 @@
 		@include breakpoint($desktop-sm) {position: fixed; bottom: 0; width: 100vw;}
 	}
 }
-

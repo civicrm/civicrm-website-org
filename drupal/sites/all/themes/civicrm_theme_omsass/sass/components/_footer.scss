@@ -2,7 +2,7 @@
 	
 	.l-region--footer-first {
 		background-color: $darkgrey;
-		padding: 1.5em;
+        padding: 2.5% $edgepadding;
 		width: 100vw;
 		
 		.block--menu-block {
@@ -87,12 +87,11 @@
 	}
 
 	.l-region--footer-second {
-		padding: 1.5em;
+		padding: 2.5% $edgepadding;
+        width: 100vw;
 
 		p {
-			display: inline-block;
-		    vertical-align: middle;
-		    margin-right: 2%;
+		    text-align: center;
 		}
 	}
 	

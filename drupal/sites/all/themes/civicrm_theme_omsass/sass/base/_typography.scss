@@ -32,20 +32,22 @@ article {
 	
 }
 
+
+
 h1, h2, h3, h4, h5 {
 	text-transform: uppercase;
     font-weight: 700;
 }
 
 h3 {
-	font-size: 1.57em; /* 22px @ 14px */
+	font-size: 1.29em; /* 22px @ 14px */
 }
 h4 {
-	font-size: 1.29em; /* 18px @ 14px */
+	font-size: 1em; /* 18px @ 14px */
 }
 
 h5 {
-	font-size: 1.29em;
+	font-size: 1em;
 }
 
 p {
@@ -465,4 +467,8 @@ p.quote, blockquote {
 	.contact-info {
 		font-weight: bold;
 	}
+}
+
+#civicrm-menu #crm-qsearch input{
+	color: #333333;
 }

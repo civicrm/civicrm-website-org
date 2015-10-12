@@ -1,0 +1,4 @@
+name = CiviCRM.org membership
+description =  Code to support the CiviCRM member program
+package = civicrm.org custom modules
+core = 7.x
