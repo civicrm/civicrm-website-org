@@ -270,8 +270,18 @@ tbody tr:hover {
     }
 }
 #block-views-homepage-news-block.left-two-thirds {
-    display: inline-block;
-    float: none;
+	display:inline-block;
+	float: none;
+}
+
+#page-title {
+	padding: 0 $edgepadding;
+
+  	img {
+	  	vertical-align: top;
+	  	margin-right: .5em;
+	  	width: 1em;
+	}
 }
 #views_slideshow_cycle_main_homepage_stats-block {
     display: inline-block;
