@@ -407,7 +407,8 @@ tbody tr:hover {
 .l-content>ul.tabs,
 .view-blog-news,
 .page-node article,
-.l-content>.block>.block__content {
+.l-content>.block>.block__content,
+.crm-public {
     padding: 0 $edgepadding;
 }
 .l-content>.action-links li {
@@ -436,12 +437,7 @@ tbody tr:hover {
 }
 
 
-.view-civi-case-study {
-    padding: 0;
-    .field-content, .views-label{
-        padding: 0 $edgepadding;
-    }
-}
+
 
 
 .node-type-feature {
@@ -615,8 +611,6 @@ article.node--blog {
 .links--inline li:first-child {
     padding-left: 0;
 }
-.page-casestudy-node,
-.page-nw-casestudy-node,
 .view-civi-case-study {
     .l-content {
         max-width: 100%;
@@ -634,6 +628,21 @@ article.node--blog {
         }
     }
 }
+
+.view-civi-case-study {
+    padding: 0;
+    .field-content, .views-label{
+        padding: 0 $edgepadding;
+    }
+    .l-region--blue, .l-region--green{
+        margin-top: 2em; 
+        margin-bottom: 2em; 
+        padding-top: 2em; 
+        padding-bottom: 2em; 
+    }
+}
+
+
 .quicktabs_main.quicktabs-style-sky {
     border: 0;
     background-color: transparent;
@@ -737,73 +746,6 @@ form ul.token-input-list {
         margin-bottom: 1em;
     }
 }
-
-/*.view-service-providers {
-	padding: 5%;
-
-	.views-row {
-		border-top: 1px solid #ccc;
-		border-bottom: 1px solid #ccc;	
-	}
-
-	
-     .views-field-nothing {
-		text-align: center;
-		@include breakpoint($tablet) {
-			text-align: left;
-		}
-
-		.display-name {
-			max-width: 100%;
-		}
-
-		.name-logo {
-			max-width: 100%;
-			clear:both;
-			img {
-				max-width: 50%;
-			}
-		}
-
-	} 
-
-	.views-field-nothing-1 {
-		// text-align: center;
-		 @include breakpoint($tablet) {
-			text-align: left;
-		}
-		.display-name {
-			max-width: 100%;
-		}
-
-		.name-logo {
-			max-width: 100%;
-			clear:both;
-			img {
-				max-width: 50%;
-			}
-		}
-
-		.contact-div {
-			max-width: 100%;
-			clear: both;
-			margin-bottom: 5%;
-		}
-
-		.civi-image {
-			max-width: 100%;
-			clear: both;
-			margin-bottom: 5%;
-
-		} 
-
-		.more-info {
-			max-width: 100%;
-			clear: both;
-			margin-bottom: 5%;
-		}
-	} 
-}*/
 .view-rotating-partner-logos .views_slideshow_cycle_slide {
     width: 100% !important;
     padding: 0 2%;
@@ -888,6 +830,11 @@ form ul.token-input-list {
         padding-bottom: 0;
     }
 }
+
+.view-extensions-related-releases{
+    padding:0;
+}
+
 .view-section-list-item-formatter dt {
     font-size: 130%;
     text-align: center;

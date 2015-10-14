@@ -421,9 +421,13 @@ p.quote, blockquote {
 	}
 }
 
-.page-casestudy-node, .page-nw-casestudy-node {
+.view-civi-case-study {
 	.l-region--green {
 		color: #fff;
+        a{
+            color: #fff;
+            font-weight: bold;
+        }
 	}
 }
 
