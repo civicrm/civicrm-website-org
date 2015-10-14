@@ -184,6 +184,7 @@ p.quote, blockquote {
 
 .block-title, .block__title {
 	@extend #page-title;
+    font-size: 2.5em;
 }
 
 .breadcrumb {
@@ -313,6 +314,10 @@ p.quote, blockquote {
 
 .l-region--blue, .l-region--blue-two, .l-region--darkgrey, .l-region--grey{
 	color: #fff;
+    a{
+        font-weight: bold;
+        color: white;
+    }
 }
 
 .l-region--grey {
@@ -381,7 +386,7 @@ p.quote, blockquote {
 	.expanded > .menu > .leaf {
 		text-transform: none;
 		font-weight: normal;
-		line-height: 2em;
+		margin: 1em 0;
 	}
 }
 
@@ -442,22 +447,13 @@ p.quote, blockquote {
 	}
 }
 
-.view-rotating-partner-logos {
-	.partner-text {
+.view-rotating-partner-logos .partner-text {
 		text-align: center;
-	}
-
-	a {
-		text-indent: -8765px;
-		line-height: 0;
-		font-size: 0;
-	}
 }
-
+/*
 .view-service-providers {
 	a {
 		font-weight: bold;
-		text-transform: uppercase;
 	}
 
 	.views-label {
@@ -467,7 +463,7 @@ p.quote, blockquote {
 	.contact-info {
 		font-weight: bold;
 	}
-}
+}*/
 
 #civicrm-menu #crm-qsearch input{
 	color: #333333;
