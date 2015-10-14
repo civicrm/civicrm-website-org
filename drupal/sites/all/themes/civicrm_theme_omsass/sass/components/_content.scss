@@ -305,6 +305,12 @@ tbody tr:hover{
 
 #page-title {
 	padding-left: $edgepadding;
+
+  	img {
+	  	vertical-align: top;
+	  	margin-right: .5em;
+	  	width: 1em;
+	}
 }
 
 #views_slideshow_cycle_main_homepage_stats-block {
