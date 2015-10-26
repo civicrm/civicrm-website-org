@@ -442,7 +442,7 @@ function media_import($form, &$form_state) {
     $form['pattern'] = array(
       '#type' => 'textfield',
       '#title' => t('Pattern'),
-      '#description' => 'Only files matching this pattern will be imported. For example, to import all jpg and gif files, the pattern would be <em>*.jpg|*.gif</em>.',
+      '#description' => t('Only files matching this pattern will be imported. For example, to import all jpg and gif files, the pattern would be <em>*.jpg|*.gif</em>.'),
     );
 
     $form['actions'] = array('#type' => 'actions');

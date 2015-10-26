@@ -10,9 +10,9 @@ files[] = test/media.entity.test
 files[] = test/media.file.usage.test
 configure = admin/config/media/browser
 
-; Information added by Drupal.org packaging script on 2015-03-21
-version = "7.x-1.5"
+; Information added by Drupal.org packaging script on 2015-08-17
+version = "7.x-1.5+3-dev"
 core = "7.x"
 project = "media"
-datestamp = "1426963084"
+datestamp = "1439795645"
 

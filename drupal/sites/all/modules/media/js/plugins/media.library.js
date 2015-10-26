@@ -4,16 +4,16 @@ namespace('Drupal.media.browser');
 
 Drupal.behaviors.mediaLibrary = {
   attach: function (context, settings) {
-    var library = new Drupal.media.browser.library(Drupal.settings.media.browser.library);
-    $('#media-browser-tabset').bind('tabsshow', function (event, ui) {
-      if (ui.tab.hash === '#media-tab-library') {
-        // Grab the parameters from the Drupal.settings object
-        var params = {};
-        for (var parameter in Drupal.settings.media.browser.library) {
-          params[parameter] = Drupal.settings.media.browser.library[parameter];
-        }
-        library.start($(ui.panel), params);
-        $('#scrollbox').bind('scroll', library, library.scrollUpdater);
+    var params = Drupal.settings.media.browser.library,
+        library = new Drupal.media.browser.library(params),
+        $scrollbox = $('#scrollbox');
+
+    $('#media-browser-tabset').bind('tabsshow tabsactivate', function (event, ui) {
+      var panel = ui.newPanel || $(ui.panel);
+
+      if ('media-tab-library' === panel.attr('id')) {
+        library.start(panel, params);
+        $scrollbox.bind('scroll', library, library.scrollUpdater);
       }
     });
   }
