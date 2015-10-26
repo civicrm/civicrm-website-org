@@ -15,8 +15,24 @@
 }
 @mixin viewColumns() {
     .views-row {
-        text-align: center;
-        padding: 0 5%;
+        
+        // padding: 0 2.5%;
+
+        // .front & {
+            padding: 0 5%;
+            text-align: center;    
+        // }
+        
+        // &:first-child {
+        //     border-top: none;
+        //     padding-left: 0;
+        // }
+
+        // &:last-child {
+        //     border-right: none;
+        //     padding-right: 0;
+        // }
+
         border-top: 1px solid $grey;
         @include breakpoint($desktop) {
             border-top: none;
@@ -30,6 +46,32 @@
         border-right: none;
     }
 }
+
+@mixin viewColumnsInternal() {
+    .views-row {
+        
+        padding: 0 2.5%;
+
+        
+        &:first-child {
+            border-top: none;
+            padding-left: 0;
+        }
+
+        &:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+
+        border-top: 1px solid $grey;
+        @include breakpoint($desktop) {
+            border-top: none;
+            border-right: 1px solid $grey;
+        }
+    }
+}   
+
+
 dd {
     margin: 0;
 }
@@ -122,6 +164,87 @@ tbody tr:hover {
         }
     }
 }
+
+.three-column {
+    // max-width: 95%;
+    margin: 0 0 2%;
+    .block__title {
+        text-align: center;
+    }
+    
+    /* .views-row {
+        text-align: center;
+        padding: 0 5% 0;
+        border-top: 1px solid $grey;    
+
+        @include breakpoint($desktop) {
+            border-top: none;
+            border-right: 1px solid $grey;  
+        }
+        
+    } */
+    @include viewColumnsInternal();
+    
+    /* .views-row-first {
+        border-top: none;
+    }
+
+    .views-row-last {
+        border-right: none;
+    } */
+    .views-field-body {
+        @include breakpoint($desktop) {
+            
+            // min-height: 8.5em;
+        }
+    }
+    .views-field-field-option-number {
+        display: inline-block;
+        .field-content {
+            width: 1.5em;
+            height: 1.5em;
+            border-radius: 2em;
+            font-size: 3.5em;
+            color: #fff;
+            font-weight: 700;
+        }
+    }
+    .views-field-field-subtitle {
+        @include breakpoint($desktop) {
+            
+            // min-height: 11.5em;
+        }
+        @include breakpoint($wide) {
+            
+            // min-height: 8em;
+        }
+    }
+    .views-field-field-button-link {
+        ul {
+            list-style-type: none;
+            -webkit-padding-start: 0;
+        }
+        li {
+            margin-bottom: 3%;
+            text-align: center;
+            a {
+                color: #fff;
+                text-transform: uppercase;
+                font-weight: 700;
+                display: block;
+                padding: 0.5em 0;
+            }
+        }
+    }
+    input {
+        float: left;
+    }
+    input[type="email"] {
+        line-height: 2.2rem;
+    }
+}
+
+
 #block-views-get-started-block,
 #block-views-get-started-block-1,
 #block-views-get-started-block-2 {
@@ -588,6 +711,10 @@ tbody tr:hover {
         .flex-direction-nav {
             display: none;
         }
+    }
+
+    .view {
+        padding: 0;
     }
 }
 .less-info {
