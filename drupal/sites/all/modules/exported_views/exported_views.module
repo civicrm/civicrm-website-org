@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Exported Views feature.
- */
-
-include_once('exported_views.features.inc');

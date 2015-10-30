@@ -1,7 +1,0 @@
-core = "7.x"
-dependencies[] = "features"
-dependencies[] = "taxonomy"
-description = "Exported Vobularies"
-features[taxonomy][] = "crm_solution_slideshow"
-name = "Taxonomy Vocabulary"
-package = "Features"
