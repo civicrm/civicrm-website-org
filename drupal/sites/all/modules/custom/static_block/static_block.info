@@ -1,5 +1,0 @@
-core = "7.x"
-package = civicrm.org custom modules
-name = "static_block"
-description = Created three custom block through static_block module related to front page ddblock,get involve,joinus.
-
