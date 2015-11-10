@@ -1,0 +1,162 @@
+// out: ../css/style.css, compress: true 
+@import 'style.less';
+
+//Typography
+
+@font-size-base: 18px;
+
+@text-color: @CiviGrey;
+@font-family-sans-serif: "Source Sans Pro", Helvetica, Arial, sans-serif;
+@headings-font-weight: 700;
+@link-color: @CiviBlue;
+@link-hover-color: @CiviBlue;
+
+h1,
+h2,
+h3 {
+    text-transform: uppercase;
+}
+html {
+    background-color: @CiviDarkGrey;
+}
+.CiviPage {
+    background-color: @CiviWhite;
+}
+
+//Blockquote
+p.quote {
+    &:extend(blockquote);
+}
+
+//Global styles
+@border-radius-base: 0;
+
+//Colors
+@brand-primary: @CiviBlue;
+@brand-success: @CiviGreen;
+@brand-danger: #d9534f;
+@brand-info: #5bc0de;
+@brand-warning: #f0ad4e;
+
+//CiviCRM colour definitions
+@CiviWhite: #fff;
+@CiviBlue: #056186;
+@CiviGreen: #7dbd56;
+@CiviLightGrey: #ddd;
+@CiviGrey: #6c696a;
+@CiviDarkGrey: #393536;
+@CiviBlack: #231f20;
+
+//TODO add @CiviPink
+//Navbar
+@navbar-height: 80px;
+@navbar-default-bg: @CiviDarkGrey;
+@navbar-default-color: @CiviLightGrey; //darken(@CiviWhite, 14%);
+@navbar-default-link-active-bg: @navbar-default-bg;
+@navbar-default-link-active-color: @CiviWhite;
+@navbar-default-link-color: @navbar-default-color;
+
+// @navbar-default-link-hover-bg: lighten(@CiviDarkGrey,2%);
+@navbar-default-link-hover-color: @CiviWhite;
+.navbar li {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 120%;
+    li {
+        font-size: 100%;
+        text-transform: none;
+    }
+}
+.navbar-btn {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+body.navbar-is-fixed-top {
+    padding-top: @navbar-height !important;
+    margin-top: 0 !important;
+}
+body.navbar-is-fixed-top.admin-menu {
+    padding-top: @navbar-height+21px !important;
+    margin-top: 0 !important;
+}
+body.admin-menu .navbar-fixed-top {
+    top: 21px;
+}
+
+//Breadcrumbs
+@breadcrumb-bg: @CiviBlack;
+@breadcrumb-color: @CiviWhite;
+@breadcrumb-separator: ">";
+.breadcrumb{
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 90%;
+    .last {
+        color: @CiviGreen;
+    }
+}
+
+//Footer menu
+footer ul.menu {
+    li a {
+        text-transform: uppercase;
+        text-align: right;
+        font-weight: 700;
+        color: @CiviLightGrey;
+        font-size: 110%;
+        &:hover {
+            color: @CiviWhite;
+            text-decoration: none;
+        }
+    }
+    ul.menu{
+        padding-left: 0;
+        li {
+            line-height: 120%;
+            margin-bottom: 2px;
+            margin-top: 2px;
+            a {
+                font-size: 80%;
+                font-weight: 400;
+                text-transform: none;
+            }
+        }
+    }
+}//Section stripes
+.CiviWhiteStripe {
+    background-color: @CiviWhite;
+    color: @CiviGrey;
+}
+.CiviBlueStripe {
+    background-color: @CiviBlue;
+    color: @CiviWhite;
+    a {
+        color: @CiviWhite;
+    }
+}
+.CiviGreenStripe {
+    background-color: @CiviGreen;
+    color: @CiviWhite;
+}
+.CiviGreyStripe {
+    background-color: @CiviGrey;
+    color: @CiviWhite;
+}
+.CiviDarkGreyStripe {
+    background-color: @CiviDarkGrey;
+    color: @CiviGrey;
+    a {
+        color: @CiviWhite;
+    }
+}
+.CiviBlackStripe {
+    background-color: @CiviBlack;
+    color: @CiviGrey;
+    a {
+        color: @CiviWhite;
+    }
+}
+/*    
+
+//civicrm.org specific stylings
+*/
