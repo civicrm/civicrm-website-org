@@ -132,7 +132,6 @@
   </div>
 <?php endif; ?>
 
-<div class="main">
 <div class="container">
 
   <header role="banner" id="page-header" class="CiviGreyStripe">
@@ -140,12 +139,6 @@
   </header> <!-- /#page-header -->
 
   <div class="row">
-
-    <?php if (!empty($page['sidebar_first'])): ?>
-      <aside class="col-sm-3" role="complementary">
-        <?php print render($page['sidebar_first']); ?>
-      </aside>  <!-- /#sidebar-first -->
-    <?php endif; ?>
 
     <section<?php print $content_column_class; ?>>
       <a id="main-content"></a>
@@ -169,15 +162,8 @@
       <?php print render($page['content']); ?>
     </section>
 
-    <?php if (!empty($page['sidebar_second'])): ?>
-      <aside class="col-sm-3" role="complementary">
-        <?php print render($page['sidebar_second']); ?>
-      </aside>  <!-- /#sidebar-second -->
-    <?php endif; ?>
-
   </div>
   
-</div>
 </div>
 
 <footer class="footer CiviDarkGreyStripe">
