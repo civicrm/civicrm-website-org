@@ -539,6 +539,9 @@ tbody tr:hover {
 .crm-public {
     padding: 0 $edgepadding;
 }
+
+.panel-flexible .view {padding: 0}
+
 .l-content>.action-links li {
     list-style-type: none;
 }
