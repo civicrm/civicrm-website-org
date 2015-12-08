@@ -1118,17 +1118,11 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
         unset($params['status_id']);
         // Pending payment status
         if ($this->contributionIsIncomplete && $this->getMembershipTypeField($params['membership_type_id'], 'minimum_fee')) {
-          $params['is_pay_later'] = $this->contributionIsPayLater;
-
-          if ($params['is_pay_later'] === TRUE) { // If user choose Pay later option.
-            if ($is_active == FALSE) {
-              $params['status_id'] = 'Pending';
-            } else {
-              $params['status_id'] = $membershipStatus;
-              $params['end_date'] = $membershipEndDate;
-            }
-          }else{
+          if ($is_active == FALSE) {
             $params['status_id'] = 'Pending';
+          } else {
+            $params['status_id'] = $membershipStatus;
+            $params['end_date'] = $membershipEndDate;
           }
         }
       }
@@ -1220,7 +1214,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
           // Automatic creator_id - default to current user or contact 1
           if (empty($data['case'][1]['creator_id'])) {
             if (user_is_logged_in()) {
-              $params['creator_id'] = 'user_contact_id';
+              $params['creator_id'] = wf_crm_user_cid();
             }
             elseif (!empty($this->ent['contact'][1]['id'])) {
               $params['creator_id'] = $this->ent['contact'][1]['id'];
@@ -1282,7 +1276,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
           // Automatic source_contact_id - default to current user or contact 1
           if (empty($data['activity'][1]['source_contact_id'])) {
             if (user_is_logged_in()) {
-              $params['source_contact_id'] = 'user_contact_id';
+              $params['source_contact_id'] = wf_crm_user_cid();
             }
             elseif (!empty($this->ent['contact'][1]['id'])) {
               $params['source_contact_id'] = $this->ent['contact'][1]['id'];
@@ -1676,10 +1670,6 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
     $params = $this->contributionParams();
     $params['contribution_status_id'] = 'Pending';
     $params['is_pay_later'] = $this->contributionIsPayLater;
-    // IPN processors use this for matching and updating the contribution status
-    if (!$this->contributionIsPayLater) {
-      $params['invoice_id'] = $this->data['contribution'][1]['contribution'][1]['invoiceID'] = md5(uniqid(rand(), TRUE));
-    }
     $result = wf_civicrm_api('contribution', 'create', $params);
     $this->ent['contribution'][1]['id'] = $result['id'];
   }
@@ -1755,6 +1745,11 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
     $params['skipRecentView'] = $params['skipLineItem'] = 1;
     $params['contact_id'] = $this->ent['contact'][1]['id'];
     $params['total_amount'] = $this->totalContribution;
+
+    // Some processors use this for matching and updating the contribution status
+    if (!$this->contributionIsPayLater) {
+      $params['invoice_id'] = $this->data['contribution'][1]['contribution'][1]['invoiceID'] = md5(uniqid(rand(), TRUE));
+    }
 
     // tax integration
     // TODO: needs review if this is changed in 4.6
@@ -2043,7 +2038,14 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       if (!$existing_contact_val[0] || is_numeric($existing_contact_val[0])) {
         $type = ($table == 'contact' && strpos($name, 'name')) ? 'name' : $table;
         if (in_array($type, $component['extra']['hide_fields'])) {
-          return TRUE;
+          // With the no_hide_blank setting we must load the contact to determine if the field was hidden
+          if (wf_crm_aval($component['extra'], 'no_hide_blank')) {
+            $value = wf_crm_aval($this->loadContact($c), "$table:$n:$name");
+            return !(!$value && !is_numeric($value));
+          }
+          else {
+            return TRUE;
+          }
         }
       }
     }
