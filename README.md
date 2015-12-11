@@ -34,6 +34,8 @@ co@www-prod$ cd /var/www/civicrm-website-org/
 co@www-prod$ git fetch origin
 ## Checkout the appropriate tag, e.g.
 co@www-prod$ git checkout deploy-2014-10-15-22-42
+## Optional: If config/*.conf has changed, then restart nginx.
+me@www-prod$ sudo service nginx restart
 ```
 
 This process gives a clear trail of the timeline for code that has been deployed on www-prod -- which can assist in future debugging/auditing.
