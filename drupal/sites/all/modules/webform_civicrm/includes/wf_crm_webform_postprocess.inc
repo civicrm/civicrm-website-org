@@ -138,20 +138,18 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       // Current employer must wait for ContactRef ids to be filled
       unset($contact['contact'][1]['employer_id']);
 
+      $newContact = empty($this->ent['contact'][$c]['id']);
+
       // Create new contact
-      if (empty($this->ent['contact'][$c]['id'])) {
+      if ($newContact) {
         $this->ent['contact'][$c]['id'] = $this->createContact($contact);
       }
-      // Update existing contact
-      else {
-        $this->updateContact($contact, $c);
+      if ($c == 1) {
+        $this->setLoggingContact();
       }
-      // Identify contact 1 as acting user if not logged in
-      if ($c == 1 && $this->ent['contact'][$c]['id'] && user_is_anonymous()) {
-        // For the sake of simple logging
-        CRM_Core_Session::singleton()->set('userID', (int) $this->ent['contact'][1]['id']);
-        // For the sake of advanced logging
-        CRM_Core_DAO::executeQuery('SET @civicrm_user_id = %1', array(1 => array($this->ent['contact'][1]['id'], 'Integer')));
+      // Update existing contact
+      if (!$newContact) {
+        $this->updateContact($contact, $c);
       }
     }
     // $this->ent['contact'] will now contain all contacts in order, with 0 as a placeholder id for any contact not saved
@@ -221,7 +219,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       }
       // Save activities
       if (!empty($this->data['activity']['number_of_activity'])) {
-       $this->processActivities();
+        $this->processActivities();
       }
       // Save grants
       if (isset($this->data['grant']['number_of_grant'])) {
@@ -240,6 +238,30 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
     if (empty($this->submission->is_draft) && !empty($this->ent['contribution'][1]['id']) && $this->contributionIsIncomplete && !$this->contributionIsPayLater) {
       $this->submitIPNPayment();
     }
+      // Send receipt 
+    if (empty($this->submission->is_draft) 
+        && !empty($this->ent['contribution'][1]['id']) 
+        && !empty($this->contribution_page['is_email_receipt']) 
+        && (!$this->contributionIsIncomplete || $this->contributionIsPayLater) ) {
+      $this->sendReceipt();
+    }
+  }
+
+  /**
+   * Send receipt 
+   */
+  private function sendReceipt(){
+    // tax integration
+    if (!is_null($this->tax_rate)) {
+      $template = CRM_Core_Smarty::singleton();
+      $template->assign('dataArray', array( "{$this->tax_rate}" => $this->tax_rate/100 ));
+    }
+    if ($this->contributionIsIncomplete) {
+      $template = CRM_Core_Smarty::singleton();
+      $template->assign('is_pay_later', 1);
+    }
+    $contribute_id = $this->ent['contribution'][1]['id'];
+    wf_civicrm_api('contribution', 'sendconfirmation', array('id' => $contribute_id) + $this->contribution_page);
   }
 
   /**
@@ -502,7 +524,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
    * @return int
    */
   private function verifyExistingContact($cid, $fid) {
-    if ($cid && is_numeric($cid) && !empty($this->enabled[$fid])) {
+    if (wf_crm_is_positive($cid) && !empty($this->enabled[$fid])) {
       module_load_include('inc', 'webform_civicrm', 'includes/contact_component');
       $component = $this->getComponent($fid);
       $filters = wf_crm_search_filters($this->node, $component);
@@ -1061,7 +1083,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       $membershipStatus = "";
       $membershipEndDate = "";
       $is_active = FALSE;
-      
+
       if (empty($params['membership_type_id'])) {
         continue;
       }
@@ -1096,17 +1118,11 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
         unset($params['status_id']);
         // Pending payment status
         if ($this->contributionIsIncomplete && $this->getMembershipTypeField($params['membership_type_id'], 'minimum_fee')) {
-          $params['is_pay_later'] = $this->contributionIsPayLater;
-          
-          if ($params['is_pay_later'] === TRUE) { // If user choose Pay later option.
-            if ($is_active == FALSE) {
-              $params['status_id'] = 'Pending';
-            } else {
-              $params['status_id'] = $membershipStatus;
-              $params['end_date'] = $membershipEndDate;
-            }
-          }else{
+          if ($is_active == FALSE) {
             $params['status_id'] = 'Pending';
+          } else {
+            $params['status_id'] = $membershipStatus;
+            $params['end_date'] = $membershipEndDate;
           }
         }
       }
@@ -1198,7 +1214,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
           // Automatic creator_id - default to current user or contact 1
           if (empty($data['case'][1]['creator_id'])) {
             if (user_is_logged_in()) {
-              $params['creator_id'] = 'user_contact_id';
+              $params['creator_id'] = wf_crm_user_cid();
             }
             elseif (!empty($this->ent['contact'][1]['id'])) {
               $params['creator_id'] = $this->ent['contact'][1]['id'];
@@ -1229,12 +1245,14 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
           // Save case roles
           foreach ($params as $param => $val) {
             if ($val && strpos($param, 'role_') === 0) {
-              wf_civicrm_api('relationship', 'create', array(
-                'relationship_type_id' => substr($param, 5),
-                'contact_id_a' => $params['client_id'],
-                'contact_id_b' => $val,
-                'case_id' => $result['id'],
-              ));
+              foreach ((array) $params['client_id'] as $client) {
+                wf_civicrm_api('relationship', 'create', array(
+                  'relationship_type_id' => substr($param, 5),
+                  'contact_id_a' => $client,
+                  'contact_id_b' => $val,
+                  'case_id' => $result['id'],
+                ));
+              }
             }
           }
         }
@@ -1258,7 +1276,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
           // Automatic source_contact_id - default to current user or contact 1
           if (empty($data['activity'][1]['source_contact_id'])) {
             if (user_is_logged_in()) {
-              $params['source_contact_id'] = 'user_contact_id';
+              $params['source_contact_id'] = wf_crm_user_cid();
             }
             elseif (!empty($this->ent['contact'][1]['id'])) {
               $params['source_contact_id'] = $this->ent['contact'][1]['id'];
@@ -1652,10 +1670,6 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
     $params = $this->contributionParams();
     $params['contribution_status_id'] = 'Pending';
     $params['is_pay_later'] = $this->contributionIsPayLater;
-    // IPN processors use this for matching and updating the contribution status
-    if (!$this->contributionIsPayLater) {
-      $params['invoice_id'] = $this->data['contribution'][1]['contribution'][1]['invoiceID'] = md5(uniqid(rand(), TRUE));
-    }
     $result = wf_civicrm_api('contribution', 'create', $params);
     $this->ent['contribution'][1]['id'] = $result['id'];
   }
@@ -1705,7 +1719,12 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       $url = url('node/' . $this->node->nid, array('absolute' => TRUE));
     }
     elseif ($url == '<confirmation>') {
-      $url = url("node/{$this->node->nid}/done", array('query' => array('sid' => $this->submission->sid), 'absolute' => TRUE));
+      $query = array('sid' => $this->submission->sid);
+      // Add token if user is not authenticated, inline with 'webform_client_form_submit()'
+      if (user_is_anonymous()) {
+        $query['token'] = webform_get_submission_access_token($this->submission);
+      }
+      $url = url("node/{$this->node->nid}/done", array('query' => $query, 'absolute' => TRUE));
     }
     else {
       $parsed = webform_replace_url_tokens($url, $this->node, $this->submission);
@@ -1726,6 +1745,11 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
     $params['skipRecentView'] = $params['skipLineItem'] = 1;
     $params['contact_id'] = $this->ent['contact'][1]['id'];
     $params['total_amount'] = $this->totalContribution;
+
+    // Some processors use this for matching and updating the contribution status
+    if (!$this->contributionIsPayLater) {
+      $params['invoice_id'] = $this->data['contribution'][1]['contribution'][1]['invoiceID'] = md5(uniqid(rand(), TRUE));
+    }
 
     // tax integration
     // TODO: needs review if this is changed in 4.6
@@ -1781,10 +1805,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       ));
     }
 
-    // tax integration
-    if (!is_null($this->tax_rate)) {
-      $contributionResult = CRM_Contribute_BAO_Contribution::getValues(array('id' => $id), CRM_Core_DAO::$_nullArray, CRM_Core_DAO::$_nullArray);
-    }
+    $contributionResult = CRM_Contribute_BAO_Contribution::getValues(array('id' => $id), CRM_Core_DAO::$_nullArray, CRM_Core_DAO::$_nullArray);
 
     // Save line-items
     foreach ($this->line_items as &$item) {
@@ -1797,7 +1818,7 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       // tax integration
       if (empty($item['contribution_id'])) {
         $item['contribution_id'] = $id;
-      }   
+      }
       // Membership
       if (!empty($item['membership_id'])) {
         $item['entity_id'] = $item['membership_id'];
@@ -1805,26 +1826,26 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
           'entity_table' => "civicrm_membership",
           'entity_id' => $item['entity_id'],
         ));
-        if($lineItemArray['count'] != 0){     
+        if ($lineItemArray['count'] != 0) {
           // We only require first membership (signup) entry to make this work.
           $firstLineItem = array_shift($lineItemArray['values']);
-          
+
           // Membership signup line item entry.
           // Line Item record is already present for membership by this stage.
           // Just need to upgrade contribution_id column in the record.
-          if(!isset($firstLineItem['contribution_id'])){
+          if (!isset($firstLineItem['contribution_id'])) {
             $item['id'] = $firstLineItem['id'];
-          }         
+          }
         }
       }
-      
+
       $line_result = wf_civicrm_api('line_item', 'create', $item);
       $item['id'] = $line_result['id'];
-  
+
+      $lineItemRecord = json_decode(json_encode($item), FALSE);
+      // Add financial_item and entity_financial_trxn
+      $result = CRM_Financial_BAO_FinancialItem::add($lineItemRecord, $contributionResult);
       if (!is_null($this->tax_rate)) {
-        $lineItemRecord = json_decode(json_encode($item), FALSE);
-        // Add financial_item and entity_financial_trxn
-        $result = CRM_Financial_BAO_FinancialItem::add($lineItemRecord, $contributionResult);
         $result = CRM_Financial_BAO_FinancialItem::add($lineItemRecord, $contributionResult, TRUE);
       }
       // Create participant/membership payment records
@@ -1835,15 +1856,6 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
           'contribution_id' => $id,
         ));
       }
-    }
-    // Send receipt
-    if (!empty($this->contribution_page['is_email_receipt'])) {
-      // tax integration
-      if (!is_null($this->tax_rate)) {
-        $template = CRM_Core_Smarty::singleton();
-        $template->assign('dataArray', array( "{$this->tax_rate}" => $this->tax_rate/100 ));
-      }
-      wf_civicrm_api('contribution', 'sendconfirmation', array('id' => $id) + $this->contribution_page);
     }
   }
 
@@ -2026,7 +2038,14 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       if (!$existing_contact_val[0] || is_numeric($existing_contact_val[0])) {
         $type = ($table == 'contact' && strpos($name, 'name')) ? 'name' : $table;
         if (in_array($type, $component['extra']['hide_fields'])) {
-          return TRUE;
+          // With the no_hide_blank setting we must load the contact to determine if the field was hidden
+          if (wf_crm_aval($component['extra'], 'no_hide_blank')) {
+            $value = wf_crm_aval($this->loadContact($c), "$table:$n:$name");
+            return !(!$value && !is_numeric($value));
+          }
+          else {
+            return TRUE;
+          }
         }
       }
     }
@@ -2115,6 +2134,15 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       else {
         return (array) $this->rawValues[$fid];
       }
+    }
+  }
+
+  /**
+   * Identifies contact 1 as acting user for CiviCRM's advanced logging
+   */
+  public function setLoggingContact() {
+    if (!empty($this->ent['contact'][1]['id']) && user_is_anonymous()) {
+      CRM_Core_DAO::executeQuery('SET @civicrm_user_id = %1', array(1 => array($this->ent['contact'][1]['id'], 'Integer')));
     }
   }
 

@@ -31,6 +31,8 @@ function _webform_defaults_civicrm_contact() {
       'randomize' => 0,
       'description' => '',
       'hide_fields' => array(),
+      'hide_method' => 'hide',
+      'no_hide_blank' => FALSE,
       'attributes' => array(),
       'private' => FALSE,
       'default' => '',
@@ -138,14 +140,32 @@ function _webform_edit_civicrm_contact($component) {
     '#parents' => array('extra', 'show_hidden_contact'),
     '#weight' => -5,
   );
-  $form['display']['hide_fields'] = array(
+  $form['field_locking'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#title' => t('Field Locking'),
+    '#description' => t('Prevent editing of existing contact data.'),
+  );
+  $form['field_locking']['hide_fields'] = array(
     '#type' => 'select',
     '#multiple' => TRUE,
-    '#title' => t('Fields to Hide'),
+    '#title' => t('Fields to Lock'),
     '#default_value' => $component['extra']['hide_fields'],
     '#options' => array('' => '- ' . t('None') . ' -') + wf_crm_contact_fields($node, $c),
-    '#weight' => -4,
     '#parents' => array('extra', 'hide_fields'),
+  );
+  $form['field_locking']['hide_method'] = array(
+    '#type' => 'select',
+    '#title' => t('Locked fields should be'),
+    '#default_value' => $component['extra']['hide_method'],
+    '#options' => array('hide' => t('Hidden'), 'disable' => t('Disabled')),
+    '#parents' => array('extra', 'hide_method'),
+  );
+  $form['field_locking']['no_hide_blank'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Don't lock fields that are empty"),
+    '#default_value' => $component['extra']['no_hide_blank'],
+    '#parents' => array('extra', 'no_hide_blank'),
   );
   $form['validation']['unique'] = array(
     '#type' => 'checkbox',
@@ -297,12 +317,16 @@ function _webform_render_civicrm_contact($component, $value = NULL, $filter = TR
   civicrm_initialize();
   list(, $c, ) = explode('_', $component['form_key'], 3);
   $hide_fields = array_filter($component['extra']['hide_fields']);
+  $hide_method = wf_crm_aval($component['extra'], 'hide_method', 'hide');
+  $no_hide_blank = (int) wf_crm_aval($component['extra'], 'no_hide_blank', 0);
   $js = '';
   $element = array(
     '#type' => $component['extra']['widget'] == 'autocomplete' ? 'textfield' : $component['extra']['widget'],
     '#weight' => $component['weight'],
     '#attributes' => $component['extra']['attributes'],
   );
+  $element['#attributes']['data-hide-method'] = $hide_method;
+  $element['#attributes']['data-no-hide-blank'] = $no_hide_blank;
   if ($component['extra']['widget'] != 'hidden' || $component['extra']['show_hidden_contact']) {
     $element += array(
       '#title' => $filter ? webform_filter_xss($component['name']) : $component['name'],
@@ -314,8 +338,10 @@ function _webform_render_civicrm_contact($component, $value = NULL, $filter = TR
     );
     // See if there are any fields to fetch via ajax
     $other_fields = wf_crm_contact_fields($node, $c);
-    foreach ($hide_fields as $h) {
-      unset($other_fields[$h]);
+    if ($hide_method == 'hide') {
+      foreach ($hide_fields as $h) {
+        unset($other_fields[$h]);
+      }
     }
     $ajax = $other_fields ? 'true' : 'false';
   }
@@ -330,12 +356,12 @@ function _webform_render_civicrm_contact($component, $value = NULL, $filter = TR
         $element['#attached']['css'][] = drupal_get_path('module', 'webform_civicrm') . '/css/token-input.css';
         $settings = '{
           queryParam: "str",
-          hintText: "' . $component['extra']['search_prompt'] . '",
-          noResultsText: "' . $component['extra']['none_prompt'] . '",
-          searchingText: "' . t('Searching...') . '",
+          hintText: ' . json_encode(filter_xss($component['extra']['search_prompt'])) . ',
+          noResultsText: ' . json_encode(filter_xss($component['extra']['none_prompt'])) . ',
+          searchingText: ' . json_encode(t('Searching...')) . ',
           tokenLimit: 1,
-          onAdd: function(item) {wfCivi.existingSelect(' . $c . ', ' . $node->nid . ', ' . $callback_path . ', toHide, item.id,' . $ajax . ');},
-          onDelete: function(item) {wfCivi.existingSelect(' . $c . ', ' . $node->nid . ', ' . $callback_path . ', toHide, "", false);},
+          onAdd: function(item) {wfCivi.existingSelect(' . $c . ', ' . $node->nid . ', ' . $callback_path . ', toHide, "' . $hide_method . '", ' . $no_hide_blank . ', item.id, ' . $ajax . ');},
+          onDelete: function(item) {wfCivi.existingSelect(' . $c . ', ' . $node->nid . ', ' . $callback_path . ', toHide, "' . $hide_method . '", ' . $no_hide_blank . ', "", false);},
           prePopulate: prep
         }';
         $js = "var prep = wfCivi.existingInit(field, $c, {$node->nid}, $callback_path, toHide);
@@ -349,13 +375,13 @@ function _webform_render_civicrm_contact($component, $value = NULL, $filter = TR
         $filters = wf_crm_search_filters($node, $component);
         $element['#options'] = wf_crm_contact_search($node, $component, $filters);
         $js = "field.change(function() {
-                  wfCivi.existingSelect($c, {$node->nid}, $callback_path, toHide, \$(this).val(), $ajax);
+                  wfCivi.existingSelect($c, {$node->nid}, $callback_path, toHide, '$hide_method', $no_hide_blank, \$(this).val(), $ajax);
                 });
                 wfCivi.existingInit(field, $c, {$node->nid}, $callback_path, toHide);";
       }
       // Display empty option unless there are no results
       if (!$component['extra']['allow_create'] || count($element['#options']) > 1) {
-        $element['#empty_option'] = $component['extra'][$element['#options'] ? 'search_prompt' : 'none_prompt'];
+        $element['#empty_option'] = filter_xss($component['extra'][$element['#options'] ? 'search_prompt' : 'none_prompt']);
       }
       break;
 
@@ -371,6 +397,9 @@ function _webform_render_civicrm_contact($component, $value = NULL, $filter = TR
           $js = "wfCivi.existingInit(field, $c, {$node->nid}, $callback_path, toHide);";
         }
         $element['#theme_wrappers'] = array('static_contact_element');
+        if ($component['required']) {
+          $element['#element_validate'] = array('wf_crm_contact_component_required');
+        }
       }
   }
   // Add inline javascript
@@ -435,7 +464,7 @@ function wf_crm_fill_contact_value($node, $component, &$element) {
     }
   }
   if (empty($cid) && $element['#type'] == 'hidden' && $component['extra']['none_prompt']) {
-    $element['#attributes']['data-civicrm-name'] = $component['extra']['none_prompt'];
+    $element['#attributes']['data-civicrm-name'] = filter_xss($component['extra']['none_prompt']);
   }
 }
 
@@ -540,13 +569,13 @@ function wf_crm_contact_search($node, $component, $params, $str = NULL) {
     }
     if (count($ret) < $limit && $component['extra']['allow_create']) {
       // HTML hack to get prompt to show up different than search results
-      $ret[] = array('id' => "-$str", 'name' => '<em><i>' . $component['extra']['none_prompt'] . '</i></em>');
+      $ret[] = array('id' => "-$str", 'name' => '<em><i>' . filter_xss($component['extra']['none_prompt']) . '</i></em>');
     }
   }
   // Select results
   else {
     if ($component['extra']['allow_create']) {
-      $ret['-'] = $component['extra']['none_prompt'];
+      $ret['-'] = filter_xss($component['extra']['none_prompt']);
     }
     foreach (wf_crm_aval($result, 'values', array()) as $contact) {
       if ($name = wf_crm_format_contact($contact, $display)) {
@@ -592,7 +621,7 @@ function wf_crm_contact_access($component, $filters, $cid) {
   $cid = "$cid";
   list(, $c, ) = explode('_', $component['form_key'], 3);
   if ($cid && $cid[0] === '-' && !empty($component['extra']['allow_create']) && !empty($component['extra']['none_prompt'])) {
-    return $component['extra']['none_prompt'];
+    return filter_xss($component['extra']['none_prompt']);
   }
   if (!is_numeric($cid)) {
     return FALSE;
@@ -635,7 +664,7 @@ function wf_crm_format_contact($contact, $display_fields) {
   $display = array();
   foreach ($display_fields as $field) {
     if ($field && !empty($contact[$field])) {
-      $display[] = $contact[$field];
+      $display[] = check_plain($contact[$field]);
     }
   }
   return implode(' :: ', $display);
@@ -803,11 +832,11 @@ function theme_static_contact_element($vars) {
   $parents = str_replace('_', '-', implode('--', array_slice($element['#parents'], $nested_level)));
 
   $wrapper_classes = array(
-   'form-item',
-   'webform-component',
-   'webform-component-' . $type,
-   'static',
-   'webform-component--' . $parents,
+    'form-item',
+    'webform-component',
+    'webform-component-' . $type,
+    'static',
+    'webform-component--' . $parents,
   );
 
   if ($component['extra']['title_display'] === 'inline') {
@@ -820,7 +849,7 @@ function theme_static_contact_element($vars) {
   if ($type == 'civicrm_contact' && !empty($element['#attributes']['data-civicrm-name'])) {
 
     if ($component['extra']['title_display'] != 'none') {
-      $output .= ' <label for="' . $element['#id'] . '">' . check_plain($element['#title']) . "</label>\n";
+      $output .= theme('form_element_label', array('element' => $element));
     }
 
     $output .= '<ul class="token-input-list"><li class="token-input-token"><p>' . $element['#attributes']['data-civicrm-name'] . "</p></li></ul>\n";
@@ -890,4 +919,16 @@ function wf_crm_tokeninput_path() {
     }
   }
   return $ret;
+}
+
+/**
+ * Validation callback
+ *
+ * @param array $element
+ * @param array $form_state
+ */
+function wf_crm_contact_component_required($element, &$form_state) {
+  if (empty($element['#value'])) {
+    form_error($element, t('!name field is required.', array('!name' => $element['#title'])));
+  }
 }

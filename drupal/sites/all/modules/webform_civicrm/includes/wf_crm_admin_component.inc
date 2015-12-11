@@ -260,18 +260,18 @@ class wf_crm_admin_component {
       );
       $this->form['civicrm_options_fieldset']['intro'] = array(
         '#markup' => '<p><div class="live-options-hide">' .
-        t('Drag the arrows to re-order these options. Click the "enabled" checkbox to show/remove an item from the form. Set the label as you want it to appear on the form.') .
-        '</div><div class="live-options-show">' .
-        t('You cannot control the presentation of live options. They will be loaded from the CiviCRM database every time the form is displayed.') .
-        '</div><div>' .
-        t('Check the "default" box for an option to be selected by default when a user views the form.') .
-        '</div></p>',
+          t('Drag the arrows to re-order these options. Click the "enabled" checkbox to show/remove an item from the form. Set the label as you want it to appear on the form.') .
+          '</div><div class="live-options-show">' .
+          t('You cannot control the presentation of live options. They will be loaded from the CiviCRM database every time the form is displayed.') .
+          '</div><div>' .
+          t('Check the "default" box for an option to be selected by default when a user views the form.') .
+          '</div></p>',
       );
       // Special instructions for contact reference fields
       if (wf_crm_aval($this->field, 'data_type') == 'ContactReference') {
         $this->form['civicrm_options_fieldset']['intro'] = array(
           '#markup' => '<p>' . t('This is a contact reference field. It points to another contact on the webform. You can configure how that contact is presented by editing their "Existing Contact" field.') . '</p>' .
-          '<p>' . t("Note: In most cases it is not desirable to have the selection of webform contacts exposed to the end-user so you may wish to set this field's value on the CiviCRM tab instead.") . '</p>',
+            '<p>' . t("Note: In most cases it is not desirable to have the selection of webform contacts exposed to the end-user so you may wish to set this field's value on the CiviCRM tab instead.") . '</p>',
         );
       }
       $options_selected = wf_crm_str2array($this->component['extra']['items']);
@@ -470,7 +470,7 @@ class wf_crm_admin_component {
       elseif (!empty($row['data-cid']) && isset($node->webform['components'][$row['data-cid']])) {
         $cid = $row['data-cid'];
         $component = $node->webform['components'][$cid];
-        $type = &$row['data'][1]['data'];
+        $type = &$row['data'][2]['data'];
         if ($component['type'] == 'civicrm_contact') {
           $types = array(
             'autocomplete' => t('Contact - Autocomplete'),
@@ -494,11 +494,11 @@ class wf_crm_admin_component {
           list( , $c, $ent, $n, $table, $name) = explode('_', $component['form_key'], 6);
           $field = wf_crm_aval($fields, $table . '_' . $name, array('type' => 'fieldset'));
           // Don't allow CiviCRM fields to be cloned
-          $row['data'][6]['data'] = '';
+          $row['data'][7]['data'] = '';
           if ($component['type'] == 'fieldset') {
             $title = t('Contact !num', array('!num' => $c));
             $type = t('Fieldset for !contact', array('!contact' => wf_crm_contact_label($c, $data)));
-            $row['data'][6]['data'] = l(t('Clone Contact'), "node/{$node->nid}/webform/components/$cid/clone", array(
+            $row['data'][7]['data'] = l(t('Clone Contact'), "node/{$node->nid}/webform/components/$cid/clone", array(
               'attributes' => array('title' => t('Add a new contact to the form with the same fields and settings')
               )));
             $class .= ' fieldset';
@@ -524,16 +524,16 @@ class wf_crm_admin_component {
           // Show defaults with labels instead of keys
           if ($component['type'] == 'civicrm_contact') {
             if ($component['extra']['default'] == 'contact_id') {
-              $row['data'][2]['data'] = check_plain(wf_crm_display_name($component['extra']['default_contact_id']));
+              $row['data'][3]['data'] = check_plain(wf_crm_display_name($component['extra']['default_contact_id']));
             }
             elseif ($component['extra']['default'] == 'user') {
-              $row['data'][2]['data'] = t('Current User');
+              $row['data'][3]['data'] = t('Current User');
             }
             elseif ($component['extra']['default'] == 'auto') {
-              $row['data'][2]['data'] = t('Auto - From Filters');
+              $row['data'][3]['data'] = t('Auto - From Filters');
             }
             elseif ($component['extra']['default'] == 'relationship' && $component['extra']['default_relationship']) {
-              $row['data'][2]['data'] = t('Relationship to !contact', array('!contact' => wf_crm_contact_label(1, $data)));
+              $row['data'][3]['data'] = t('Relationship to !contact', array('!contact' => wf_crm_contact_label(1, $data)));
             }
           }
           elseif (isset($component['value']) && strlen($component['value']) && ($field['type'] == 'select' || !empty($field['expose_list']))) {
@@ -549,13 +549,13 @@ class wf_crm_admin_component {
                 $val .= ($val ? ', ' : '') . $items[trim($v)];
               }
             }
-            $row['data'][2]['data'] = $val;
+            $row['data'][3]['data'] = $val;
           }
           // Contribution page - link to civicrm config form instead of component edit form
           if ($name == 'contribution_page_id') {
             $type = t('CiviCRM Billing Fields');
             $class .= ' contribution';
-            $row['data'][5]['data'] = l(t('Configure'), 'civicrm/admin/contribute/settings', array(
+            $row['data'][6]['data'] = l(t('Configure'), 'civicrm/admin/contribute/settings', array(
               'query' => array(
                 'reset' => 1,
                 'action' => 'update',
@@ -567,7 +567,7 @@ class wf_crm_admin_component {
             ));
           }
           $type = '<span class="' . $class . '"> </span>' . $type;
-          $row['data'][1]['title'] = $title;
+          $row['data'][2]['title'] = $title;
         }
       }
     }

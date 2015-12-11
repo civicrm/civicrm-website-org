@@ -382,28 +382,36 @@ function wf_crm_get_contact_relationship_types($type_a, $type_b, $sub_type_a, $s
   foreach (wf_crm_get_relationship_types() as $t) {
     $reciprocal = ($t['label_a_b'] != $t['label_b_a'] && $t['label_b_a'] || $t['type_a'] != $t['type_b']);
     if (($t['type_a'] == $type_a || !$t['type_a'])
-    && ($t['type_b'] == $type_b || !$t['type_b'])
-    && (in_array($t['sub_type_a'], $sub_type_a) || !$t['sub_type_a'])
-    && (in_array($t['sub_type_b'], $sub_type_b) || !$t['sub_type_b'])) {
+      && ($t['type_b'] == $type_b || !$t['type_b'])
+      && (in_array($t['sub_type_a'], $sub_type_a) || !$t['sub_type_a'])
+      && (in_array($t['sub_type_b'], $sub_type_b) || !$t['sub_type_b'])
+    ) {
       $ret[$t['id'] . ($reciprocal ? '_a' : '_r')] = $t['label_a_b'];
     }
     // Reciprocal form - only show if different from above
     if ($reciprocal
-    && ($t['type_a'] == $type_b || !$t['type_a'])
-    && ($t['type_b'] == $type_a || !$t['type_b'])
-    && (in_array($t['sub_type_a'], $sub_type_b) || !$t['sub_type_a'])
-    && (in_array($t['sub_type_b'], $sub_type_a) || !$t['sub_type_b'])) {
+      && ($t['type_a'] == $type_b || !$t['type_a'])
+      && ($t['type_b'] == $type_a || !$t['type_b'])
+      && (in_array($t['sub_type_a'], $sub_type_b) || !$t['sub_type_a'])
+      && (in_array($t['sub_type_b'], $sub_type_a) || !$t['sub_type_b'])
+    ) {
       $ret[$t['id'] . '_b'] = $t['label_b_a'];
     }
   }
   return $ret;
 }
 
+/**
+ * List dedupe rules available for a contact type
+ *
+ * @param string $contact_type
+ * @return array
+ */
 function wf_crm_get_matching_rules($contact_type) {
   static $rules;
   $contact_type = ucfirst($contact_type);
   if (!$rules) {
-    $rules = array('Individual', 'Organization', 'Household');
+    $rules = array_fill_keys(array('Individual', 'Organization', 'Household'), array());
     $dao = CRM_Core_DAO::executeQuery('SELECT * FROM civicrm_dedupe_rule_group');
     while ($dao->fetch()) {
       $rules[$dao->contact_type][$dao->id] = $dao->title;
@@ -455,7 +463,7 @@ function wf_crm_enabled_fields($node, $submission = NULL, $show_all = FALSE) {
  * @param string $var
  *   Name of variable to return: fields, tokens, or sets
  *
- * @return array - one of:
+ * @return array
  *   fields: The CiviCRM contact fields this module supports
  *   tokens: Available tokens keyed to field ids
  *   sets: Info on fieldsets (entities)
@@ -1005,6 +1013,7 @@ function wf_crm_get_fields($var = 'fields') {
         'type' => 'select',
         'expose_list' => TRUE,
         'value' => '1',
+        'extra' => array('multiple' => 1, 'required' => 1),
       );
       $fields['participant_status_id'] = array(
         'name' => t('Registration Status'),
@@ -1345,15 +1354,19 @@ function wf_crm_user_cid($id = NULL, $type = 'uf') {
   // Lookup current domain for multisite support
   static $domain = 0;
   if (!$domain) {
-    $domain = wf_civicrm_api('domain', 'get', array('current_domain' => 1, 'return.id' => 1));
+    $domain = wf_civicrm_api('domain', 'get', array('current_domain' => 1, 'return' => 'id'));
     $domain = wf_crm_aval($domain, 'id', 1);
   }
-  $result = wf_civicrm_api('uf_match', 'getsingle', array($type . '_id' => $id, 'domain_id' => $domain));
-  if (empty($result['is_error'])) {
+  $result = wf_crm_apivalues('uf_match', 'get', array(
+    $type . '_id' => $id,
+    'domain_id' => $domain,
+    'sequential' => 1,
+  ));
+  if ($result) {
     if (!empty($user_lookup)) {
-      $current_user = $result['contact_id'];
+      $current_user = $result[0]['contact_id'];
     }
-    return $type == 'uf' ? $result['contact_id'] : $result['uf_id'];
+    return $type == 'uf' ? $result[0]['contact_id'] : $result[0]['uf_id'];
   }
 }
 
@@ -1476,7 +1489,8 @@ function wf_civicrm_api($entity, $operation, $params) {
     $bt = debug_backtrace();
     $n = $bt[0]['function'] == 'wf_civicrm_api' ? 1 : 0;
     $file = explode('/', $bt[$n]['file']);
-    watchdog('webform_civicrm', 'The CiviCRM "%function" API returned the error: "%msg" when called by function "!fn" on line !line of !file with parameters: "!params"',
+    watchdog('webform_civicrm',
+      'The CiviCRM "%function" API returned the error: "%msg" when called by function "!fn" on line !line of !file with parameters: "!params"',
       array(
         '%function' => $entity . ' ' . $operation,
         '%msg' => $result['error_message'],
@@ -1511,7 +1525,7 @@ function wf_crm_apivalues($entity, $operation, $params = array(), $value = NULL)
   }
   $params += array('options' => array());
   // Work around the api's default limit of 25
-  $params['options'] += array('limit' => 9999);
+  $params['options'] += array('limit' => 0);
   $ret = wf_crm_aval(wf_civicrm_api($entity, $operation, $params), 'values', array());
   if ($value) {
     foreach ($ret as &$values) {
@@ -1563,6 +1577,7 @@ function wf_crm_required_contact_fields($contact_type) {
 
 /**
  * These are the contact location fields this module supports
+ *
  * @return array
  */
 function wf_crm_location_fields() {
@@ -1570,7 +1585,11 @@ function wf_crm_location_fields() {
 }
 
 /**
- * Returns the children of a webform component
+ * Returns a count of children of a webform component
+ *
+ * @param int $nid
+ * @param int $id
+ * @return int
  */
 function _wf_crm_child_components($nid, $id) {
   return db_select('webform_component', 'c')

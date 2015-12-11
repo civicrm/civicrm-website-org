@@ -16,6 +16,7 @@ abstract class wf_crm_webform_base {
   protected $events = array();
   protected $line_items = array();
   protected $membership_types = array();
+  protected $loadedContacts = array();
 
   // No direct access - storage for variables fetched via __get
   private $_payment_processor;
@@ -37,26 +38,26 @@ abstract class wf_crm_webform_base {
           $this->_payment_processor = wf_civicrm_api('payment_processor', 'getsingle', array('id' => $payment_processor_id));
         }
         return $this->_payment_processor;
-      
+
       case 'contribution_page':
         $contribution_page_id = wf_crm_aval($this->data, 'contribution:1:contribution:1:contribution_page_id');
         if ($contribution_page_id && !$this->_contribution_page) {
           $this->_contribution_page = wf_civicrm_api('contribution_page', 'getsingle', array('id' => $contribution_page_id));
         }
         return $this->_contribution_page;
-        
+
       case 'tax_rate':
         $taxSettings = CRM_Core_BAO_Setting::getItem(CRM_Core_BAO_Setting::CONTRIBUTE_PREFERENCES_NAME, 'contribution_invoice_settings');
         if (is_array($taxSettings) && !empty($taxSettings['invoicing'])) {
-            if ($this->contribution_page) {
-              // tax integration
-              $taxRates = CRM_Core_PseudoConstant::getTaxRates();
-              $this->_tax_rate = $taxRates[$this->_contribution_page['financial_type_id']];
-            }
-            return $this->_tax_rate;
+          if ($this->contribution_page) {
+            // tax integration
+            $taxRates = CRM_Core_PseudoConstant::getTaxRates();
+            $this->_tax_rate = $taxRates[$this->_contribution_page['financial_type_id']];
+          }
+          return $this->_tax_rate;
         }
         return;
-      
+
       default:
         throw new Exception('Unknown property');
     }
@@ -71,11 +72,18 @@ abstract class wf_crm_webform_base {
    * @param array $exclude
    *   Fields to ignore
    *
-   * @return array of contact data
+   * @return array
+   *   Contact data
    */
   protected function loadContact($c, $exclude = array()) {
+    if (!empty($this->loadedContacts[$c])) {
+      return $this->loadedContacts[$c];
+    }
     $info = array();
     $cid = $this->ent['contact'][$c]['id'];
+    if (!$cid) {
+      return $info;
+    }
     $contact = $this->data['contact'][$c];
     $prefix = 'civicrm_' . $c . '_contact_1_';
     foreach (array_merge(array('contact'), wf_crm_location_fields()) as $ent) {
@@ -182,6 +190,7 @@ abstract class wf_crm_webform_base {
         }
       }
     }
+    $this->loadedContacts[$c] = $info;
     return $info;
   }
 
@@ -242,16 +251,16 @@ abstract class wf_crm_webform_base {
    */
   protected function getExposedOptions($field_key, $exclude = array()) {
     $field = $this->getComponent($field_key);
-    
+
     if ($field && $field['type'] == 'hidden') {
       // Fetch live options
       $exposed = wf_crm_field_options($field, 'live_options', $this->data);
       foreach ($exclude as $i) {
-       unset($exposed[$i]);
+        unset($exposed[$i]);
       }
       return $exposed;
     }
-    
+
     if ($field && $field['type'] == 'select') {
       // Fetch static options
       if (empty($field['extra']['civicrm_live_options'])) {
@@ -471,8 +480,11 @@ abstract class wf_crm_webform_base {
   }
 
   /**
+   * Find a case matching criteria
+   *
    * Normally we could do this by passing filters into the api, but legacy case api doesn't support them
-   * So instead we fetch every case for the contact and loop through them
+   * So instead we fetch every case for the contact and loop through them to test against filters.
+   *
    * @param array|int $cid
    * @param array $filters
    * @return null|array
@@ -481,11 +493,15 @@ abstract class wf_crm_webform_base {
     $case = NULL;
     foreach (wf_crm_apivalues('case', 'get', array('client_id' => $cid)) as $item) {
       if (empty($item['is_deleted'])) {
+        $match = TRUE;
         foreach (array_filter($filters) as $filter => $value) {
-          if (array_intersect((array)$item[$filter], (array)$value)) {
-            // Note: this loop has no break on purpose - this way we find the most recent case instead of stopping at the first
-            $case = $item;
+          if (!array_intersect((array)$item[$filter], (array)$value)) {
+            $match = FALSE;
           }
+        }
+        // Note: this loop has no break on purpose - this way we find the most recent case instead of stopping at the first
+        if ($match) {
+          $case = $item;
         }
       }
     }
@@ -611,4 +627,3 @@ abstract class wf_crm_webform_base {
   }
 
 }
-
