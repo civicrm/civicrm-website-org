@@ -52,6 +52,19 @@ You can develop locally as long as you are not storing any unencrypted personal 
 
 Drupal and CiviCRM databases can be encrypted on www-test.civicrm.org before being transferred to local development environments.
 
+The site is hosted with nginx and this repository also contains some nginx rewrites that you can include with something like the below:
+
+
+```
+server {
+
+    # Standard Drupal and CiviCRM nginx configuration here
+    
+    include /var/www/civicrm-website-org/config/rewrites.conf; # <-- add this line
+
+}
+```
+
 # Upgrades
 
 Upgrades (especially CiviCRM upgrades) should be
@@ -73,3 +86,7 @@ Put the site into maintanence mode before upgrading
 # CiviCRM customisations
 
 Any CiviCRM customisations should be places in the php and templates directory rather than being directly overwritted in order to make it easy to keep track of customisations through upgrades.
+
+# Support
+
+Please email michael@civicrm.org or totten@civicrm.org if you need any support with any of the above.
