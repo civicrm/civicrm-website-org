@@ -48,7 +48,7 @@ function civicrm_org_providers_update_provider($contact_id){
     $groups=civicrm_api('GroupContact', 'get', $params);
     foreach($groups['values'] as $group){
         if($group['group_id']==131){
-            $badges[]='active-contributor';
+            $badges[]='contributor-empowering';
             break;
         }
     }
@@ -58,7 +58,7 @@ function civicrm_org_providers_update_provider($contact_id){
     $groups=civicrm_api('GroupContact', 'get', $params);
     foreach($groups['values'] as $group){
         if($group['group_id']==267){
-            $badges[]='technology-partner';
+            $badges[]='technology-sponsor';
             break;
         }
     }
@@ -67,17 +67,17 @@ function civicrm_org_providers_update_provider($contact_id){
     $membership=civicrm_api('Membership', 'getsingle', $params);
     if(in_array($membership['status_id'], array(1,2,3,5)) AND in_array($membership['membership_type_id'], array(1,2,3,12,13,14))){ //1=new, 2=current, 3=grace, 5=pending 
         $membershipTypeBadgeTranslate=array(
-            1 => 'associate-partner',
-            2 => 'supporting-partner',
-            3 => 'sustaining-partner',
-            12 => 'sustaining-partner',
-            13 => 'supporting-partner',
-            14 => 'associate-partner'
+            1 => 'partner-sustaining',
+            2 => 'partner-empowering',
+            3 => 'partner-supporting',
+            12 => 'partner-sustaining',
+            13 => 'partner-empowering',
+            14 => 'partner-supporting'
         );
         // print_r($membershipTypeBadgeTranslate[$membership['membership_type_id']]);exit;
         $partnerText = $membershipTypeBadgeTranslate[$membership['membership_type_id']];
         if($founder){
-            $partnerText = 'founding-'.$partnerText;
+            $partnerText = $partnerText.'-founding';
         }
         $badges[]=$partnerText;
     }
