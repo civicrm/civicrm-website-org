@@ -167,3 +167,13 @@ function civicrm_org_providers_block_view($block_name){
         return $output;
     }
 }
+
+function civicrm_org_providers_batch_update($contact_ids=array()){
+    civicrm_initialize();
+    if(count($contact_ids)==0){
+        $contacts = CRM_Core_DAO::executeQuery("SELECT contact_id FROM civicrm_group_contact WHERE group_id IN (131,140,267) UNION SELECT contact_id FROM civicrm_membership");
+        while($contacts->fetch()){
+            civicrm_org_providers_update_provider($contacts->contact_id);
+        }        
+    }
+}
