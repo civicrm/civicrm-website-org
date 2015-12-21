@@ -1864,6 +1864,11 @@ form ul.token-input-list {
   .view-section-list-item-formatter dt a {
     color: #fff; }
 
+/* line 983, ../sass/components/_content.scss */
+ul ul, ol ol {
+  margin-bottom: 0;
+  margin-top: 0; }
+
 /* line 3, ../sass/components/_footer.scss */
 .l-footer .l-region--footer-first {
   background-color: #393536;
