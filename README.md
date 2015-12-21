@@ -61,7 +61,7 @@ The site is hosted with nginx and this repository also contains some nginx rewri
 server {
 
     # Standard Drupal and CiviCRM nginx configuration here
-    
+
     include /var/www/civicrm-website-org/config/rewrites.conf; # <-- add this line
 
 }
@@ -80,7 +80,7 @@ Notes:
 * The drush command 'drush updb' is useful for just applying db upgrades when the code upgrade has already been done with a git pull (as is the case on www-test and www-prod).
 * The drush command 'civicrm-upgrade-db' is useful for upgrading CiviCRM from the command line
 
-Needless to say, if you do notice anything going wrong 
+Needless to say, if you do notice anything going wrong
 and on the test infrastructure before being carried out on the production server.
 
 Put the site into maintanence mode before upgrading
