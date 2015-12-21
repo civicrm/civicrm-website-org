@@ -876,11 +876,16 @@ form ul.token-input-list {
     }
     
     .logo{
-        max-width: 210px;
-        max-height: 210px;
+        max-width: 250px;
+        max-height: 250px;
         margin-bottom: 1em;
     }
 }
+
+.service-provider-logo{
+    max-width: 120px;
+}
+
 .view-rotating-partner-logos .views_slideshow_cycle_slide {
     width: 100% !important;
     padding: 0 2%;

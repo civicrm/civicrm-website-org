@@ -1356,52 +1356,56 @@ form ul.token-input-list {
   margin-left: 10px; }
 /* line 878, ../sass/components/_content.scss */
 .view-service-providers .logo {
-  max-width: 210px;
-  max-height: 210px;
+  max-width: 250px;
+  max-height: 250px;
   margin-bottom: 1em; }
 
-/* line 884, ../sass/components/_content.scss */
+/* line 885, ../sass/components/_content.scss */
+.service-provider-logo {
+  max-width: 120px; }
+
+/* line 889, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views_slideshow_cycle_slide {
   width: 100% !important;
   padding: 0 2%; }
 
-/* line 888, ../sass/components/_content.scss */
+/* line 893, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-text {
   text-align: center;
   padding: 0 3%; }
 
-/* line 895, ../sass/components/_content.scss */
+/* line 900, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-text h5,
 .view-rotating-partner-logos .partner-contact h5 {
   font-size: 1.29em;
   margin-top: 0;
   margin-bottom: 0.8%; }
 
-/* line 901, ../sass/components/_content.scss */
+/* line 906, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-contact {
   border-top: 1px solid #fff;
   padding-top: 5%; }
 
-/* line 911, ../sass/components/_content.scss */
+/* line 916, ../sass/components/_content.scss */
 .view-rotating-partner-logos .partner-img {
   text-align: center; }
-  /* line 913, ../sass/components/_content.scss */
+  /* line 918, ../sass/components/_content.scss */
   .view-rotating-partner-logos .partner-img img {
     max-width: 180px; }
 
-/* line 917, ../sass/components/_content.scss */
+/* line 922, ../sass/components/_content.scss */
 .view-rotating-partner-logos .pad {
   padding: 20px; }
 
-/* line 920, ../sass/components/_content.scss */
+/* line 925, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-bottom {
   position: relative; }
 
-/* line 926, ../sass/components/_content.scss */
+/* line 931, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-pause {
   display: none; }
 
-/* line 929, ../sass/components/_content.scss */
+/* line 934, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-previous a,
 .view-rotating-partner-logos .views-slideshow-controls-text-next a {
   position: absolute;
@@ -1411,45 +1415,45 @@ form ul.token-input-list {
   text-indent: -8765px;
   z-index: 999; }
 
-/* line 946, ../sass/components/_content.scss */
+/* line 951, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-previous a {
   background: url("images/arrow-prev-white.png") no-repeat 0 0;
   left: 0; }
 
-/* line 950, ../sass/components/_content.scss */
+/* line 955, ../sass/components/_content.scss */
 .view-rotating-partner-logos .views-slideshow-controls-text-next a {
   background: url("images/arrow-next-white.png") no-repeat 0 0;
   right: 0; }
 
-/* line 954, ../sass/components/_content.scss */
+/* line 959, ../sass/components/_content.scss */
 .view-rotating-partner-logos p a {
   font-weight: bold;
   color: #fff; }
 
-/* line 959, ../sass/components/_content.scss */
+/* line 964, ../sass/components/_content.scss */
 .view-extensions-directory .views-row {
   margin: 2em 0;
   padding-bottom: 2em; }
-/* line 963, ../sass/components/_content.scss */
+/* line 968, ../sass/components/_content.scss */
 .view-extensions-directory h2, .view-extensions-directory .field--name-field-section-heading, .view-extensions-directory .node-type-feature .l-content .field--name-field-top-feature-heading, .node-type-feature .l-content .view-extensions-directory .field--name-field-top-feature-heading {
   margin-bottom: 0;
   padding-bottom: 0; }
 
-/* line 969, ../sass/components/_content.scss */
+/* line 974, ../sass/components/_content.scss */
 .view-extensions-related-releases {
   padding: 0; }
 
-/* line 973, ../sass/components/_content.scss */
+/* line 978, ../sass/components/_content.scss */
 .view-section-list-item-formatter dt {
   font-size: 130%;
   text-align: center;
   font-weight: bold;
   text-transform: uppercase; }
-  /* line 978, ../sass/components/_content.scss */
+  /* line 983, ../sass/components/_content.scss */
   .view-section-list-item-formatter dt a {
     color: #fff; }
 
-/* line 983, ../sass/components/_content.scss */
+/* line 988, ../sass/components/_content.scss */
 ul ul, ol ol {
   margin-bottom: 0;
   margin-top: 0; }
