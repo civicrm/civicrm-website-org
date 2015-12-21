@@ -67,12 +67,12 @@ function civicrm_org_providers_update_provider($contact_id){
     $membership=civicrm_api('Membership', 'getsingle', $params);
     if(in_array($membership['status_id'], array(1,2,3,5)) AND in_array($membership['membership_type_id'], array(1,2,3,12,13,14))){ //1=new, 2=current, 3=grace, 5=pending 
         $membershipTypeBadgeTranslate=array(
-            1 => 'partner-sustaining',
+            1 => 'partner-supporting',
             2 => 'partner-empowering',
-            3 => 'partner-supporting',
-            12 => 'partner-sustaining',
+            3 => 'partner-sustaining',
+            12 => 'partner-supporting',
             13 => 'partner-empowering',
-            14 => 'partner-supporting'
+            14 => 'partner-sustaining'
         );
         // print_r($membershipTypeBadgeTranslate[$membership['membership_type_id']]);exit;
         $partnerText = $membershipTypeBadgeTranslate[$membership['membership_type_id']];
