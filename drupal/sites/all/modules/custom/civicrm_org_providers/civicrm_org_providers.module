@@ -63,7 +63,9 @@ function civicrm_org_providers_update_provider($contact_id){
         }
     }
     //find out if they members and what type of members they are
-    $params = array('version' => 3, 'contact_id' => $contact_id);
+    $memberships = CRM_Core_DAO::executeQuery("SELECT id FROM civicrm_membership WHERE contact_id = %1 ORDER BY start_date DESC LIMIT 1", array(1 => array($contact_id, 'Integer')));
+    $memberships->fetch();
+    $params = array('version' => 3, 'membership_id' => $memberships->id);
     $membership=civicrm_api('Membership', 'getsingle', $params);
     if(in_array($membership['status_id'], array(1,2,3,5)) AND in_array($membership['membership_type_id'], array(1,2,3,12,13,14))){ //1=new, 2=current, 3=grace, 5=pending 
         $membershipTypeBadgeTranslate=array(
