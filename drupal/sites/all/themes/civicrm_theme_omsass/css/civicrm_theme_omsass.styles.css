@@ -1412,7 +1412,7 @@ tbody tr:hover {
 .l-content > .block > .block__content,
 .page-user form,
 .panel-flexible,
-.crm-container .crm-public {
+.crm-container.crm-public {
   padding: 0 5%; }
 
 /* line 543, ../sass/components/_content.scss */
