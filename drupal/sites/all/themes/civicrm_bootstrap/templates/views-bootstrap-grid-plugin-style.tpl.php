@@ -19,7 +19,7 @@
       <div class="row">
     <?php foreach ($items as $row): ?>
         <?php foreach ($row['content'] as $column): ?>
-          <div class="col col-md-6 col-lg-<?php print $column_type ?> text-center">
+          <div class="col col-md-<?php print $column_type ?> text-center">
             <?php print $column['content'] ?>
           </div>
         <?php endforeach ?>

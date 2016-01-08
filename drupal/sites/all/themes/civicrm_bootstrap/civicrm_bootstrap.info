@@ -14,12 +14,17 @@ regions[help]           = 'Help'
 regions[content]        = 'Content'
 regions[sidebar_first]  = 'Primary'
 regions[sidebar_second] = 'Secondary'
-regions[footer_menu]    = 'Footer Menu'
-regions[footer_social]  = 'Footer Social'
+regions[footer]         = 'Footer'
 
 regions[page_top]       = 'Page top'
 regions[page_bottom]    = 'Page bottom'
 
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Panels
+;;;;;;;;;;;;;;;;;;;;;
+
+plugins[panels][layouts] = layouts
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Stylesheets

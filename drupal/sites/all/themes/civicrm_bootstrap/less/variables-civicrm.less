@@ -2,15 +2,12 @@
 @import 'style.less';
 
 //Typography
-
 @font-size-base: 18px;
-
 @text-color: @CiviGrey;
 @font-family-sans-serif: "Source Sans Pro", Helvetica, Arial, sans-serif;
 @headings-font-weight: 700;
 @link-color: @CiviBlue;
 @link-hover-color: @CiviBlue;
-
 h1,
 h2,
 h3 {
@@ -21,6 +18,13 @@ html {
 }
 .CiviPage {
     background-color: @CiviWhite;
+}
+.lead {
+    font-weight: 400;
+}
+.linksOnColours {
+    color: @CiviWhite;
+    font-weight: 700;
 }
 
 //Blockquote
@@ -41,13 +45,16 @@ p.quote {
 //CiviCRM colour definitions
 @CiviWhite: #fff;
 @CiviBlue: #056186;
-@CiviGreen: #7dbd56;
-@CiviLightGrey: #ddd;
+@CiviGreen: darken(#7dbd56,5%);
+@CiviLightGrey: #eee;
 @CiviGrey: #6c696a;
 @CiviDarkGrey: #393536;
 @CiviBlack: #231f20;
 
 //TODO add @CiviPink
+//TODO add @CiviPurple?! (from the badges)
+@grid-float-breakpoint: 1000px;
+
 //Navbar
 @navbar-height: 80px;
 @navbar-default-bg: @CiviDarkGrey;
@@ -83,14 +90,25 @@ body.admin-menu .navbar-fixed-top {
     top: 21px;
 }
 
+//button-size
+.btn {
+    text-transform: uppercase;
+}
+@btn-font-weight: 700;
+
 //Breadcrumbs
 @breadcrumb-bg: @CiviBlack;
 @breadcrumb-color: @CiviWhite;
 @breadcrumb-separator: ">";
-.breadcrumb{
+.breadcrumb {
     margin: 0;
-    text-transform: uppercase;
-    font-size: 90%;
+    padding-left: 0;
+    padding-right: 0;
+    li {
+        text-transform: uppercase;
+        font-weight: 400;
+        font-size: 90%;
+    }
     .last {
         color: @CiviGreen;
     }
@@ -98,6 +116,7 @@ body.admin-menu .navbar-fixed-top {
 
 //Footer menu
 footer ul.menu {
+    padding: 0;
     li a {
         text-transform: uppercase;
         text-align: right;
@@ -109,7 +128,7 @@ footer ul.menu {
             text-decoration: none;
         }
     }
-    ul.menu{
+    ul.menu {
         padding-left: 0;
         li {
             line-height: 120%;
@@ -122,7 +141,37 @@ footer ul.menu {
             }
         }
     }
-}//Section stripes
+}
+
+//Grids
+.views-bootstrap-grid-plugin-style {
+    padding: 20px 0;
+    .col {
+        padding: 15px 0;
+        .views-field {
+            padding: 3px 0;
+        }
+    }
+}
+@vertical-major-margin: 60px;
+@vertical-minor-margin: 20px;
+/* For things like the space between headers and the edge of the header box*/
+h2.pane-title {
+    margin-top: @vertical-major-margin;
+}
+
+h3.pane-title {
+    margin-top: @vertical-minor-margin;
+}
+
+.pane-content {
+    margin-bottom: @vertical-major-margin;
+}
+.stripe-banner .pane-content {
+    margin-bottom: 0;
+}
+
+//Section stripes
 .CiviWhiteStripe {
     background-color: @CiviWhite;
     color: @CiviGrey;
@@ -131,12 +180,15 @@ footer ul.menu {
     background-color: @CiviBlue;
     color: @CiviWhite;
     a {
-        color: @CiviWhite;
+        .linksOnColours
     }
 }
 .CiviGreenStripe {
     background-color: @CiviGreen;
     color: @CiviWhite;
+    a {
+        .linksOnColours
+    }
 }
 .CiviGreyStripe {
     background-color: @CiviGrey;
@@ -146,7 +198,7 @@ footer ul.menu {
     background-color: @CiviDarkGrey;
     color: @CiviGrey;
     a {
-        color: @CiviWhite;
+        .linksOnColours
     }
 }
 .CiviBlackStripe {
@@ -156,6 +208,55 @@ footer ul.menu {
         color: @CiviWhite;
     }
 }
+.civi-banner-image {
+    width: 100%;
+    height: 300px;
+    h1,
+    .shadow {
+        color: @CiviWhite;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    }
+}
+@btn-default-color: @CiviDarkGrey;
+@btn-default-bg: @CiviWhite;
+@btn-default-border: @CiviWhite;
+.btn-default:hover {
+    background-color: @CiviWhite;
+    border-color: @CiviWhite;
+    text-decoration: underline;
+}
+.stripe-features,
+.stripe-news {
+    .CiviBlueStripe
+}
+.stripe-community-highlight {
+    .CiviGreenStripe
+}
+@media (min-width: @screen-md-min) {
+    .civi-banner-image {
+        width: 100%;
+        height: 400px;
+    }
+}
+@media (min-width: @screen-lg-min) {
+    .civi-banner-image {
+        width: 100%;
+        height: 600px;
+    }
+}
+
+//homepage
+.stripe-features {
+    text-align: center;
+}
+.stripe-get-started,
+.stripe-support-us,
+.stripe-get-involved {
+    h2, h3 {
+        text-align: center;
+    }
+}
+
 /*    
 
 //civicrm.org specific stylings
