@@ -72,9 +72,9 @@ function civicrm_org_providers_update_provider($contact_id){
             1 => 'partner-supporting',
             2 => 'partner-empowering',
             3 => 'partner-sustaining',
-            12 => 'partner-supporting',
+            12 => 'partner-sustaining',
             13 => 'partner-empowering',
-            14 => 'partner-sustaining'
+            14 => 'partner-supporting'
         );
         // print_r($membershipTypeBadgeTranslate[$membership['membership_type_id']]);exit;
         $partnerText = $membershipTypeBadgeTranslate[$membership['membership_type_id']];
