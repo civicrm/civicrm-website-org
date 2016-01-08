@@ -11,7 +11,7 @@ function civicrm_bootstrap_home_page_panels_layouts() {
     'icon' => 'home-page.png',
     'regions' => array(
       'banner' => t('Banner'),
-      'intro' => t('Intro'),
+      'highlight' => t('Highlight'),
       'features' => t('Features'),
       'get-started' => t('Get started'),
       'community-highlight' => t('Community highlight'),
