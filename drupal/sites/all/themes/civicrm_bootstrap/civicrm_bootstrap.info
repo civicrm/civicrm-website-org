@@ -9,13 +9,9 @@ base theme = bootstrap
 ;;;;;;;;;;;;;;;;;;;;;
 
 regions[navigation]     = 'Navigation'
-regions[jumbotron]      = 'Jumbotron'
 regions[help]           = 'Help'
 regions[content]        = 'Content'
-regions[sidebar_first]  = 'Primary'
-regions[sidebar_second] = 'Secondary'
 regions[footer]         = 'Footer'
-
 regions[page_top]       = 'Page top'
 regions[page_bottom]    = 'Page bottom'
 
