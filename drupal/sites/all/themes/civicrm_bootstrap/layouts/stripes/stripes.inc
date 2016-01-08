@@ -12,7 +12,7 @@ function civicrm_bootstrap_stripes_panels_layouts() {
     'regions' => array(
       'white' => t('White'),
       'blue' => t('Blue'),
-      'extra-white' => t('Extra white'),
+      'extra-white' => t('Second white'),
       'green' => t('Green'),
     ),
   );

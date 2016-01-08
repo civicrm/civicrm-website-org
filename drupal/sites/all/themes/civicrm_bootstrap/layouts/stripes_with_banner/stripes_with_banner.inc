@@ -13,7 +13,7 @@ function civicrm_bootstrap_stripes_with_banner_panels_layouts() {
       'banner' => t('Banner'),
       'white' => t('White'),
       'blue' => t('Blue'),
-      'extra-white' => t('Extra white'),
+      'extra-white' => t('Second white'),
       'green' => t('Green'),
     ),
   );
