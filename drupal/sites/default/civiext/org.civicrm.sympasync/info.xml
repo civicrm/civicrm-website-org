@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<extension key="org.civicrm.sympasync" type="module">
+  <file>sympasync</file>
+  <name>Sympa Sync</name>
+  <description>Integrate CiviCRM groups with Sympa mailing lists. Add an administration screen, "Administer: Communications: Sympa Sync" and unsubscribe handler.</description>
+  <license>LGPL-2.1+</license>
+  <maintainer>
+    <author>Tim Otten</author>
+    <email>totten@civicrm.org</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">http://github.com/civicrm/org.civicrm.sympasync</url>
+    <url desc="Documentation">http://github.com/civicrm/org.civicrm.sympasync</url>
+    <url desc="Support">http://github.com/civicrm/org.civicrm.sympasync</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/lgpl-2.1.html</url>
+  </urls>
+  <releaseDate>2015-10-15</releaseDate>
+  <version>0.1</version>
+  <compatibility>
+    <ver>4.6</ver>
+  </compatibility>
+  <comments></comments>
+  <civix>
+    <namespace>CRM/Sympasync</namespace>
+  </civix>
+</extension>

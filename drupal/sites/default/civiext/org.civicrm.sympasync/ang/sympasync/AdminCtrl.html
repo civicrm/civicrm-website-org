@@ -1,0 +1,79 @@
+<div class="crm-container">
+  <div crm-ui-debug="sqlCred"></div>
+  <div crm-ui-debug="staticGroups"></div>
+
+  <form name="sympaAdminForm" crm-ui-id-scope>
+
+    <div class="help">
+      <p>{{ts('Sympa is a powerful mailing-list application which allows subscribers to exchange messages with each other. It includes support for reading the subscriber list from a SQL database, such as CiviCRM.')}}</p>
+
+      <p>{{ts('For more instructions on how to integrate a CiviCRM group with a Sympa mailing-list, choose a CiviCRM group below.')}}</p>
+    </div>
+
+    <div class="crm-sympasync-admin-box">
+      <select crm-ui-select="{allowClear:true}" ng-model="selected.groupId" style="width: 95%">
+        <option value="">{{ts(' - select group -')}}</option>
+        <optgroup label="{{ts('Mailing Groups (Static)')}}">
+          <option ng-repeat="group in staticGroups" ng-value="group.id">{{group.title}}</option>
+        </optgroup>
+        <!-- TODO: Smart Mailing Groups -->
+      </select>
+    </div>
+
+    <div class="crm-sympasync-admin-box" crm-ui-accordion="{title: ts('Setup: MySQL Server')}" ng-show="selected.groupId">
+      <p>{{ts('If you have not already, open a SQL client (such as "phpMyAdmin" or "mysql") and create a user with permission to read the subscribers.')}}</p>
+
+      <!-- Note: Usernames and passwords are alphanumeric. $/ -->
+      <pre>
+      CREATE USER '{{sqlCred.db_user}}'@'localhost' IDENTIFIED BY '{{sqlCred.db_pass}}';
+      GRANT USAGE, SELECT ON {{sqlCred.db_name}}.{{sqlView}} TO '{{sqlCred.db_user}}'@'localhost'";
+
+      CREATE USER '{{sqlCred.db_user}}'@'%' IDENTIFIED BY '{{sqlCred.db_pass}}';
+      GRANT USAGE, SELECT ON {{sqlCred.db_name}}.{{sqlView}} TO '{{sqlCred.db_user}}'@'%'";
+      </pre>
+    </div>
+
+    <div class="crm-sympasync-admin-box" crm-ui-accordion="{title: ts('Setup: Sympa Data Source')}" ng-show="selected.groupId">
+
+      <p>{{ts('In the Sympa settings for your mailing list, navigate to "Change Settings: Data Sources" and configure a MySQL data source:')}}</p>
+
+      <div class="crm-block">
+        <div class="crm-group">
+          <div crm-ui-field="{title: 'database type'}">mysql</div>
+          <div crm-ui-field="{title: 'remote host'}">{{sqlCred.db_host}}</div>
+          <div crm-ui-field="{title: 'database port'}">{{sqlCred.db_port}}</div>
+          <div crm-ui-field="{title: 'database name'}">{{sqlCred.db_name}}</div>
+          <div crm-ui-field="{title: 'remote user'}">{{sqlCred.db_user}}</div>
+          <div crm-ui-field="{title: 'remote password'}">{{sqlCred.db_pass}}</div>
+          <div crm-ui-field="{title: 'sql query'}">
+            <pre>SELECT email FROM {{sqlView}} WHERE group_id = {{selected.groupId}}</pre>
+          </div>
+        </div>
+      </div>
+
+      <p><em>({{ts('Note: If Sympa and CiviCRM are on different servers, then you may need to adjust the host and port.')}})</em></p>
+    </div>
+
+    <div class="crm-sympasync-admin-box" crm-ui-accordion="{title: ts('Setup: Subscriber management')}" ng-show="selected.groupId">
+      <p>{{ts('To keep the subscriber lists synchronized in CiviCRM and Sympa, it helps to consistently manage subscribers through CiviCRM. This requires additional configuration in Sympa.')}}</p>
+
+      <p>{{ts('You may restrict access to Sympa\'s built-in "Subscribe" and "Unsubscribe" features by navigating to "Change Settings: Permissions". Review permissions for "subscribe", "add", "unsubscribe", and "del".')}}</p>
+
+      <p>{{ts('By default, all messages sent through Sympa include unsubscribe instructions in the footer. You may change these instructions to reference CiviCRM.')}}</p>
+
+      <p>{{ts('Navigate to "Edit Templates" and open the message footer. Replace the Sympa unsubscribe address with one of these URLs:')}}</p>
+
+      <pre>
+      {{unsubscribeBaseUrl}}?gid={{selected.groupId}}
+
+      or
+
+      {{unsubscribeBaseUrl}}?gid={{selected.groupId}}&email=[% user.email | uri %]
+      </pre>
+
+
+    </div>
+
+  </form>
+
+</div>
