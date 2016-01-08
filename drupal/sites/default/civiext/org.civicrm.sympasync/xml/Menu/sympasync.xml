@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/sympa/unsubscribe</path>
+    <page_callback>CRM_Sympasync_Form_Unsubscribe</page_callback>
+    <title>Unsubscribe</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/sympa/unsubscribe/confirm</path>
+    <page_callback>CRM_Sympasync_Page_UnsubscribeConfirm</page_callback>
+    <title>UnsubscribeConfirm</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+</menu>
