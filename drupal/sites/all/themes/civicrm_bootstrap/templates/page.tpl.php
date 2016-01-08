@@ -76,6 +76,7 @@
 <div class="CiviPage">
 <header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
   <div class="container">
+    <div class="row">
     <div class="navbar-header">
       <?php if ($logo): ?>
       <a class="logo navbar-btn pull-left" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
@@ -98,7 +99,7 @@
 
     <?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
       <div class="navbar-collapse collapse">
-        <nav role="navigation">
+        <nav role="navigation" id="navigation">
           <?php if (!empty($primary_nav)): ?>
             <?php print render($primary_nav); ?>
           <?php endif; ?>
@@ -112,6 +113,18 @@
       </div>
     <?php endif; ?>
   </div>
+  </div>
+  
+  <?php if (!empty($breadcrumb)): ?>
+  <div class="CiviBlackStripe">
+      <div class="container">
+          <div class="row">
+              <?php print $breadcrumb; ?>
+           </div>
+      </div>
+  </div>
+  <?php endif;?>
+
 </header>
 
 
@@ -123,53 +136,44 @@
 </div>
 <?php endif;?>
 
-<!-- I need the jumbotron to be outside the container -->
-<?php if (!empty($page['jumbotron'])): ?>
-  <div class="jumbotron">
-      <div class="container">
-          <?php print render($page['jumbotron']); ?>
-      </div>
-  </div>
-<?php endif; ?>
-
-<div class="container">
 
   <header role="banner" id="page-header" class="CiviGreyStripe">
     <?php print render($page['header']); ?>
   </header> <!-- /#page-header -->
 
-  <div class="row">
 
-    <section<?php print $content_column_class; ?>>
-      <a id="main-content"></a>
-      <?php print render($title_prefix); ?>
-      <?php if (!empty($title)): ?>
-          <div class="page-header">
-        <h1><?php print $title; ?></h1>
-          </div>
-      <?php endif; ?>
-      <?php print render($title_suffix); ?>
-      <?php print $messages; ?>
-      <?php if (!empty($tabs)): ?>
-        <?php print render($tabs); ?>
-      <?php endif; ?>
-      <?php if (!empty($page['help'])): ?>
-        <?php print render($page['help']); ?>
-      <?php endif; ?>
-      <?php if (!empty($action_links)): ?>
-        <ul class="action-links"><?php print render($action_links); ?></ul>
-      <?php endif; ?>
-      <?php print render($page['content']); ?>
-    </section>
+        <section>
+            <div class="container">
+                <div class="row">
+          <a id="main-content"></a>
+          <?php print render($title_prefix); ?>
+          <?php if (!empty($title)): ?>
+              <div class="page-header">
+            <h1><?php print $title; ?></h1>
+              </div>
+          <?php endif; ?>
+          <?php print render($title_suffix); ?>
+          <?php print $messages; ?>
+          <?php if (!empty($tabs)): ?>
+            <?php print render($tabs); ?>
+          <?php endif; ?>
+          <?php if (!empty($page['help'])): ?>
+            <?php print render($page['help']); ?>
+          <?php endif; ?>
+          <?php if (!empty($action_links)): ?>
+            <ul class="action-links"><?php print render($action_links); ?></ul>
+          <?php endif; ?>
+      </div>
+      </div>
+          <?php print render($page['content']); ?>
+        </section>
 
-  </div>
   
-</div>
 
 <footer class="footer CiviDarkGreyStripe">
     <div class="container">
         <div class="row">
-             <?php print render($page['footer_menu']);?>
+             <?php print render($page['footer']);?>
         </div>
   </div>
 </footer>
