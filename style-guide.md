@@ -7,7 +7,7 @@ These guidelines outline the bits of bootstrap that we prefer to use in most sit
 # Making stuff stand out
 
 * The .lead class can be used to make text stand out (http://getbootstrap.com/css/#lead-body-copy)
-* The <blockquote> should be used for any quotes from people (http://getbootstrap.com/css/#type-blockquotes)
+* The blockquote tag should be used for any quotes from people (http://getbootstrap.com/css/#type-blockquotes)
 * Bootstrap's button classes (http://getbootstrap.com/css/#buttons) are available for inviting clicks
 * http://getbootstrap.com/css/#small-text can be used for fine print.
 
