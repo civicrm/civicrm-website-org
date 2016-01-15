@@ -1,0 +1,14 @@
+/* This is a fix for ensuring Fontello icons display properly. */
+.icon.fontello {
+  background: none;
+  display: inline-block;
+  height: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  vertical-align: inherit;
+  width: auto;
+  /* IE 7 Hack for inline-block */
+  *display: inline; 
+  *zoom: 1;
+}
