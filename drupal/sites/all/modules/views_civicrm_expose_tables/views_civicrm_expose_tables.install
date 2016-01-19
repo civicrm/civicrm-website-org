@@ -1,0 +1,6 @@
+<?php
+
+function views_civicrm_expose_tables_uninstall() {
+  variable_del('views_civicrm_expose_tables_prefix_tables'); 
+  variable_del('views_civicrm_expose_tables_civicrm_database'); 
+}

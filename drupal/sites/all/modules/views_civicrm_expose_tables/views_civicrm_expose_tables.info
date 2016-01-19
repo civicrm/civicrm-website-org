@@ -1,0 +1,14 @@
+name = Views CiviCRM Expose Tables
+description = Exposes all CiviCRM DB tables to Views
+core = 7.x
+version = "7.x-1.0beta1"
+project = "Views CiviCRM Expose Tables"
+
+package = CiviCRM
+
+configure = admin/structure/views/civicrm_expose_tables
+
+dependencies[] = views
+dependencies[] = civicrm
+dependencies[] = date_views
+
