@@ -1,0 +1,11 @@
+name = Block Conditional Visibility by URI Query Parameters
+description = Control block visibility by URI Query Parameters.
+core = 7.x
+dependencies[] = block
+
+; Information added by drupal.org packaging script on 2013-08-29
+version = "7.x-1.2"
+core = "7.x"
+project = "block_query"
+datestamp = "1377810367"
+

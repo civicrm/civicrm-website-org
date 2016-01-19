@@ -1,0 +1,242 @@
+<?php
+/**
+ * @file
+ * Controls block visibility by URI Query Parameters
+ */
+
+/**
+ * Implements hook_init().
+ */
+function block_query_init() {
+  if (!drupal_is_cli()) {
+    if (module_exists('context')) {
+      $plugin = context_get_plugin('condition', 'block_query');
+      if (!empty($plugin)) {
+        $plugin->execute();
+      }
+    }
+  }
+}
+
+/**
+ * @file
+ * Controls block visibility by URI Query Parameters
+ */
+
+/**
+ * Implements hook_form_FORMID_alter().
+ *
+ * Adds term specific visibility options to add block form.
+ *
+ * @see block_add_block_form()
+ */
+function block_query_form_block_add_block_form_alter(&$form, &$form_state) {
+  block_query_form_block_admin_configure_alter($form, $form_state);
+}
+
+/**
+ * Implements hook_form_FORMID_alter().
+ *
+ * Adds term specific visibility options to block configuration form.
+ *
+ * @see block_admin_configure()
+ */
+function block_query_form_block_admin_configure_alter(&$form, &$form_state) {
+  $module = $form['module']['#value'];
+  $delta = $form['delta']['#value'];
+
+  $block = db_query("SELECT visibility, queries FROM {block_query} WHERE module = :module AND delta = :delta", array(
+    ':module' => $form['module']['#value'],
+    ':delta' => $form['delta']['#value'],
+  ))->fetchObject();
+   
+
+
+  // Query visibility.
+  $form['visibility']['query'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Queries'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#group' => 'visibility',
+    '#weight' => 20,
+  );
+
+  $options = array(
+    BLOCK_VISIBILITY_NOTLISTED => t('All pages except those listed'),
+    BLOCK_VISIBILITY_LISTED => t('Only the listed pages'),
+  );
+  $description = t("Specify pages by using their queries. Enter one query per line.  Since urls are <a href='http://www.php.net/manual/en/function.urldecode.php'>urldecode</a>d, be careful to use a decoded url. For example, a + is interpreted as a space. If <a href='https://drupal.org/project/context_respect'>Context Respect</a> is enabled, you must select \"Context Ignore Pages\" to ignore these settings in the context. Example query: visibility=show");
+  $title = t('Queries');
+
+  $form['visibility']['query']['query_visibility'] = array(
+    '#type' => 'radios',
+    '#title' => t('Show block on specific pages'),
+    '#options' => $options,
+    '#default_value' => isset($block->visibility) ? $block->visibility : BLOCK_VISIBILITY_NOTLISTED,
+  );
+  $form['visibility']['query']['queries'] = array(
+    '#type' => 'textarea',
+    '#title' => '<span class="element-invisible">' . $title . '</span>',
+    '#default_value' => isset($block->queries) ? $block->queries : '',
+    '#description' => $description,
+  );
+
+  $form['#submit'][] = 'block_query_form_block_admin_configure_submit';
+}
+
+/**
+ * Form submit handler for block configuration form.
+ *
+ * @see block_query_form_block_admin_configure_alter()
+ */
+function block_query_form_block_admin_configure_submit($form, &$form_state) {
+  db_delete('block_query')
+    ->condition('module', $form_state['values']['module'])
+    ->condition('delta', $form_state['values']['delta'])
+    ->execute();
+
+  $query = db_insert('block_query')
+    ->fields(array(
+      'module',
+      'delta',
+      'visibility',
+      'queries',
+  ));
+
+  $query->values(array(
+     'module' => $form_state['values']['module'],
+     'delta' => $form_state['values']['delta'],
+     'visibility' => $form_state['values']['query_visibility'],
+     'queries' => $form_state['values']['queries'],
+      ));
+  $query->execute();
+}
+
+/**
+ * Implements hook_block_list_alter().
+ *
+ * Check the term specific visibilty settings.
+ * Remove the block if the visibility conditions are not met.
+ */
+function block_query_block_list_alter(&$blocks) {
+  global $theme_key;
+
+  // Build an array of terms for each block.
+  $block_queries = array();
+  $result = db_query('SELECT module, delta, visibility, queries FROM {block_query}');
+  foreach ($result as $record) {
+    $block_queries[$record->module][$record->delta] = $record->queries;
+    $block_visibility[$record->module][$record->delta] = $record->visibility;
+  }
+  foreach ($blocks as $key => $block) {
+    if (!empty($block_queries[$block->module][$block->delta])) {
+
+      // Convert path to lowercase. This allows comparison of the same query
+      // with different case.
+      $page_match = FALSE;
+      $queries = drupal_strtolower($block_queries[$block->module][$block->delta]);
+
+      foreach ($_GET as $getkey => $value) {
+        if (!is_array($getkey) and !is_array($value)) {
+          $getkeylower = drupal_strtolower($getkey);
+          $valuelower = drupal_strtolower($value);
+
+          if ($getkeylower != 'q' && !$page_match) {
+            $page_match = drupal_match_path($getkeylower . '=' . $valuelower, $queries);
+          }
+        }
+      }
+
+      // When $block->visibility has a value of 0 (BLOCK_VISIBILITY_NOTLISTED),
+      // the block is displayed on all pages except those listed in
+      // $block->pages.
+      //
+      // When set to 1 (BLOCK_VISIBILITY_LISTED), it is displayed only on those
+      // pages listed in $block->pages.
+      $page_match = !($block_visibility[$block->module][$block->delta] xor $page_match);
+      if (!$page_match) {
+        unset($blocks[$key]);
+      }
+    }
+  }
+}
+
+/**
+ * Adds to the context of the block query from array plugins.
+ */
+function block_query_context_plugins() {
+  $plugins = array();
+  $plugins['context_condition_block_query'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'block_query'),
+      'file' => 'context_condition_block_query.inc',
+      'class' => 'context_condition_block_query',
+      'parent' => 'context_condition',
+    ),
+  );
+  return $plugins;
+}
+
+/**
+ * Creates a registry for the block query context that matched.
+ *
+ * @return array
+ *   Returns an array of an array of an array of bars for the registry.
+ */
+function block_query_context_registry() {
+  return array(
+    'conditions' => array(
+      'block_query' => array(
+        'title' => t('Url Query'),
+        'plugin' => 'context_condition_block_query',
+        'description' => t('Set this context when any of the queries above matches a url query. Put each query on a separate line. You can use the "*" character as a wildcard and <code>~</code> to exclude one or more url queries. Use &lt;front&gt; for the site front page.  Example: arg=somevalue'),
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_context_page_condition().
+ */
+function block_query_context_page_condition() {
+  if ($plugin = context_get_plugin('condition', 'block_query')) {
+    $plugin->execute();
+  }
+}
+
+function block_query_context_respect_hide_block($block) {
+  $overrides = variable_get('context_respect_override_page', false);
+  if($overrides) {
+    foreach($overrides as $or_bid => $or_val) {
+      if($or_bid == $block->bid) {
+        return false;
+      }
+    }
+  }
+
+  $record = db_query("SELECT module, delta, visibility, queries FROM {block_query} b where b.delta = :delta and b.module = :module", array(':delta' => $block->delta, ':module' => $block->module))->fetch();
+
+   if (!empty($record->queries)) {
+      // Convert path to lowercase. This allows comparison of the same query
+      // with different case.
+      $page_match = false;
+      $queries = drupal_strtolower($record->queries);
+
+      foreach ($_GET as $getkey => $value) {
+        if (!is_array($getkey) and !is_array($value)) {
+          $getkeylower = drupal_strtolower($getkey);
+          $valuelower = drupal_strtolower($value);
+
+          if ($getkeylower != 'q' && !$page_match) {
+            $page_match = drupal_match_path($getkeylower . '=' . $valuelower, $queries);
+          }
+        }
+      }
+
+      $page_match = !($record->visibility xor $page_match);
+      if (!$page_match) {
+        return true;  
+      }
+   }
+}
