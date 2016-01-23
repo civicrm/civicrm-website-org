@@ -164,9 +164,19 @@
             <ul class="action-links"><?php print render($action_links); ?></ul>
           <?php endif; ?>
       </div>
-      </div>
-          <?php print render($page['content']); ?>
-        </section>
+    </div>
+          <?php if($panel_page): ?>
+                  <?php print render($page['content']); ?>
+          <?php else: ?>
+              <div class="container">
+                <div class="row">
+                  <?php print render($page['content']); ?>
+                </div>
+              </div>
+          <?php endif; ?>
+          
+          
+      </section>
 
   
 

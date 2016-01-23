@@ -33,9 +33,20 @@ function civicrm_bootstrap_menu_tree__menu_block__menu_primary_menu($variables)
     return '<ul class="menu">'.$variables['tree'].'</ul>';
 }
 
-function civicrm_bootstrap_preprocess_page(&$variables)
+function civicrm_bootstrap_preprocess_html(&$variables)
 {
-    $variables['content_column_class'] = ' class="col-sm-12"';
+    // drupal_add_css('sites/default/files/wackymcdoo.css');
+
+    if(page_manager_get_current_page()){
+        $variables['classes_array'][]='panel-page';
+    }
+}
+
+function civicrm_bootstrap_preprocess_page(&$variables){
+    if(page_manager_get_current_page()){
+        $variables['panel_page']=true;
+    }
+    
 }
 
 function civicrm_bootstrap_preprocess_region(&$variables)
