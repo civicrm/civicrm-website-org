@@ -50,6 +50,10 @@ p.quote {
 @CiviGrey: #6c696a;
 @CiviDarkGrey: #393536;
 @CiviBlack: #231f20;
+@CiviPink:#de447a;
+@CiviTeal:#00969b;
+
+
 
 //TODO add @CiviPink
 //TODO add @CiviPurple?! (from the badges)
@@ -115,29 +119,38 @@ body.admin-menu .navbar-fixed-top {
 }
 
 //Footer menu
-footer ul.menu {
+.footer {
+    border-color: @CiviDarkGrey;
+    margin-top:0;
     padding: 0;
-    li a {
-        text-transform: uppercase;
-        text-align: right;
-        font-weight: 700;
-        color: @CiviLightGrey;
-        font-size: 110%;
-        &:hover {
-            color: @CiviWhite;
-            text-decoration: none;
-        }
+    .container{
+        margin-top:@vm;
+        margin-bottom:@vm;
     }
     ul.menu {
-        padding-left: 0;
-        li {
-            line-height: 120%;
-            margin-bottom: 2px;
-            margin-top: 2px;
-            a {
-                font-size: 80%;
-                font-weight: 400;
-                text-transform: none;
+        padding: 0;
+        li a {
+            text-transform: uppercase;
+            text-align: right;
+            font-weight: 700;
+            color: @CiviLightGrey;
+            font-size: 110%;
+            &:hover {
+                color: @CiviWhite;
+                text-decoration: none;
+            }
+        }
+        ul.menu {
+            padding-left: 0;
+            li {
+                line-height: 120%;
+                margin-bottom: 2px;
+                margin-top: 2px;
+                a {
+                    font-size: 80%;
+                    font-weight: 400;
+                    text-transform: none;
+                }
             }
         }
     }
@@ -153,19 +166,35 @@ footer ul.menu {
         }
     }
 }
-@vertical-major-margin: 60px;
-@vertical-minor-margin: 20px;
+@vm: 40px;
+@vsm: 20px;
 /* For things like the space between headers and the edge of the header box*/
+
+.page-header{
+    border-bottom: none;
+    margin-top: @vm;
+    margin-bottom: @vm;
+    padding-bottom: 0;
+    h1{
+        margin-top: @vm;
+        margin-bottom: @vm;
+    }
+}
+
+
 h2.pane-title {
-    margin-top: @vertical-major-margin;
+    margin-top: @vm;
 }
-
 h3.pane-title {
-    margin-top: @vertical-minor-margin;
+    margin-top: @vsm;
 }
-
 .pane-content {
-    margin-bottom: @vertical-major-margin;
+    > p:first-child, > h2:first-child{
+        margin-top: @vm;        
+    }
+    > p:last-child, > h2:last-child{
+        margin-bottom: @vm;
+    }
 }
 .stripe-banner .pane-content {
     margin-bottom: 0;
@@ -226,21 +255,21 @@ h3.pane-title {
     text-decoration: underline;
 }
 .stripe-features,
-.stripe-news {
+.stripe-news,
+.stripe-blue {
     .CiviBlueStripe
 }
-.stripe-community-highlight {
+.stripe-community-highlight,
+.stripe-green {
     .CiviGreenStripe
 }
 @media (min-width: @screen-md-min) {
     .civi-banner-image {
-        width: 100%;
         height: 400px;
     }
 }
 @media (min-width: @screen-lg-min) {
     .civi-banner-image {
-        width: 100%;
         height: 600px;
     }
 }
@@ -252,7 +281,8 @@ h3.pane-title {
 .stripe-get-started,
 .stripe-support-us,
 .stripe-get-involved {
-    h2, h3 {
+    h2,
+    h3 {
         text-align: center;
     }
 }
