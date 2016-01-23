@@ -50,10 +50,8 @@ p.quote {
 @CiviGrey: #6c696a;
 @CiviDarkGrey: #393536;
 @CiviBlack: #231f20;
-@CiviPink:#de447a;
-@CiviTeal:#00969b;
-
-
+@CiviPink: #de447a;
+@CiviTeal: #00969b;
 
 //TODO add @CiviPink
 //TODO add @CiviPurple?! (from the badges)
@@ -121,11 +119,11 @@ body.admin-menu .navbar-fixed-top {
 //Footer menu
 .footer {
     border-color: @CiviDarkGrey;
-    margin-top:0;
+    margin-top: 0;
     padding: 0;
-    .container{
-        margin-top:@vm;
-        margin-bottom:@vm;
+    .container {
+        margin-top: @vm;
+        margin-bottom: @vm;
     }
     ul.menu {
         padding: 0;
@@ -169,19 +167,16 @@ body.admin-menu .navbar-fixed-top {
 @vm: 40px;
 @vsm: 20px;
 /* For things like the space between headers and the edge of the header box*/
-
-.page-header{
+.page-header {
     border-bottom: none;
     margin-top: @vm;
     margin-bottom: @vm;
     padding-bottom: 0;
-    h1{
+    h1 {
         margin-top: @vm;
         margin-bottom: @vm;
     }
 }
-
-
 h2.pane-title {
     margin-top: @vm;
 }
@@ -189,10 +184,14 @@ h3.pane-title {
     margin-top: @vsm;
 }
 .pane-content {
-    > p:first-child, > h2:first-child{
-        margin-top: @vm;        
+    p:first-child,
+    h2:first-child,
+    h3:first-child {
+        margin-top: @vm;
     }
-    > p:last-child, > h2:last-child{
+    p:last-child,
+    h2:last-child,
+    h3:last-child {
         margin-bottom: @vm;
     }
 }
