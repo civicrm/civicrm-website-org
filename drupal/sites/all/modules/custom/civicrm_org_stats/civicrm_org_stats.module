@@ -115,9 +115,10 @@ function civicrm_org_stats_tokens($type, $tokens, array $data = array(), array $
                         break;
                     case 'member-count':
                         $value = civicrm_org_stats_get_member_count(array(1,2,3,12,13,14));
+                        break;
                     case 'partner-count':
                         $value = civicrm_org_stats_get_member_count(array(4,5,9,15,16,17));
-
+                        break;
 
                 }
                 $replacements[$original] = $value;
