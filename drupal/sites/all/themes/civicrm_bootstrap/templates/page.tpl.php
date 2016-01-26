@@ -73,8 +73,11 @@
  * @ingroup themeable
  */
 ?>
+
 <div class="CiviPage">
-<header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
+<header id="navbar" role="banner" class="<?php print $navbar_classes; ?> <?php if (!empty($breadcrumb)) {
+    print 'navbar-crumbs';
+}?>">
   <div class="container">
     <div class="row">
     <div class="navbar-header">
@@ -114,27 +117,20 @@
     <?php endif; ?>
   </div>
   </div>
-  
+
   <?php if (!empty($breadcrumb)): ?>
   <div class="CiviBlackStripe">
       <div class="container">
           <div class="row">
               <?php print $breadcrumb; ?>
-           </div>
+          </div>
       </div>
   </div>
   <?php endif;?>
-
+  
 </header>
 
 
-<?php if (!empty($breadcrumb)): ?>
-<div class="CiviBlackStripe">
-    <div class="container">
-         <?php print $breadcrumb; ?>
-    </div>
-</div>
-<?php endif;?>
 
 
   <header role="banner" id="page-header" class="CiviGreyStripe">
@@ -165,11 +161,11 @@
           <?php endif; ?>
       </div>
     </div>
-          <?php if($panel_page): ?>
+          <?php if ($panel_page): ?>
                   <?php print render($page['content']); ?>
           <?php else: ?>
               <div class="container">
-                <div class="row">
+                <div class="row page-content">
                   <?php print render($page['content']); ?>
                 </div>
               </div>
