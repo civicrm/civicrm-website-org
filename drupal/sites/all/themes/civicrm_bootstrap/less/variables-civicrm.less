@@ -1,4 +1,4 @@
-// out: ../css/style.css, compress: true , sourcemap: true
+// out: ../css/style.css, compress: true
 @import 'style.less';
 
 /* # GOBAL DESIGN AND LAYOUT # */
@@ -211,17 +211,19 @@ body.admin-menu .navbar-fixed-top {
         color: @CiviLightGrey;
         font-size: 20px;
         &:hover {
-            text-decoration: underline;
+            color: @CiviWhite;
+            text-decoration: none;
+
         }
     }
     ul.menu {
         padding-left: 0;
         li {
-            line-height: 120%;
-            margin-bottom: 2px;
-            margin-top: 2px;
+            line-height: 110%;
+            margin-bottom: 6px;
+            margin-top: 6px;
             a {
-                font-size: 14px;
+                font-size: 15px;
                 font-weight: 400;
                 text-transform: none;
             }
@@ -291,7 +293,7 @@ h3.pane-title {
 }
 
 //But sometimes we don't want any padding
-.stripe-banner {
+.stripe-banner, .stripe-community-highlight {
     padding-bottom: 0;
 }
 
@@ -301,36 +303,32 @@ h3.pane-title {
 }
 
 //Define colours for stripes
-.CiviWhiteStripe {
-    background-color: @CiviWhite;
-    color: @CiviGrey;
-}
-.CiviBlueStripe {
+.stripe-blue {
     background-color: @CiviBlue;
     color: @CiviWhite;
     a {
         .linksOnColours
     }
 }
-.CiviGreenStripe {
+.stripe-green {
     background-color: @CiviGreen;
     color: @CiviWhite;
     a {
         .linksOnColours
     }
 }
-.CiviGreyStripe {
+.stripe-grey {
     background-color: @CiviGrey;
     color: @CiviWhite;
 }
-.CiviDarkGreyStripe {
+.stripe-darkgrey {
     background-color: @CiviDarkGrey;
     color: @CiviGrey;
     a {
         .linksOnColours
     }
 }
-.CiviBlackStripe {
+.stripe-black {
     background-color: @CiviBlack;
     color: @CiviGrey;
     a {
@@ -347,24 +345,13 @@ h3.pane-title {
     text-decoration: underline;
 }
 .stripe-features,
-.stripe-news,
-.stripe-blue {
-    .CiviBlueStripe
+.stripe-news{
+    .stripe-blue
 }
-.stripe-community-highlight,
-.stripe-green {
-    .CiviGreenStripe
+.stripe-community-highlight{
+    .stripe-green
 }
-@media (min-width: @screen-md-min) {
-    .civi-banner-image {
-        height: 400px;
-    }
-}
-@media (min-width: @screen-lg-min) {
-    .civi-banner-image {
-        height: 600px;
-    }
-}
+
 
 /* ### COMMENTS ### */
 
@@ -378,21 +365,9 @@ h3.pane-title {
 
 /* ## HOMEPAGE ## */
 
-/* ### IMAGE BANNER ### */
-
-.civi-banner-image {
-    width: 100%;
-    height: 300px;
-    h1,
-    .shadow {
-        color: @CiviWhite;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-    }
-}
-
 /* ### HOMEPAGE STRIPES ### */
 
-.stripe-features {
+.stripe-features, .stripe-partners {
     text-align: center;
 }
 .stripe-get-started,
@@ -406,7 +381,40 @@ h3.pane-title {
 
 /* ### PARTNERS AND CONTRIBUTORS BLOCK ## */
 
-/* ### BLOG ## */
+.front .view-partners-and-contributors {
+    .views-field-image-URL{
+        max-height: 250px;
+        max-width: 500px;
+        margin: @vsm auto;
+        img{
+            width:100%;
+            height:auto;
+        }
+    }
+}
+
+/* ### IMAGE BANNER ### */
+
+.civi-banner-image {
+    width: 100%;
+    height: 300px;
+    h1,
+    .shadow {
+        color: @CiviWhite;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    }
+}
+@media (min-width: @screen-md-min) {
+    .civi-banner-image {
+        height: 400px;
+    }
+}
+@media (min-width: @screen-lg-min) {
+    .civi-banner-image {
+        height: 600px;
+    }
+}
+/* ## BLOG ## */
 .view-blog-news .views-row, .node-teaser{
     .horizontal-spacer;
 }

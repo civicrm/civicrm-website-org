@@ -119,7 +119,7 @@
   </div>
 
   <?php if (!empty($breadcrumb)): ?>
-  <div class="CiviBlackStripe">
+  <div class="stripe-black">
       <div class="container">
           <div class="row">
               <?php print $breadcrumb; ?>
@@ -176,7 +176,7 @@
 
   
 
-<footer class="footer CiviDarkGreyStripe">
+<footer class="footer stripe-darkgrey">
     <div class="container">
         <div class="row">
              <?php print render($page['footer']);?>
