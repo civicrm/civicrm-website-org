@@ -17,9 +17,11 @@
  */
 foreach ($content as $p => $c) {
     //print "<div> {$c} </div>";
-    if ($p == 'banner') {
-        print "<div class=\"stripe stripe-{$p}\" id=\"{$p}\"> {$c} </div>";
-    } else {
-        print "<div class=\"stripe stripe-{$p}\" id=\"{$p}\"> <div class=\"container\"> <div class=\"row\"> {$c} </div> </div> </div>";
+    if ($c) {
+        if ($p == 'banner') {
+            print "<div class=\"stripe stripe-{$p}\" id=\"{$p}\"> {$c} </div>";
+        } else {
+            print "<div class=\"stripe stripe-{$p}\" id=\"{$p}\"> <div class=\"container\"> <div class=\"row\"> {$c} </div> </div> </div>";
+        }
     }
 }
