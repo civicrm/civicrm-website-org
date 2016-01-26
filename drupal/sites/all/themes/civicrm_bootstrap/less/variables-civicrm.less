@@ -85,10 +85,29 @@ h2, h3 {
 /* ## BUTTONS, ETC ##*/
 // Make everything that was round, square
 @border-radius-base: 0;
+@border-radius-large: 0;
+@border-radius-small: 0;
+
 .btn {
     text-transform: uppercase;
 }
 @btn-font-weight: 700;
+.field-name-field-button-link a{
+    .btn;
+    .btn-primary;
+    .btn-lg;
+    .btn-block;
+}
+
+@btn-default-color: @CiviDarkGrey;
+@btn-default-bg: @CiviWhite;
+@btn-default-border: @CiviWhite;
+.btn-default:hover {
+    background-color: @CiviWhite;
+    border-color: @CiviWhite;
+    text-decoration: underline;
+}
+
 
 // TODO buttons on blue
 
@@ -336,14 +355,6 @@ h3.pane-title {
     }
 }
 
-@btn-default-color: @CiviDarkGrey;
-@btn-default-bg: @CiviWhite;
-@btn-default-border: @CiviWhite;
-.btn-default:hover {
-    background-color: @CiviWhite;
-    border-color: @CiviWhite;
-    text-decoration: underline;
-}
 .stripe-features,
 .stripe-news{
     .stripe-blue
