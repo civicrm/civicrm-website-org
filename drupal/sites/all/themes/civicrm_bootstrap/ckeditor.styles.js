@@ -13,7 +13,7 @@ if(typeof(CKEDITOR) !== 'undefined') {
             { name : 'Heading 2'		, element : 'h2' },
             { name : 'Heading 3'		, element : 'h3' },
             { name : 'Paragraph'		, element : 'p' },
-            { name : 'Quote'			, element : 'p', attributes : { 'class' : 'quote' } },
+            { name : 'Blockquote'		, element : 'blockquote' },
             { name : 'Code'			, element : 'pre' },
     ]);
 }
