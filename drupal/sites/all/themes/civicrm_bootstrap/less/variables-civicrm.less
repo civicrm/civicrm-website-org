@@ -21,6 +21,7 @@
 // Override bootstrap colours with CiviCRM colours
 @brand-primary: @CiviBlue;
 @brand-success: @CiviGreen;
+@brand-info: @brand-primary;
 
 @CiviLine: 4px solid @CiviLightGrey;
 
@@ -425,6 +426,13 @@ h3.pane-title {
         height: 600px;
     }
 }
+
+/* ### HOMEPAGE STATS ### */
+
+.pane-homepage-stats{
+    margin-top: @vm;
+}
+
 /* ## BLOG ## */
 .view-blog-news .views-row, .node-teaser{
     .horizontal-spacer;
@@ -445,6 +453,26 @@ h3.pane-title {
         padding-left: 0px;
 
     }
+}
+
+/* ## PROVIDERS ## */
+
+.view-service-providers .views-row, .node-teaser{
+    .horizontal-spacer;
+}
+.view-service-providers .views-row-first{
+    .horizontal-spacer-first;
+}
+
+/* ## CIVICRM FORMS ## */
+
+#crm-container.crm-public .label{
+    color: @text-color;
+    white-space: normal;
+    line-height: 120%;
+    padding-top: 18px;
+    padding-right: 0px;
+    
 }
 
 // .node-readmore a{
