@@ -1,9 +1,52 @@
-// out: ../css/style.css, compress: true 
+// out: ../css/style.css, compress: true , sourcemap: true
 @import 'style.less';
 
-//Typography
+/* # GOBAL DESIGN AND LAYOUT # */
+
+/* ## COLOURS ## */
+// Define CiviCRM colours
+
+@CiviWhite: #fff;
+@CiviLightGrey: lighten(@CiviGrey, 45%);
+@CiviGrey: #70696a;
+@CiviDarkGrey: darken(@CiviGrey, 22%);
+@CiviBlack: darken(@CiviGrey, 40%);
+
+@CiviBlue: #056186;
+@CiviGreen: darken(#7dbd56,5%);
+@CiviPink: #de447a;
+@CiviTeal: #00969b;
+
+// TODO add @CiviPurple?! (from the badges)
+// Override bootstrap colours with CiviCRM colours
+@brand-primary: @CiviBlue;
+@brand-success: @CiviGreen;
+
+@CiviLine: 4px solid @CiviLightGrey;
+
+// @brand-danger: #d9534f;
+// @brand-info: #5bc0de;
+// @brand-warning: #f0ad4e;
+// This ensures that the don't a white border at the bottom of any short pages
+html {
+    background-color: @CiviDarkGrey;
+}
+.CiviPage {
+    background-color: @CiviWhite;
+}
+
+.horizontal-spacer{
+    margin-top: @vsm;
+    border-top: @CiviLine;
+}
+.horizontal-spacer-first{
+    margin-top: 0px;
+    border-top: none;
+}
+
+/* ## TYPOGRAPHY ## */
 @font-size-base: 18px;
-@text-color: @CiviGrey;
+@text-color: darken(@CiviGrey, 5%);;
 @font-family-sans-serif: "Source Sans Pro", Helvetica, Arial, sans-serif;
 @headings-font-weight: 700;
 @link-color: @CiviBlue;
@@ -13,12 +56,18 @@ h2,
 h3 {
     text-transform: uppercase;
 }
-html {
-    background-color: @CiviDarkGrey;
+h1 {
+    margin-top: @vm;
+    margin-bottom: @vsm;
+
 }
-.CiviPage {
-    background-color: @CiviWhite;
+
+h2, h3 {
+    margin-top: @vsm;
+    margin-bottom: @vsm;
 }
+
+
 .lead {
     font-weight: 400;
 }
@@ -27,78 +76,101 @@ html {
     font-weight: 700;
 }
 
-//Blockquote
-p.quote {
-    &:extend(blockquote);
-}
+/* ## MARGINS ##*/
 
-//Global styles
+// Used for things like the spacing between the bottom element of a stripe and the end of the stripe
+@vm: 50px;
+@vsm: @vm / 2;
+
+/* ## BUTTONS, ETC ##*/
+// Make everything that was round, square
 @border-radius-base: 0;
+.btn {
+    text-transform: uppercase;
+}
+@btn-font-weight: 700;
 
-//Colors
-@brand-primary: @CiviBlue;
-@brand-success: @CiviGreen;
-@brand-danger: #d9534f;
-@brand-info: #5bc0de;
-@brand-warning: #f0ad4e;
+// TODO buttons on blue
 
-//CiviCRM colour definitions
-@CiviWhite: #fff;
-@CiviBlue: #056186;
-@CiviGreen: darken(#7dbd56,5%);
-@CiviLightGrey: #eee;
-@CiviGrey: #6c696a;
-@CiviDarkGrey: #393536;
-@CiviBlack: #231f20;
-@CiviPink: #de447a;
-@CiviTeal: #00969b;
+/* # PAGE ELEMENTS # */
 
-//TODO add @CiviPink
-//TODO add @CiviPurple?! (from the badges)
-@grid-float-breakpoint: 1000px;
-
-//Navbar
-@navbar-height: 80px;
+/* ## HEADER ## */
+//Need to manually set heights to be able to deal with the fixed menu
+@navbar-height: 110px;
+@adminbar-height: 21px;
+@breadcrumbs-height: 42px;
+@logo-height: 56px;
+body.navbar-is-fixed-top {
+    padding-top: @navbar-height !important;
+    margin-top: 0 !important;
+}
+body.navbar-is-fixed-top.admin-menu {
+    padding-top: @navbar-height+@adminbar-height !important;
+    margin-top: 0 !important;
+}
+body.navbar-is-fixed-top.breadcrumbs {
+    padding-top: @navbar-height+@breadcrumbs-height !important;
+    margin-top: 0 !important;
+}
+body.navbar-is-fixed-top.admin-menu.breadcrumbs {
+    padding-top: @navbar-height+@adminbar-height+@breadcrumbs-height !important;
+    margin-top: 0 !important;
+}
+body.admin-menu .navbar-fixed-top {
+    top: @adminbar-height;
+}
 @navbar-default-bg: @CiviDarkGrey;
 @navbar-default-color: @CiviLightGrey; //darken(@CiviWhite, 14%);
 @navbar-default-link-active-bg: @navbar-default-bg;
 @navbar-default-link-active-color: @CiviWhite;
 @navbar-default-link-color: @navbar-default-color;
 
-// @navbar-default-link-hover-bg: lighten(@CiviDarkGrey,2%);
+// We have quite a long menu. Setting this at 1000px ensures that it changed to one column mobile friendly before it has a chance to overlap the logo and look bad
+@grid-float-breakpoint: 1000px;
 @navbar-default-link-hover-color: @CiviWhite;
-.navbar li {
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 120%;
+.navbar {
+    border-color: @CiviDarkGrey;
+}
+
+/* ## MENUS ## */
+
+.navbar-nav {
     li {
-        font-size: 100%;
-        text-transform: none;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 22px;
+        a {
+            padding: 20px 10px;
+        }
+        li {
+            font-size: 15px;
+            text-transform: none;
+            a {
+                padding: 3px 20px;
+            }
+        }
     }
 }
-.navbar-btn {
-    margin-bottom: 20px;
-    margin-top: 20px;
-}
-body.navbar-is-fixed-top {
-    padding-top: @navbar-height !important;
-    margin-top: 0 !important;
-}
-body.navbar-is-fixed-top.admin-menu {
-    padding-top: @navbar-height+21px !important;
-    margin-top: 0 !important;
-}
-body.admin-menu .navbar-fixed-top {
-    top: 21px;
+
+//Extra stuff for the secondary menu
+.navbar-secondary {
+    clear: right;
+    li a {
+        padding: 10px;
+        font-size: 16px;
+        font-weight: normal;
+    }
 }
 
-//button-size
-.btn {
-    text-transform: uppercase;
-}
-@btn-font-weight: 700;
+/* ### LOGO ### */
 
-//Breadcrumbs
+//This centres the logo vertically in the navbar
+.navbar .logo {
+    margin: ( @navbar-height - @logo-height ) / 2 0px;
+}
+
+/* ### BREADCRUMBS ### */
+
 @breadcrumb-bg: @CiviBlack;
 @breadcrumb-color: @CiviWhite;
 @breadcrumb-separator: ">";
@@ -116,7 +188,8 @@ body.admin-menu .navbar-fixed-top {
     }
 }
 
-//Footer menu
+/* ## FOOTER ## */
+
 .footer {
     border-color: @CiviDarkGrey;
     margin-top: 0;
@@ -125,36 +198,53 @@ body.admin-menu .navbar-fixed-top {
         margin-top: @vm;
         margin-bottom: @vm;
     }
-    ul.menu {
-        padding: 0;
-        li a {
-            text-transform: uppercase;
-            text-align: right;
-            font-weight: 700;
-            color: @CiviLightGrey;
-            font-size: 110%;
-            &:hover {
-                color: @CiviWhite;
-                text-decoration: none;
-            }
+}
+
+/* ### FOOTER MENU / SITEMAP ### */
+
+.footer ul.menu {
+    padding: 0;
+    li a {
+        text-transform: uppercase;
+        text-align: right;
+        font-weight: 700;
+        color: @CiviLightGrey;
+        font-size: 20px;
+        &:hover {
+            text-decoration: underline;
         }
-        ul.menu {
-            padding-left: 0;
-            li {
-                line-height: 120%;
-                margin-bottom: 2px;
-                margin-top: 2px;
-                a {
-                    font-size: 80%;
-                    font-weight: 400;
-                    text-transform: none;
-                }
+    }
+    ul.menu {
+        padding-left: 0;
+        li {
+            line-height: 120%;
+            margin-bottom: 2px;
+            margin-top: 2px;
+            a {
+                font-size: 14px;
+                font-weight: 400;
+                text-transform: none;
             }
         }
     }
 }
 
-//Grids
+/* ### SOCIAL MEDIA ICONS ### */
+
+#block-block-42 {
+    margin-top: 10px;
+    font-size: 50px;
+    line-height: 60px;
+    a{
+        color: darken(@CiviLightGrey, 15%);
+    }
+    a:hover{
+        color: @CiviLightGrey;
+    }
+}
+
+/* # VIEWS # */
+
 .views-bootstrap-grid-plugin-style {
     padding: 20px 0;
     .col {
@@ -164,42 +254,53 @@ body.admin-menu .navbar-fixed-top {
         }
     }
 }
-@vm: 40px;
-@vsm: 20px;
-/* For things like the space between headers and the edge of the header box*/
+
+/* # CONTENT LAYOUT # */
+
 .page-header {
     border-bottom: none;
     margin-top: @vm;
-    margin-bottom: @vm;
+    margin-bottom: @vsm;
     padding-bottom: 0;
     h1 {
         margin-top: @vm;
-        margin-bottom: @vm;
+        margin-bottom: @vsm;
     }
 }
+
+.tabs--primary, ul.action-links, .submitted {
+    margin-top: 5px - @vsm;
+    margin-bottom: @vsm;
+}
+ 
 h2.pane-title {
     margin-top: @vm;
 }
 h3.pane-title {
     margin-top: @vsm;
 }
-.pane-content {
-    p:first-child,
-    h2:first-child,
-    h3:first-child {
-        margin-top: @vm;
-    }
-    p:last-child,
-    h2:last-child,
-    h3:last-child {
-        margin-bottom: @vm;
-    }
+.page-content {
+    margin-bottom: @vm;
 }
+
+/* ## STRIPES ## */
+
+//Normally, the top margin of stripes should come from the margin of the first element in it, but the bottom is achieved with padding
+.stripe {
+    padding-bottom: @vm;
+}
+
+//But sometimes we don't want any padding
+.stripe-banner {
+    padding-bottom: 0;
+}
+
+//Not sure what this does
 .stripe-banner .pane-content {
     margin-bottom: 0;
 }
 
-//Section stripes
+//Define colours for stripes
 .CiviWhiteStripe {
     background-color: @CiviWhite;
     color: @CiviGrey;
@@ -236,15 +337,7 @@ h3.pane-title {
         color: @CiviWhite;
     }
 }
-.civi-banner-image {
-    width: 100%;
-    height: 300px;
-    h1,
-    .shadow {
-        color: @CiviWhite;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-    }
-}
+
 @btn-default-color: @CiviDarkGrey;
 @btn-default-bg: @CiviWhite;
 @btn-default-border: @CiviWhite;
@@ -273,7 +366,32 @@ h3.pane-title {
     }
 }
 
-//homepage
+/* ### COMMENTS ### */
+
+
+.indented{
+    margin-left: @vsm;
+    padding-left: @vsm;
+    border-left: @CiviLine;
+}
+/* # SPECIFIC AREAS AND PAGES OF THE SITE # */
+
+/* ## HOMEPAGE ## */
+
+/* ### IMAGE BANNER ### */
+
+.civi-banner-image {
+    width: 100%;
+    height: 300px;
+    h1,
+    .shadow {
+        color: @CiviWhite;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    }
+}
+
+/* ### HOMEPAGE STRIPES ### */
+
 .stripe-features {
     text-align: center;
 }
@@ -286,7 +404,32 @@ h3.pane-title {
     }
 }
 
-/*    
+/* ### PARTNERS AND CONTRIBUTORS BLOCK ## */
 
-//civicrm.org specific stylings
-*/
+/* ### BLOG ## */
+.view-blog-news .views-row, .node-teaser{
+    .horizontal-spacer;
+}
+.view-blog-news .views-row-first, #block-system-main .node-teaser:first-child{
+    .horizontal-spacer-first;
+}
+
+.links.list-inline{
+    margin-top:12.5px;
+    margin-left: 0px;
+    li{
+        border-left: 3px solid @CiviLightGrey;
+        padding-left: 10px;
+    }
+    li.first{
+        border-left: none;
+        padding-left: 0px;
+
+    }
+}
+
+// .node-readmore a{
+//     .btn;
+//     .btn-primary;
+//     .btn-xs;
+// }
