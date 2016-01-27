@@ -40,8 +40,8 @@ html {
     border-top: none;
 }
 
-.block-system{
-    padding-bottom: @vm;
+.page-content{
+    margin-bottom: @vm;
 }
 
 /* ## TYPOGRAPHY ## */
@@ -271,10 +271,20 @@ body.admin-menu .navbar-fixed-top {
         }
     }
 }
-.view-filters {
+
+/* # FORMS # */
+form.comment-form, .view-filters {
     .well;
     margin-top: @xsvm;
     margin-bottom: @xsvm;
+}
+
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
+.checkbox-inline input[type="checkbox"] {
+  margin-left: 0px;
+  //Not sure why Bootstrap's form.less suggest minus 20 here but I am reseting for Drupal
 }
 
 /* # CONTENT LAYOUT # */
@@ -474,6 +484,8 @@ ul.action-links,
     }
     .views-row-first {
         .horizontal-spacer-first;
+        padding-top: 0;
+
     }
     .logo {
         margin-top: @svm;
