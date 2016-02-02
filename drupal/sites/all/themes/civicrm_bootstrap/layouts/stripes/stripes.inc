@@ -7,7 +7,7 @@ function civicrm_bootstrap_stripes_panels_layouts() {
   $items['stripes'] = array(
     'title' => t('Stripes'),
     'category' => t('CiviCRM'),
-    'theme' => 'home_page',
+    'theme' => 'stripes',
     'icon' => 'stripes.png',
     'regions' => array(
       'white' => t('White'),

@@ -14,6 +14,13 @@
  *   - $content['middle']: Content in the middle column.
  *   - $content['right']: Content in the right column.
  */
-foreach($content as $p => $c){
-    print "<div class=\"container container-{$p}\"> {$c} </div>";
-}
+foreach ($content as $p => $c) {
+     //print "<div> {$c} </div>";
+     if ($c) {
+         if ($p == 'banner') {
+             print "<div class=\"stripe stripe-{$p}\" id=\"{$p}\"> {$c} </div>";
+         } else {
+             print "<div class=\"stripe stripe-{$p}\" id=\"{$p}\"> <div class=\"container\"> <div class=\"row row-stripe\"> {$c} </div> </div> </div>";
+         }
+     }
+ }
