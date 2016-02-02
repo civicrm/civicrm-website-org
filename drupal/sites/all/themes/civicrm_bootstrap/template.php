@@ -1,19 +1,14 @@
 <?php
 
+function civicrm_bootstrap_menu_tree__primary(&$variables)
+{
+    return '<ul class="menu nav navbar-nav navbar-right">'.$variables['tree'].'</ul>';
+}
 
-
- /**
-  * @file
-  * template.php
-  */
-  function civicrm_bootstrap_menu_tree__primary(&$variables)
-  {
-      return '<ul class="menu nav navbar-nav navbar-right">'.$variables['tree'].'</ul>';
-  }
-  function civicrm_bootstrap_menu_tree__secondary(&$variables)
-  {
-      return '<ul class="menu nav navbar-nav navbar-right navbar-secondary">'.$variables['tree'].'</ul>';
-  }
+function civicrm_bootstrap_menu_tree__secondary(&$variables)
+{
+    return '<ul class="menu nav navbar-nav navbar-right navbar-secondary">'.$variables['tree'].'</ul>';
+}
 
 function civicrm_bootstrap_menu_link__menu_block__menu_primary_menu($variables)
 {
@@ -41,29 +36,29 @@ function civicrm_bootstrap_preprocess_html(&$variables)
 {
     // drupal_add_css('sites/default/files/wackymcdoo.css');
 
-    if(page_manager_get_current_page()){
-        $variables['classes_array'][]='panel-page';
-    }
-        
-    if(count(crumbs_get_trail())>1){
-        $variables['classes_array'][]='breadcrumbs';
+  if (page_manager_get_current_page()) {
+      $variables['classes_array'][] = 'panel-page';
+  }
+
+    if (count(crumbs_get_trail()) > 1) {
+        $variables['classes_array'][] = 'breadcrumbs';
     }
 }
 
-function civicrm_bootstrap_preprocess_page(&$variables){
-    if(page_manager_get_current_page()){
-        $variables['panel_page']=true;
+function civicrm_bootstrap_preprocess_page(&$variables)
+{
+    if (page_manager_get_current_page()) {
+        $variables['panel_page'] = true;
     }
-    
 }
 
 function civicrm_bootstrap_preprocess_region(&$variables)
 {
     switch ($variables['region']) {
-    // @todo is this actually used properly?
-      case 'footer':
-      $variables['classes_array'][] = 'row';
+  // @todo is this actually used properly?
+  case 'footer':
+  $variables['classes_array'][] = 'row';
 
-        break;
-    }
+  break;
+  }
 }
