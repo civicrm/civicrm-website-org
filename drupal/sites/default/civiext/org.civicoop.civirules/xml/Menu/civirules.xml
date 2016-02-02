@@ -1,0 +1,220 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/civirules/page/rule</path>
+    <page_callback>CRM_Civirules_Page_Rule</page_callback>
+    <title>Rule</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/rule</path>
+    <page_callback>CRM_Civirules_Form_Rule</page_callback>
+    <title>Rule</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/rule_condition</path>
+    <page_callback>CRM_Civirules_Form_RuleCondition</page_callback>
+    <title>RuleCondition</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/rule_action</path>
+    <page_callback>CRM_Civirules_Form_RuleAction</page_callback>
+    <title>RuleAction</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/datacomparison</path>
+    <page_callback>CRM_CivirulesConditions_Form_ValueComparison</page_callback>
+    <title>Value comparison</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/datachangedcomparison</path>
+    <page_callback>CRM_CivirulesConditions_Form_FieldValueChangeComparison</page_callback>
+    <title>Value comparison</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/fieldvaluecomparison</path>
+    <page_callback>CRM_CivirulesConditions_Form_FieldValueComparison</page_callback>
+    <title>Value comparison</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/groupcontact/groupid</path>
+    <page_callback>CRM_CivirulesConditions_Form_GroupContact_GroupId</page_callback>
+    <title>Group Id</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contributionstatus</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_Status</page_callback>
+    <title>contribution status</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/case/casetype</path>
+    <page_callback>CRM_CivirulesConditions_Form_Case_CaseType</page_callback>
+    <title>case type</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/membershiptype</path>
+    <page_callback>CRM_CivirulesConditions_Form_Membership_Type</page_callback>
+    <title>membership type</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/membershipstatus</path>
+    <page_callback>CRM_CivirulesConditions_Form_Membership_Status</page_callback>
+    <title>membership status</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contribution_totalcontributedamount</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_TotalContributedAmount</page_callback>
+    <title>Total contributed amount</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contribution_financialtype</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_FinancialType</page_callback>
+    <title>financial type</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contribution_distinctcontributingday</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay</page_callback>
+    <title>distinct contributing days</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contribution_countrecurring</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_CountRecurring</page_callback>
+    <title>recurring contribution collections</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contribution_donorisrecurring</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_DonorIsRecurring</page_callback>
+    <title>donor has recurring contributions</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contribution_recurringenddate</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_RecurringEndDate</page_callback>
+    <title>end date recurring contribution</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contribution_specificamount</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_SpecificAmount</page_callback>
+    <title>specific amount count</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contact_ingroup</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contact_InGroup</page_callback>
+    <title>In Group</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contact_hastag</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contact_HasTag</page_callback>
+    <title>Has Tag</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contact_hasphone</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contact_HasPhone</page_callback>
+    <title>Has Phone</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contribution_paidby</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_PaidBy</page_callback>
+    <title>paid by</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/action/groupcontact</path>
+    <page_callback>CRM_CivirulesActions_GroupContact_Form_GroupId</page_callback>
+    <title>Group contact</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/action/contribution/thankyoudate</path>
+    <page_callback>CRM_CivirulesActions_Contribution_Form_ThankYouDate</page_callback>
+    <title>Contribution Thank You Date</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/trigger/groupmembership</path>
+    <page_callback>CRM_CivirulesCronTrigger_Form_GroupMembership</page_callback>
+    <title>Group membership</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/action/tag</path>
+    <page_callback>CRM_CivirulesActions_Tag_Form_TagId</page_callback>
+    <title>Tag</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/action/contact/subtype</path>
+    <page_callback>CRM_CivirulesActions_Contact_Form_Subtype</page_callback>
+    <title>Set contact subtype</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/action/activity</path>
+    <page_callback>CRM_CivirulesActions_Activity_Form_Activity</page_callback>
+    <title>Activity</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/activity_type</path>
+    <page_callback>CRM_CivirulesConditions_Form_Activity_Type</page_callback>
+    <title>Activity Type</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/activity_contact_record_type</path>
+    <page_callback>CRM_CivirulesConditions_Form_Activity_RecordType</page_callback>
+    <title>Activity Contact Record Type</title>
+    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+</menu>
