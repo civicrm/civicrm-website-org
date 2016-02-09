@@ -545,35 +545,38 @@ ul.action-links,
             height: auto;
         }
     }
-    .more a,
-    .less a {
+    .more, .less {
+        a {
+            .btn;
+            .btn-xs;
+            .btn-primary;
+        }
+    }
+    .less{
         margin-top: @svm;
-        .btn;
-        .btn-xs;
-        .btn-primary;
     }
 }
-@media (min-width: @screen-md-min) {
-    .view-service-providers {
-        .service-provider-logo {
-            text-align: center;
-        }
-        .badges {
-            text-align: right;
+    @media (min-width: @screen-md-min) {
+        .view-service-providers {
+            .service-provider-logo {
+                text-align: center;
+            }
+            .badges {
+                text-align: right;
+            }
         }
     }
-}
-/* ## CIVICRM FORMS ## */
-div.crm-container .crm-section .label,
-div.crm-container .label,
-div.crm-container label {
-    color: @text-color;
-    white-space: normal;
-    font-weight: bold;
-    font-size: @font-size-base;
-    line-height: 120%;
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-right: 0;
-    text-align: left;
-}
+    /* ## CIVICRM FORMS ## */
+    div.crm-container .crm-section .label,
+    div.crm-container .label,
+    div.crm-container label {
+        color: @text-color;
+        white-space: normal;
+        font-weight: bold;
+        font-size: @font-size-base;
+        line-height: 120%;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-right: 0;
+        text-align: left;
+    }
