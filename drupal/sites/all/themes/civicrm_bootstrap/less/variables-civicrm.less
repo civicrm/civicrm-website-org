@@ -14,7 +14,7 @@
 @CiviPink: #de447a;
 @CiviTeal: #00969b;
 
-@grid-gutter-width:         60px;
+@grid-gutter-width:         50px;
 
 // TODO add @CiviPurple?! (from the badges)
 // Override bootstrap colours with CiviCRM colours
@@ -79,7 +79,7 @@ h3 {
 
 /* ## MARGINS ##*/
 // Used for things like the spacing between the bottom element of a stripe and the end of the stripe
-@vm: 50px;
+@vm: @grid-gutter-width;
 @svm: @vm / 2;
 @xsvm: @svm / 2;
 
@@ -230,7 +230,7 @@ body.admin-menu .navbar-fixed-top {
 }
 
 .navbar-right ~ .navbar-right{
-    margin-right: -30px;
+    margin-right: -@grid-gutter-width / 2;
 }
 // see https://github.com/twbs/bootstrap/issues/10815
 
@@ -574,10 +574,14 @@ ul.action-links,
 }
 
 /* ## CIVICRM FORMS ## */
-.crm-public .label {
+div.crm-container .crm-section .label, div.crm-container .label, div.crm-container label {
     color: @text-color;
     white-space: normal;
+    font-weight: bold;
+    font-size: @font-size-base;
     line-height: 120%;
-    padding-top: 18px;
-    padding-right: 0;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+    text-align: left;
 }

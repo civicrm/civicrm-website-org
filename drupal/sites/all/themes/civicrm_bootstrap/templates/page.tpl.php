@@ -79,7 +79,6 @@
     print 'navbar-crumbs';
 }?>">
   <div class="container">
-    <div class="row">
     <div class="navbar-header">
       <?php if ($logo): ?>
       <a class="logo navbar-btn pull-left" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
@@ -116,15 +115,12 @@
       </div>
     <?php endif; ?>
   </div>
-  </div>
 
   <?php if (!empty($breadcrumb)): ?>
   <div class="stripe-black">
-      <div class="container">
-          <div class="row">
-              <?php print $breadcrumb; ?>
-          </div>
-      </div>
+    <div class="container">
+      <?php print $breadcrumb; ?>
+    </div>
   </div>
   <?php endif;?>
   
@@ -138,49 +134,45 @@
   </header> <!-- /#page-header -->
 
 
-        <section>
-            <div class="container">
-                <div class="row">
-          <a id="main-content"></a>
-          <?php print render($title_prefix); ?>
-          <?php if (!empty($title)): ?>
-              <div class="page-header">
-            <h1><?php print $title; ?></h1>
-              </div>
-          <?php endif; ?>
-          <?php print render($title_suffix); ?>
-          <?php print $messages; ?>
-          <?php if (!empty($tabs)): ?>
-            <?php print render($tabs); ?>
-          <?php endif; ?>
-          <?php if (!empty($page['help'])): ?>
-            <?php print render($page['help']); ?>
-          <?php endif; ?>
-          <?php if (!empty($action_links)): ?>
-            <ul class="action-links"><?php print render($action_links); ?></ul>
-          <?php endif; ?>
-      </div>
-    </div>
-          <?php if ($panel_page): ?>
-                  <?php print render($page['content']); ?>
-          <?php else: ?>
-              <div class="container">
-                <div class="row page-content">
-                  <?php print render($page['content']); ?>
-                </div>
-              </div>
-          <?php endif; ?>
-          
-          
-      </section>
+    <section>
+        <div class="container">
+      <a id="main-content"></a>
+      <?php print render($title_prefix); ?>
+      <?php if (!empty($title)): ?>
+          <div class="page-header">
+        <h1><?php print $title; ?></h1>
+          </div>
+      <?php endif; ?>
+      <?php print render($title_suffix); ?>
+      <?php print $messages; ?>
+      <?php if (!empty($tabs)): ?>
+        <?php print render($tabs); ?>
+      <?php endif; ?>
+      <?php if (!empty($page['help'])): ?>
+        <?php print render($page['help']); ?>
+      <?php endif; ?>
+      <?php if (!empty($action_links)): ?>
+        <ul class="action-links"><?php print render($action_links); ?></ul>
+      <?php endif; ?>
+</div>
+      <?php if ($panel_page): ?>
+              <?php print render($page['content']); ?>
+      <?php else: ?>
+          <div class="container">
+            <div class="page-content">
+              <?php print render($page['content']); ?>
+            </div>
+          </div>
+      <?php endif; ?>
+      
+      
+  </section>
 
   
 
 <footer class="footer stripe-darkgrey">
     <div class="container">
-        <div class="row">
              <?php print render($page['footer']);?>
-        </div>
   </div>
 </footer>
 </div>
