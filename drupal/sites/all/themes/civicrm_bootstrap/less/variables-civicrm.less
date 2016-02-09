@@ -486,6 +486,19 @@ ul.action-links,
         height: 400px;
     }
 }
+@media (max-width: @screen-md-min) {
+    .carousel-indicators{
+        display: none;
+    }
+    .view-homepage-banner{
+        .lead{
+            display: none;
+        }
+        h1{
+            font-size: 36px;
+        }
+    }
+}
 @media (min-width: @screen-lg-min) {
     .civi-banner-image {
         height: 600px;
@@ -521,9 +534,13 @@ ul.action-links,
         padding-left: 0;
     }
 }
-.node-blog img {
+.node-blog, .views-slideshow-cycle-main-frame{
+    img {
     .img-responsive;
+    }   
 }
+
+
 
 /* ## EXTENSIONS ## */
 .view-extensions-directory {
