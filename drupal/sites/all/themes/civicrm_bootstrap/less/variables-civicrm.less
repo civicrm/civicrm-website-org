@@ -267,22 +267,27 @@ body.admin-menu .navbar-fixed-top {
 /* ### FOOTER MENU ### */
 .footer ul.menu {
     padding: 0;
-    li a {
-        text-transform: uppercase;
-        text-align: right;
-        font-weight: 700;
-        color: @CiviLightGrey;
-        font-size: 22px;
-        &:hover {
-            color: @CiviWhite;
-            text-decoration: none;
+    li {
+        padding-bottom: @svm;
+        a {
+            text-transform: uppercase;
+            text-align: right;
+            font-weight: 700;
+            color: @CiviLightGrey;
+            font-size: 22px;
+            &:hover {
+                color: @CiviWhite;
+                text-decoration: none;
+            }
         }
     }
     ul.menu {
         padding-left: 0;
         li {
             line-height: 115%;
-            margin: 7px 0;
+            margin: 7px 0px;
+            padding-bottom: 0;
+
             a {
                 font-size: 15px;
                 font-weight: 400;
@@ -297,12 +302,14 @@ body.admin-menu .navbar-fixed-top {
     margin-top: 10px;
     font-size: 50px;
     line-height: 60px;
+    padding-bottom: @svm;
     a {
         color: darken(@CiviLightGrey, 15%);
     }
     a:hover {
         color: @CiviLightGrey;
     }
+
 }
 
 /* # VIEWS # */
@@ -462,11 +469,12 @@ ul.action-links,
 /* ### PARTNERS AND CONTRIBUTORS BLOCK ## */
 .front .view-partners-and-contributors {
     .views-field-image-URL {
-        max-height: 200px;
         margin: @svm auto;
         img {
-            max-height: 200px;
-            width: auto;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: auto;
         }
     }
 }
