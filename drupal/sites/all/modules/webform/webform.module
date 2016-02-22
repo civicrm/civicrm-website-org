@@ -4357,16 +4357,8 @@ function webform_format_email_address($address, $name, $node = NULL, $submission
   elseif (is_numeric($name) && isset($node->webform['components'][$name])) {
     if (isset($submission->data[$name])) {
       $component = $node->webform['components'][$name];
-      $name = $submission->data[$name];
-
-      // Convert the FROM name to be the label of select lists.
-      if (webform_component_implements($component['type'], 'options')) {
-        $options = webform_component_invoke($component['type'], 'options', $component);
-        foreach ($name as &$one_name) {
-          $one_name = isset($options[$one_name]) ? $options[$one_name] : $one_name;
-        }
-        unset($one_name); // Drop PHP reference.
-      }
+      $display_element = webform_component_invoke($component['type'], 'display', $component, $submission->data[$name], 'text', $submission);
+      $name = $display_element['#value'];
     }
     else {
       $name = t('Value of !component', array('!component' => $node->webform['components'][$name]['name']));
