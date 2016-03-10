@@ -10,6 +10,7 @@ function civicrm_bootstrap_stripes_with_banner_panels_layouts() {
     'theme' => 'stripes_with_banner',
     'icon' => 'stripes-with-banner.png',
     'regions' => array(
+      'banner' => t('Banner'),
       'white' => t('White'),
       'blue' => t('Blue'),
       'extra-white' => t('Second white'),
