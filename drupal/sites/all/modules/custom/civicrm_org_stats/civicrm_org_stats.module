@@ -113,10 +113,10 @@ function civicrm_org_stats_tokens($type, $tokens, array $data = array(), array $
                         $value = cividownload_get_current_version('stable');
                         $cacheTime = 60 * 60 * 3;
                         break;
-                    case 'member-count':
+                    case 'partner-count':
                         $value = civicrm_org_stats_get_member_count(array(1,2,3,12,13,14));
                         break;
-                    case 'partner-count':
+                    case 'member-count':
                         $value = civicrm_org_stats_get_member_count(array(4,5,9,15,16,17));
                         break;
 
