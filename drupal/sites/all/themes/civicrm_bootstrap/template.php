@@ -49,6 +49,9 @@ function civicrm_bootstrap_preprocess_page(&$variables)
 {
     if (page_manager_get_current_page()) {
         $variables['panel_page'] = true;
+    }else {
+        $variables['panel_page'] = false;
+
     }
 }
 
