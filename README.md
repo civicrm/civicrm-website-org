@@ -16,6 +16,13 @@ www-prod should track the master branch.  Developments should happen on seperate
 
 All custom modules should be added to the sites/all/modules/custom directory and follow the naming convention civicrm_org_module_name.
 
+## File permissions
+
+We use facls for handling file permissions. These are set up and shouldn't need to be changed.  In case they do
+
+`sudo find /var/www/civicrm-website-org/drupal/sites/civicrm.org/files/civicrm/ -type f -exec setfacl -m u:www-data:rwx -R {} \;`
+`sudo find /var/www/civicrm-website-org/drupal/sites/civicrm.org/files/ -type f -exec setfacl -m u:www-data:rwx -R {} \;`
+
 ## Releases
 
 http://civicrm.org is served from www-prod.  All source-code is owned by the co user.  To do a release, use the latest code from the master branch to create a tag and then check out the tag on www-prod, e.g.
@@ -80,8 +87,7 @@ Notes:
 * The drush command 'drush updb' is useful for just applying db upgrades when the code upgrade has already been done with a git pull (as is the case on www-test and www-prod).
 * The drush command 'civicrm-upgrade-db' is useful for upgrading CiviCRM from the command line
 
-Needless to say, if you do notice anything going wrong
-and on the test infrastructure before being carried out on the production server.
+Needless to say, if you do notice anything going wrong, fix and test again on the test infrastructure before carried out any upgrades on the production server.
 
 Put the site into maintanence mode before upgrading
 
