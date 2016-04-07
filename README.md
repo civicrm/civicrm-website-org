@@ -20,8 +20,10 @@ All custom modules should be added to the sites/all/modules/custom directory and
 
 We use facls for handling file permissions. These are set up and shouldn't need to be changed.  In case they do
 
-`sudo find /var/www/civicrm-website-org/drupal/sites/civicrm.org/files/ -type d -exec setfacl -m u:www-data:rwx -m d:u:www-data:rwx -R {} \;`
-`sudo find /var/www/civicrm-website-org/drupal/sites/civicrm.org/files/ -type f -exec setfacl -m u:www-data:rwx -R {} \;`
+```
+sudo find /var/www/civicrm-website-org/drupal/sites/civicrm.org/files/ -type d -exec setfacl -m u:www-data:rwx -m d:u:www-data:rwx -R {} \;
+sudo find /var/www/civicrm-website-org/drupal/sites/civicrm.org/files/ -type f -exec setfacl -m u:www-data:rwx -R {} \;
+```
 
 ## Releases
 
