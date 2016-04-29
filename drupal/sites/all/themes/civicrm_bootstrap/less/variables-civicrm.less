@@ -48,8 +48,7 @@ html {
 @link-color: @CiviBlue;
 @link-hover-color: @CiviBlue;
 h1,
-h2,
-h3 {
+h2 {
     text-transform: uppercase;
 }
 h1 {
@@ -69,9 +68,6 @@ h3 {
     font-weight: 700;
 }
 
-.node .field {
-    margin-bottom: 12.5px;
-}
 /* ## MARGINS ##*/
 // Used for things like the spacing between the bottom element of a stripe and the end of the stripe
 @vm: @grid-gutter-width;
@@ -85,6 +81,15 @@ h3 {
 .btn {
     text-transform: uppercase;
 }
+
+.node .field {
+    margin-bottom: @xsvm;
+}
+.panel-separator {
+    margin-bottom: @xsvm;
+}
+
+
 @btn-font-weight: 700;
 .field-name-field-button-link {
     a {
