@@ -45,10 +45,9 @@ function webform_validation_schema() {
         'not null' => FALSE,
       ),
       'error_message' => array(
-        'type' => 'varchar',
+        'type' => 'text',
         'description' => 'Rule error message',
         'not null' => FALSE,
-        'length' => 255,
       ),
       'negate' => array(
         'type' => 'int',
@@ -209,4 +208,15 @@ function webform_validation_update_7105() {
     'default' => 0,
   );
   db_add_field('webform_validation_rule', 'weight', $spec);
+}
+
+/**
+ * Alter error_message field to allow longer than 255 chars error messages.
+ */
+function webform_validation_update_7106() {
+  db_change_field('webform_validation_rule', 'error_message', 'error_message', array(
+    'type' => 'text',
+    'description' => 'Rule error message',
+    'not null' => FALSE,
+  ));
 }

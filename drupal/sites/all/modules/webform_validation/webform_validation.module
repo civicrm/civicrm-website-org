@@ -110,6 +110,7 @@ function webform_validation_i18n_string_info() {
  * Webform validation handler to validate against the given rules
  */
 function webform_validation_validate($form, &$form_state) {
+  $static_error_messages = &drupal_static(__FUNCTION__, array());
   $page_count = 1;
   $nid = $form_state['values']['details']['nid'];
   $node = node_load($nid);
@@ -192,6 +193,12 @@ function webform_validation_validate($form, &$form_state) {
         $errors = webform_validation_unprefix_keys($errors);
         $components = webform_validation_unprefix_keys($component_definitions);
         foreach ($errors as $item_key => $error) {
+          // Do not set error message if an identical message has already been set.
+          if (in_array($error, $static_error_messages, TRUE)) {
+            continue;
+          }
+          $static_error_messages[] = $error;
+
           // build the proper form element error key, taking into account hierarchy
           $error_key = 'submitted][' . webform_validation_parent_tree($item_key, $components) . $components[$item_key]['form_key'];
           if (is_array($error)) {

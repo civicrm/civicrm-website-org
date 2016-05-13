@@ -15,6 +15,7 @@ function _webform_defaults_layout_box() {
     'pid' => 0,
     'weight' => 0,
     'extra' => array(
+      'unique' => TRUE,
       'private' => FALSE,
       'align' => 'horiz',
     ),
@@ -50,6 +51,7 @@ function _webform_edit_layout_box($component) {
  */
 function _webform_render_layout_box($component, $value = NULL, $filter = TRUE) {
   $element = array(
+    '#title' => $filter ? _webform_filter_xss($component['name']) : $component['name'],
     '#weight' => $component['weight'],
     '#pre_render' => array('webform_layout_box_prerender'),
     '#webform_component' => $component,
@@ -57,6 +59,14 @@ function _webform_render_layout_box($component, $value = NULL, $filter = TRUE) {
     '#suffix' => '</div>',
     '#attached' => array('css' => array(drupal_get_path('module', 'webform_layout') . '/layout_box.css')),
   );
+
+  if (module_exists('form_builder_webform')) {
+    $is_form_build = (arg(0) === 'admin' && arg(1) === 'build' && arg(2) === 'form-builder') || (arg(0) === 'node' && arg(2) === 'webform');
+    if ($is_form_build) {
+      $element['#type'] = 'fieldset';
+    }
+  }
+
   return $element;
 }
 
@@ -95,4 +105,49 @@ function _webform_display_layout_box($component, $value, $format = 'html') {
   $element['#format'] = $format;
 
   return $element;
+}
+
+// FORM builder specific hooks
+
+/**
+ * Implements _form_builder_webform_form_builder_types_component().
+ */
+function _form_builder_webform_form_builder_types_layout_box() {
+  drupal_add_css(drupal_get_path('module', 'webform_layout') . '/form_builder.css');
+  $fields = array();
+
+  $fields['layout_box'] = array(
+    'title' => t('Layout box'),
+    'weight' => -20
+  );
+  $component['name'] = t('Layout box');
+  $fields['layout_box']['default'] = _form_builder_webform_default('layout_box', array(), $component);
+
+  return $fields;
+}
+
+/**
+ * Implements _form_builder_webform_form_builder_map_component().
+ */
+function _form_builder_webform_form_builder_map_layout_box() {
+  return array(
+    'form_builder_type' => 'layout_box',
+    'properties' => array(
+      'align' => array(
+        'form_parents' => array('display', 'align'),
+        'storage_parents' => array('extra', 'align'),
+      )
+    ),
+  );
+}
+
+/**
+ * @see webform_layout_theme().
+ */
+function theme_webform_layout_empty_layout_box($variables) {
+  $output = '';
+  $output .= '<div class="form-builder-wrapper form-builder-empty-placeholder">';
+  $output .= '<span>' . t('This layout box is empty. Drag a form element into it.') . '</span>';
+  $output .= '</div>';
+  return $output;
 }

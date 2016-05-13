@@ -30,6 +30,7 @@ function _webform_defaults_civicrm_contact() {
       'title_display' => 'before',
       'randomize' => 0,
       'description' => '',
+      'no_autofill' => array(),
       'hide_fields' => array(),
       'hide_method' => 'hide',
       'no_hide_blank' => FALSE,
@@ -96,7 +97,7 @@ function _webform_edit_civicrm_contact($component) {
     '#type' => 'select',
     '#title' => t('Form Widget'),
     '#default_value' => $component['extra']['widget'],
-    '#options' => array('autocomplete' => t('Autocomplete'), 'select' => t('Select List'), 'hidden' => t('Static')),
+    '#options' => array('autocomplete' => t('Autocomplete'), 'select' => t('Select List'), 'hidden' => t('Static'), 'textfield' => t('Enter Contact ID')),
     '#weight' => -9,
     '#parents' => array('extra', 'widget'),
   );
@@ -140,28 +141,38 @@ function _webform_edit_civicrm_contact($component) {
     '#parents' => array('extra', 'show_hidden_contact'),
     '#weight' => -5,
   );
-  $form['field_locking'] = array(
+  $form['field_handling'] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
-    '#title' => t('Field Locking'),
-    '#description' => t('Prevent editing of existing contact data.'),
+    '#title' => t('Contact Field Handling'),
+    '#description' => t('By default, all contact data will be autopopulated on the form for this existing contact. You can modify that behavior here.'),
   );
-  $form['field_locking']['hide_fields'] = array(
+  $form['field_handling']['no_autofill'] = array(
+    '#type' => 'select',
+    '#multiple' => TRUE,
+    '#title' => t('Skip Autofilling of'),
+    '#description' => t('Which fields should <em>not</em> be autofilled for this contact?'),
+    '#default_value' => $component['extra']['no_autofill'],
+    '#options' => array('' => '- ' . t('None') . ' -') + wf_crm_contact_fields($node, $c),
+    '#parents' => array('extra', 'no_autofill'),
+  );
+  $form['field_handling']['hide_fields'] = array(
     '#type' => 'select',
     '#multiple' => TRUE,
     '#title' => t('Fields to Lock'),
+    '#description' => t('Prevent editing by disabling or hiding fields when a contact already exists.'),
     '#default_value' => $component['extra']['hide_fields'],
     '#options' => array('' => '- ' . t('None') . ' -') + wf_crm_contact_fields($node, $c),
     '#parents' => array('extra', 'hide_fields'),
   );
-  $form['field_locking']['hide_method'] = array(
+  $form['field_handling']['hide_method'] = array(
     '#type' => 'select',
     '#title' => t('Locked fields should be'),
     '#default_value' => $component['extra']['hide_method'],
     '#options' => array('hide' => t('Hidden'), 'disable' => t('Disabled')),
     '#parents' => array('extra', 'hide_method'),
   );
-  $form['field_locking']['no_hide_blank'] = array(
+  $form['field_handling']['no_hide_blank'] = array(
     '#type' => 'checkbox',
     '#title' => t("Don't lock fields that are empty"),
     '#default_value' => $component['extra']['no_hide_blank'],
@@ -401,6 +412,22 @@ function _webform_render_civicrm_contact($component, $value = NULL, $filter = TR
           $element['#element_validate'] = array('wf_crm_contact_component_required');
         }
       }
+      break;
+
+    case 'textfield':
+      $element['#description'] = t('Lookup by Contact ID.');
+      $element['#size'] = 8;
+      if ($node && isset($node->webform_civicrm)) {
+        $js = "field.change(function() {
+                  wfCivi.existingSelect($c, {$node->nid}, $callback_path, toHide, '$hide_method', $no_hide_blank, \$(this).val(), $ajax);
+                });
+                wfCivi.existingInit(field, $c, {$node->nid}, $callback_path, toHide);";
+      }
+      // Display empty option unless there are no results
+      if (!$component['extra']['allow_create'] || count($element['#options']) > 1) {
+        $element['#empty_option'] = $component['extra'][$element['#options'] ? 'search_prompt' : 'none_prompt'];
+      }
+
   }
   // Add inline javascript
   if ($js) {

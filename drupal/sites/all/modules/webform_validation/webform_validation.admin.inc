@@ -213,13 +213,13 @@ function webform_validation_manage_rule($form, $form_state, $node, $action = 'ad
     '#default_value' => (isset($rule['components'])) ? array_keys($rule['components']) : array(),
   );
 
-  if (isset($rule_validator['custom_data']) && is_array($rule_validator['custom_data'])) {
+  if (!empty($rule_validator['custom_data']) && is_array($rule_validator['custom_data'])) {
     $required = isset($rule_validator['custom_data']['required']) ? $rule_validator['custom_data']['required'] : TRUE;
     $form['rule']['data'] = array(
       '#type' => 'textfield',
       '#title' => $rule_validator['custom_data']['label'],
       '#description' => $rule_validator['custom_data']['description'],
-      '#required' => ($required !== FALSE) ? TRUE : FALSE,
+      '#required' => (bool) $required,
       '#size' => 60,
       '#maxlength' => NULL,
       '#default_value' => $rule['data'],
@@ -227,7 +227,7 @@ function webform_validation_manage_rule($form, $form_state, $node, $action = 'ad
     );
   }
 
-  if (isset($rule_validator['negatable'])) {
+  if (!empty($rule_validator['negatable'])) {
     $form['rule']['negate'] = array(
       '#type' => 'checkbox',
       '#title' => t('Negate rule'),
@@ -237,14 +237,14 @@ function webform_validation_manage_rule($form, $form_state, $node, $action = 'ad
     );
   }
 
-  if (isset($rule_validator['custom_error'])) {
+  if (!empty($rule_validator['custom_error'])) {
     $form['rule']['error_message'] = array(
       '#type' => 'textfield',
       '#title' => t('Custom error message'),
       '#description' => t("Specify an error message that should be displayed when user input doesn't pass validation"),
       '#required' => TRUE,
       '#size' => 60,
-      '#maxlength' => 255,
+      '#maxlength' => 2048,
       '#default_value' => $rule['error_message'],
       '#weight' => 5,
     );

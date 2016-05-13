@@ -330,10 +330,10 @@ function webform_validation_webform_validation_validators() {
       ),
       'custom_error' => TRUE,
       'custom_data' => array(
-        'label' => t('Regex code'),
-        'description' => t('Specify regex code to validate the user input against.'),
+        'label' => t('Regex code (case-sensitive)'),
+        'description' => t('Specify regex code to validate the user input against. Do not include delimiters such as /.'),
       ),
-      'description' => t('Validates user-entered text against a specified case-sensitive regular expression. Note: don\'t include delimiters such as /.'),
+      'description' => t('Validates user-entered text against a case-sensitive regular expression.'),
     ),
     'regexi' => array(
       'name' => t('Regular expression, case-insensitive'),
@@ -347,10 +347,10 @@ function webform_validation_webform_validation_validators() {
       ),
       'custom_error' => TRUE,
       'custom_data' => array(
-        'label' => t('Regex code'),
-        'description' => t('Specify regex code to validate the user input against.'),
+        'label' => t('Regex code (case-insensitive)'),
+        'description' => t('Specify regex code to validate the user input against. Do not include delimiters such as /.'),
       ),
-      'description' => t('Validates user-entered text against a specified case-insensitive regular expression. Note: don\'t include delimiters such as /.'),
+      'description' => t('Validates user-entered text against a case-insensitive regular expression.'),
     ),
     'must_be_empty' => array(
       'name' => t('Must be empty'),
@@ -1030,10 +1030,22 @@ function _webform_validation_i18n_error_message($rule) {
 }
 
 /**
- * Helper function used by array_filter to determine if a value was selected or not
+ * Helper function used by array_filter() to determine if a value is empty.
+ *
+ * This is used in place of empty() because string '0' needs to be considered
+ * not empty and return FALSE.
+ *
+ * @param mixed $var
+ *   The value to check.
+ *
+ * @return bool
+ *   TRUE if $var is not one of FALSE, int 0, or empty string; FALSE otherwise.
+ *
+ * @see https://www.drupal.org/node/886458
+ * @see https://www.drupal.org/node/2638172
  */
 function _webform_validation_check_false($var) {
-  return $var !== FALSE && $var !== 0;
+  return $var !== FALSE && $var !== 0 && $var !== '';
 }
 
 /**

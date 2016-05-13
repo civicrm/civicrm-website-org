@@ -184,11 +184,17 @@ function wf_crm_get_events($reg_options, $context) {
   $ret = array();
   $format = wf_crm_aval($reg_options, 'title_display', 'title');
   $sql = "SELECT id, title, start_date, end_date, event_type_id FROM civicrm_event WHERE is_template = 0 AND is_active = 1";
-  // 0 means only current events, 1 means show all past events, other values are relative date strings
-  $date = wf_crm_aval($reg_options, 'show_past_events', 'now');
-  if ($date != '1') {
-    $date = date('Y-m-d H:i:s', strtotime($date));
-    $sql .= " AND (end_date >= '$date' OR end_date IS NULL)";
+  // 'now' means only current events, 1 means show all past events, other values are relative date strings
+  $date_past = wf_crm_aval($reg_options, 'show_past_events', 'now');
+  if ($date_past != '1') {
+    $date_past = date('Y-m-d H:i:s', strtotime($date_past));
+    $sql .= " AND (end_date >= '$date_past' OR end_date IS NULL)";
+  }
+  // 'now' means only past events, 1 means show all future events, other values are relative date strings
+  $date_future = wf_crm_aval($reg_options, 'show_future_events', '1');
+  if ($date_future != '1') {
+    $date_future = date('Y-m-d H:i:s', strtotime($date_future));
+    $sql .= " AND (end_date <= '$date_future' OR end_date IS NULL)";
   }
   if (is_numeric($reg_options['event_type'])) {
     $sql .= ' AND event_type_id = ' . $reg_options['event_type'];

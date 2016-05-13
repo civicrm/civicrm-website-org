@@ -11,7 +11,7 @@
 function pathologic_configuration_form($form, $form_state) {
   $form['reminder'] = array(
     '#type' => 'markup',
-    '#markup' => '<p>' . t('Reminder: The settings on this form only affect text formats for which Pathologic is configured to use the global Pathologic settings; if it&rsquo;s configured to use per-format settings, these settings will have no effect. If you have upgraded to the current 7.x-3.x version of Pathologic from version 7.x-2.x, all of your current formats will use their existing per-format settings by default, so that behavior will be the same as the 7.x-2.x version until they are configured to use the global settings instead. Please <a href="!docs">consult Pathologic&rsquo;s documentation</a> for a step-by-step guide to configuring Pathologic.', array('!docs' => 'http://drupal.org/node/257026')) . '</p>',
+    '#markup' => '<p>' . t('Reminder: The settings on this form only affect text formats for which Pathologic is configured to use the global Pathologic settings; if it&rsquo;s configured to use per-format settings, these settings will have no effect. If you have upgraded to the current 7.x-3.x version of Pathologic from version 7.x-2.x, all of your current formats will use their existing per-format settings by default, so that behavior will be the same as the 7.x-2.x version until they are configured to use the global settings instead. Please <a href="!docs">consult Pathologic&rsquo;s documentation</a> for a step-by-step guide to configuring Pathologic.', array('!docs' => 'https://www.drupal.org/node/257026')) . '</p>',
     '#weight' => 0,
   );
   $config_form = _pathologic_configuration_form(array(
@@ -52,7 +52,7 @@ function _pathologic_configuration_form($defaults) {
       '#type' => 'textarea',
       '#title' =>  t('All base paths for this site'),
       '#default_value' => $defaults['local_paths'],
-        '#description' => t('If this site is or was available at more than one base path or URL, enter them here, separated by line breaks. For example, if this site is live at <code>http://example.com/</code> but has a staging version at <code>http://dev.example.org/staging/</code>, you would enter both those URLs here. If confused, please read <a href="!docs">Pathologic&rsquo;s documentation</a> for more information about this option and what it affects.', array('!docs' => 'http://drupal.org/node/257026')),
+        '#description' => t('If this site is or was available at more than one base path or URL, enter them here, separated by line breaks. For example, if this site is live at <code>http://example.com/</code> but has a staging version at <code>http://dev.example.org/staging/</code>, you would enter both those URLs here. If confused, please read <a href="!docs">Pathologic&rsquo;s documentation</a> for more information about this option and what it affects.', array('!docs' => 'https://www.drupal.org/node/257026')),
       '#weight' => 20,
     ),
   );

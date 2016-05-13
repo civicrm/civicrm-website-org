@@ -74,7 +74,7 @@ function _pathologic_settings($form, &$form_state, $filter, $format, $defaults, 
   );
   $our_form['local_settings'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Custom settings for this input format'),
+    '#title' => t('Custom settings for this text format'),
     '#weight' => 20,
     '#collapsible' => FALSE,
     '#collapsed' => FALSE,
@@ -86,9 +86,10 @@ function _pathologic_settings($form, &$form_state, $filter, $format, $defaults, 
     ),
   );
   module_load_include('inc', 'pathologic', 'pathologic.admin');
+  $settings = isset($filter->settings['local_settings']) ? $filter->settings['local_settings'] : $filter->settings;
   $our_form['local_settings'] += _pathologic_configuration_form(array(
-    'protocol_style' => isset($filter->settings['protocol_style']) ? $filter->settings['protocol_style'] : $defaults['protocol_style'],
-    'local_paths' => isset($filter->settings['local_paths']) ? $filter->settings['local_paths'] : $defaults['local_paths'],
+    'protocol_style' => isset($settings['protocol_style']) ? $settings['protocol_style'] : $defaults['protocol_style'],
+    'local_paths' => isset($settings['local_paths']) ? $settings['local_paths'] : $defaults['local_paths'],
   ));
   return $our_form;
 }
@@ -130,7 +131,7 @@ function _pathologic_filter($text, $filter, $format, $langcode, $cache, $cache_i
   // different settings, we build an array of settings, keyed by format ID.
   $cached_settings = &drupal_static(__FUNCTION__, array());
   if (!isset($cached_settings[$filter->format])) {
-    $filter_settings = $filter->settings;
+    $filter_settings = isset($filter->settings['local_settings']) ? $filter->settings['local_settings'] : $filter->settings;
     // Overwrite local settings with the global defaults if necessary
     if (_pathologic_get_real_settings_source($filter->format) === 'global') {
       $filter_settings['protocol_style'] = variable_get('pathologic_protocol_style', 'full');

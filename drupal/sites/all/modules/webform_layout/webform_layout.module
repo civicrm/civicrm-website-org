@@ -75,6 +75,44 @@ function webform_layout_form_add_submit($form, &$form_state) {
     webform_component_defaults($component);
     $cid = webform_component_insert($component);
 
+    // Since Webform components have been updated but the node itself has not
+    // been saved, it is necessary to explicitly clear the cache to make sure
+    // the updated webform is visible to anonymous users.
+    cache_clear_all();
+
+    // Clear the entity cache if Entity Cache module is installed.
+    if (module_exists('entitycache')) {
+      entity_get_controller('node')->resetCache(array($nid));
+    }
+
     $form_state['redirect'] = array("node/$nid/webform/components", array('query' => array('cid' => $cid)));
+  }
+}
+
+/**
+ * Implement hook_theme();
+ */
+function webform_layout_theme(&$element, $form_type, $form_id) {
+  return array(
+    'webform_layout_empty_layout_box' => array(
+      'variables' => array(),
+      'file' => 'layout_box.inc',
+    ),
+  );
+}
+
+/**
+ * Implement hook_form_builder_preview_alter();
+ */
+function webform_layout_form_builder_preview_alter(&$element, $form_type, $form_id) {
+  if ($element['#form_builder']['element_type'] == 'layout_box') {
+    $element['#attributes']['class'][] = 'form-builder-fieldset form-builder-layout-box';
+  }
+
+  if (isset($element['#type']) &&
+    $element['#type'] == 'fieldset' &&
+    $element['#form_builder']['element_type'] == 'layout_box' &&
+    count(element_children($element)) == 0) {
+      $element['#children'] = theme('webform_layout_empty_layout_box');
   }
 }
