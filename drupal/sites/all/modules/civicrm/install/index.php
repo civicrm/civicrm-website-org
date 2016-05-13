@@ -3,11 +3,38 @@
 /**
  * Note that this installer has been based of the SilverStripe installer.
  * You can get more information from the SilverStripe Website at
- * http://www.silverstripe.com/. Please check
- * http://www.silverstripe.com/licensing for licensing details.
+ * http://www.silverstripe.com/.
  *
  * Copyright (c) 2006-7, SilverStripe Limited - www.silverstripe.com
  * All rights reserved.
+ *
+ * License: BSD-3-clause
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *  Redistributions of source code must retain the above copyright notice,
+ *  this list of conditions and the following disclaimer.
+ *
+ *  Redistributions in binary form must reproduce the above copyright
+ *  notice, this list of conditions and the following disclaimer in the
+ *  documentation and/or other materials provided with the distribution.
+ *
+ *  Neither the name of SilverStripe nor the names of its contributors may
+ *  be used to endorse or promote products derived from this software
+ *  without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+ * OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Changes and modifications (c) 2007-2015 by CiviCRM LLC
  *
@@ -30,6 +57,9 @@ else {
 
 // set installation type - drupal
 if (!session_id()) {
+  if (defined('PANTHEON_ENVIRONMENT')) {
+    ini_set('session.save_handler', 'files');
+  }
   session_start();
 }
 
@@ -76,22 +106,32 @@ require_once $crmPath . '/CRM/Core/ClassLoader.php';
 CRM_Core_ClassLoader::singleton()->register();
 
 // Load civicrm database config
-if (isset($_REQUEST['mysql'])) {
-  $databaseConfig = $_REQUEST['mysql'];
+if (isset($_POST['mysql'])) {
+  $databaseConfig = $_POST['mysql'];
 }
 else {
   $databaseConfig = array(
-    "server" => "localhost",
+    "server"   => "localhost",
     "username" => "civicrm",
     "password" => "",
     "database" => "civicrm",
   );
 }
 
+if ($installType == 'wordpress') {
+  //WP Database Data
+  $databaseConfig = array(
+    "server"   => DB_HOST,
+    "username" => DB_USER,
+    "password" => DB_PASSWORD,
+    "database" => DB_NAME,
+  );
+}
+
 if ($installType == 'drupal') {
   // Load drupal database config
-  if (isset($_REQUEST['drupal'])) {
-    $drupalConfig = $_REQUEST['drupal'];
+  if (isset($_POST['drupal'])) {
+    $drupalConfig = $_POST['drupal'];
   }
   else {
     $drupalConfig = array(
@@ -104,7 +144,7 @@ if ($installType == 'drupal') {
 }
 
 $loadGenerated = 0;
-if (isset($_REQUEST['loadGenerated'])) {
+if (isset($_POST['loadGenerated'])) {
   $loadGenerated = 1;
 }
 
@@ -134,6 +174,9 @@ global $tsLocale;
 $tsLocale = 'en_US';
 $seedLanguage = 'en_US';
 
+// CRM-16801 This validates that seedLanguage is valid by looking in $langs.
+// NB: the variable is initial a $_REQUEST for the initial page reload,
+// then becomes a $_POST when the installation form is submitted.
 if (isset($_REQUEST['seedLanguage']) and isset($langs[$_REQUEST['seedLanguage']])) {
   $seedLanguage = $_REQUEST['seedLanguage'];
   $tsLocale = $_REQUEST['seedLanguage'];
@@ -143,8 +186,12 @@ $config = CRM_Core_Config::singleton(FALSE);
 $GLOBALS['civicrm_default_error_scope'] = NULL;
 
 // The translation files are in the parent directory (l10n)
-$config->gettextResourceDir = '..' . DIRECTORY_SEPARATOR . $config->gettextResourceDir;
 $i18n = CRM_Core_I18n::singleton();
+
+// Support for Arabic, Hebrew, Farsi, etc.
+// Used in the template.html
+$short_lang_code = CRM_Core_I18n_PseudoConstant::shortForLong($tsLocale);
+$text_direction = (CRM_Core_I18n::isLanguageRTL($tsLocale) ? 'rtl' : 'ltr');
 
 global $cmsPath;
 if ($installType == 'drupal') {
@@ -161,9 +208,16 @@ if ($installType == 'drupal') {
 }
 elseif ($installType == 'wordpress') {
   $cmsPath = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'civicrm';
-  $alreadyInstalled = file_exists($cmsPath . CIVICRM_DIRECTORY_SEPARATOR .
-    'civicrm.settings.php'
-  );
+  $upload_dir = wp_upload_dir();
+  $files_dirname = $upload_dir['basedir'] . DIRECTORY_SEPARATOR . 'civicrm';
+  $wp_civi_settings = $upload_dir['basedir'] . DIRECTORY_SEPARATOR . 'civicrm' . DIRECTORY_SEPARATOR . 'civicrm.settings.php';
+  $wp_civi_settings_deprectated = CIVICRM_PLUGIN_DIR . 'civicrm.settings.php';
+  if (file_exists($wp_civi_settings_deprectated)) {
+    $alreadyInstalled = $wp_civi_settings_deprectated;
+  }
+  elseif (file_exists($wp_civi_settings)) {
+    $alreadyInstalled = $wp_civi_settings;
+  }
 }
 
 if ($installType == 'drupal') {
@@ -261,14 +315,14 @@ if ($databaseConfig) {
 }
 
 // Actual processor
-if (isset($_REQUEST['go']) && !$req->hasErrors() && !$dbReq->hasErrors()) {
+if (isset($_POST['go']) && !$req->hasErrors() && !$dbReq->hasErrors()) {
   // Confirm before reinstalling
-  if (!isset($_REQUEST['force_reinstall']) && $alreadyInstalled) {
+  if (!isset($_POST['force_reinstall']) && $alreadyInstalled) {
     include $installDirPath . 'template.html';
   }
   else {
     $inst = new Installer();
-    $inst->install($_REQUEST);
+    $inst->install($_POST);
   }
 
   // Show the config form
@@ -340,6 +394,18 @@ class InstallRequirements {
             ts("An auto_increment_increment value greater than 1 is not currently supported. Please see issue CRM-7923 for further details and potential workaround."),
           )
         );
+        $testDetails = array(
+          ts("MySQL %1 Configuration", array(1 => $dbName)),
+          ts("Is the provided database name valid?"),
+          ts("The database name provided is not valid. Please use only 0-9, a-z, A-Z and _ as characters in the name."),
+        );
+        if (!CRM_Core_DAO::requireValidDBName($databaseConfig['database'])) {
+          $this->error($testDetails);
+          return FALSE;
+        }
+        else {
+          $this->testing($testDetails);
+        }
         $this->requireMySQLThreadStack($databaseConfig['server'],
           $databaseConfig['username'],
           $databaseConfig['password'],
@@ -419,7 +485,7 @@ class InstallRequirements {
 
     $this->errors = NULL;
 
-    $this->requirePHPVersion('5.3.3', array(
+    $this->requirePHPVersion('5.3.4', array(
       ts("PHP Configuration"),
       ts("PHP5 installed"),
       NULL,
@@ -475,8 +541,13 @@ class InstallRequirements {
       );
     }
     elseif ($installType == 'wordpress') {
-      // make sure that we can write to plugins/civicrm  and plugins/files/
-      $writableDirectories = array(WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'files', $cmsPath);
+      // make sure that we can write to uploads/civicrm/
+      $upload_dir = wp_upload_dir();
+      $files_dirname = $upload_dir['basedir'] . DIRECTORY_SEPARATOR . 'civicrm';
+      if (!file_exists($files_dirname)) {
+        wp_mkdir_p($files_dirname);
+      }
+      $writableDirectories = array($files_dirname);
     }
 
     foreach ($writableDirectories as $dir) {
@@ -674,10 +745,14 @@ class InstallRequirements {
     $aboveMinVersion = version_compare($phpVersion, $minVersion) >= 0;
     $belowMaxVersion = $maxVersion ? version_compare($phpVersion, $maxVersion) < 0 : TRUE;
 
-    if ($maxVersion && $aboveMinVersion && $belowMaxVersion) {
-      return TRUE;
-    }
-    elseif (!$maxVersion && $aboveMinVersion) {
+    if ($aboveMinVersion && $belowMaxVersion) {
+      if (version_compare(phpversion(), CRM_Upgrade_Incremental_General::MIN_RECOMMENDED_PHP_VER) < 0) {
+        $testDetails[2] = ts('This webserver is running an outdated version of PHP (%1). It is strongly recommended to upgrade to PHP %2 or later, as older versions can present a security risk.', array(
+          1 => phpversion(),
+          2 => CRM_Upgrade_Incremental_General::MIN_RECOMMENDED_PHP_VER,
+        ));
+        $this->warning($testDetails);
+      }
       return TRUE;
     }
 
@@ -1096,7 +1171,8 @@ class InstallRequirements {
       return;
     }
     else {
-      if (@mysql_query("CREATE DATABASE $database")) {
+      $query = sprintf("CREATE DATABASE %s", mysql_real_escape_string($database));
+      if (@mysql_query($query)) {
         $okay = ts("Able to create a new database.");
       }
       else {
@@ -1228,8 +1304,8 @@ class Installer extends InstallRequirements {
       // skip if database already present
       return;
     }
-
-    if (@mysql_query("CREATE DATABASE $database")) {
+    $query = sprintf("CREATE DATABASE %s", mysql_real_escape_string($database));
+    if (@mysql_query($query)) {
     }
     else {
       $errorTitle = ts("Oops! Could not create database %1", array(1 => $database));
@@ -1341,10 +1417,6 @@ class Installer extends InstallRequirements {
 
         //change the default language to one chosen
         if (isset($config['seedLanguage']) && $config['seedLanguage'] != 'en_US') {
-          // This ensures that defaults get set, otherwise the user will login
-          // and most configurations will be empty, not set to en_US defaults.
-          civicrm_api3('Setting', 'revert');
-
           civicrm_api3('Setting', 'create', array(
               'domain_id' => 'current_domain',
               'lcMessages' => $config['seedLanguage'],
@@ -1431,6 +1503,10 @@ class Installer extends InstallRequirements {
 
         $c = CRM_Core_Config::singleton(FALSE);
         $c->free();
+        $wpInstallRedirect = admin_url("?page=CiviCRM&q=civicrm&reset=1");
+        echo "<script>
+         window.location = '$wpInstallRedirect';
+        </script>";
       }
     }
 
