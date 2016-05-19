@@ -1,6 +1,6 @@
 #Development workflow
 
-All new code, etc. should be developed locally, commited to this repository, tested on www-test.civicrm.org, and the deployed on production. www-test should NOT be used for code based development.
+All new code, etc. should be developed locally, commited to this repository, tested on https://www-test.civicrm.org, and the deployed on production. www-test should NOT be used for code based development.
 
 It is good practice to use www-test to experiment with anything that does not happen at the code level (like configuration changes, creating views, permissions changes, etc.) but if you are making trivial changes, just adding content, etc., and you are confident of the results, please feel free to make the changes directly on the live site.
 
