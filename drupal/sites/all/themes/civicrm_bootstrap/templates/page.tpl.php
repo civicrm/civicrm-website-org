@@ -169,6 +169,9 @@
   </section>
 
   
+<section class="footer-top">
+             <?php print render($page['footer_top']);?>
+</section>
 
 <footer class="footer stripe-darkgrey">
     <div class="container">

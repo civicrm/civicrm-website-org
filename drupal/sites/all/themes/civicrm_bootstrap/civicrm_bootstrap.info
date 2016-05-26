@@ -11,6 +11,7 @@ base theme = bootstrap
 regions[navigation]     = 'Navigation'
 regions[help]           = 'Help'
 regions[content]        = 'Content'
+regions[footer_top]     = 'Footer Top'
 regions[footer]         = 'Footer'
 regions[page_top]       = 'Page top'
 regions[page_bottom]    = 'Page bottom'
@@ -27,6 +28,7 @@ plugins[panels][layouts] = layouts
 ;;;;;;;;;;;;;;;;;;;;;
 
 stylesheets[all][] = css/style.css
+stylesheets[all][] = css/new.css
 
 
 ; For information on choosing the desired method, please read the Drupal
