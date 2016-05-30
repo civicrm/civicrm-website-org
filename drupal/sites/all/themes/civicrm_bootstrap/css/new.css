@@ -257,18 +257,18 @@ a.bluebutton:active{
     text-align: center;
 }
 /* CIVICRM 101 */
-.page-node-5400 .page-header,
-.page-node-5400 .navbar-fixed-top .stripe-black {
+.page-node-5424 .page-header,
+.page-node-5424 .navbar-fixed-top .stripe-black {
     display: none;
 }
-body.navbar-is-fixed-top.breadcrumbs.page-node-5400{
+body.navbar-is-fixed-top.breadcrumbs.page-node-5424{
 	padding-top: 171px !important;
 }
-.page-node-5400 #white > div.container {
+.page-node-5424 #white > div.container {
     padding: 0;
     width: 100%;
 }
-.page-node-5400 .pane-node-body{
+.page-node-5424 .pane-node-body{
 	margin:0;
 }
 .navbar.fixed.scrollable {
