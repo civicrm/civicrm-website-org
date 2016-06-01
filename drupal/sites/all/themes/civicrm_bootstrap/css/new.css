@@ -319,7 +319,8 @@ body.navbar-is-fixed-top.breadcrumbs.page-node-5424{
 }
 h2.focal {
     color: #82c459;
-    font-family: oswald;
+    font-family: 'Oswald', sans-serif;
+	font-weight: 700;
     font-size: 60px;
     line-height: 1.03;
 }
