@@ -13,6 +13,7 @@ regions[help]           = 'Help'
 regions[content]        = 'Content'
 regions[footer_top]     = 'Footer Top'
 regions[footer]         = 'Footer'
+regions[footer_bottom]  = 'Footer Bottom'
 regions[page_top]       = 'Page top'
 regions[page_bottom]    = 'Page bottom'
 

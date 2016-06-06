@@ -172,4 +172,10 @@
              <?php print render($page['footer']);?>
   </div>
 </footer>
+
+<section class="footer-bottom">
+    <div class="container">
+             <?php print render($page['footer_bottom']);?>
+  </div>
+</footer>
 </div>
