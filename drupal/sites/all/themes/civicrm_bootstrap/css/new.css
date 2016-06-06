@@ -450,7 +450,29 @@ a.feature-box:hover{
 }
 
 
-
+/* FOOTER BOTTOM - 06/06/16 */
+.footer-bottom {
+    background: #363333 none repeat scroll 0 0;
+    color: #BBB7B7;
+    overflow: hidden;
+}
+.footer-bottom a{
+    color: #BBB7B7;
+    text-decoration: underline;	
+}
+.footer-bottom a:hover{
+    color: #BBB7B7;
+    text-decoration: none;	
+}
+.footer .container {
+    margin-bottom: 0;
+}
+.footer-bottom p {
+    font-size: 15px;
+}
+.region-footer-bottom .block {
+    margin-bottom: 40px;
+}
 
 
 
