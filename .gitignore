@@ -16,7 +16,6 @@ drupal/sites/default/civiext/cache
 
 tags
 
-*.sql
 *.tar
 *.gz
 *.zip
