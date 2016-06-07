@@ -10,3 +10,9 @@ Implement the new CiviCRM website design in bootstrap, staying as close to Boots
   - work out whether to use panels for other special pages
 - Modify the page.tpl.php so that it will work easily with bootstrap_panels
 - Checkout https://www.drupal.org/project/bootstrap_carousel for the home page slider
+
+# Regenerating less to CSS
+
+```
+lessc --compress ./less/variables-civicrm.less > css/style.css
+```
