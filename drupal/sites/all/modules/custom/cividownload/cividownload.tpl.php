@@ -54,13 +54,13 @@ $url = "https://download.civicrm.org/civicrm-{$content['civicrm_lts_version']}-"
     <div class="crm-introduction" style="font-size: 1.2em;">
       <a href="https://civicrm.org/versions" target="_blank">Which version should I get? ›</a>
       <br />
+       <a href="http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Upgrades" target="_blank">Installation and Upgrade Guides ›</a>
+       <br />
       <a href="http://sourceforge.net/projects/civicrm/files/" target="_blank">Previous and pre-release versions (on Sourceforge.net) ›</a>
-      <br />
-      <a href="http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Upgrades" target="_blank">Installation and Upgrade Guides ›</a>
       <br />
       <a href="http://book.civicrm.org/user" target="_blank">User and Administrator Guide ›</a>
       <br />
-      <a href="http://wiki.civicrm.org/confluence/display/CRMDOC/Develop" target="_blank">Developer Documentation ›</a>
+      <a href="http://docs.civicrm.org/dev/en/master/" target="_blank">Developer Documentation ›</a>
     </div>
   </div>
   <br />
