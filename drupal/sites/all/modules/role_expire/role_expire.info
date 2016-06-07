@@ -1,0 +1,13 @@
+name = Role Expire
+description = "Enables user roles to expire on given time and day."
+core = 7.x
+files[] = tests/role_expire.test
+files[] = role_expire.views.inc
+files[] = role_expire.rules.inc
+
+; Information added by drupal.org packaging script on 2013-10-01
+version = "7.x-1.0-beta1+6-dev"
+core = "7.x"
+project = "role_expire"
+datestamp = "1380626074"
+
