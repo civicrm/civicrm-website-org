@@ -294,8 +294,7 @@ class CRM_Contact_Page_AJAX {
       echo CRM_Contact_BAO_Contact::getCountComponent('custom_' . $customGroupID, $contactId);
     }
 
-    // reset the group contact cache for this group
-    CRM_Contact_BAO_GroupContactCache::remove();
+    CRM_Contact_BAO_GroupContactCache::opportunisticCacheFlush();
     CRM_Utils_System::civiExit();
   }
 
@@ -667,7 +666,7 @@ LIMIT {$offset}, {$rowCount}
       $contactType = CRM_Core_DAO::getFieldValue('CRM_Dedupe_DAO_RuleGroup', $rgid, 'contact_type');
     }
 
-    $cacheKeyString   = "merge {$contactType}_{$rgid}_{$gid}";
+    $cacheKeyString   = CRM_Dedupe_Merger::getMergeCacheKeyString($rgid, $gid);
     $searchRows       = array();
     $selectorElements = array('is_selected', 'is_selected_input', 'src_image', 'src', 'src_email', 'src_street', 'src_postcode', 'dst_image', 'dst', 'dst_email', 'dst_street', 'dst_postcode', 'conflicts', 'weight', 'actions');
 
@@ -726,7 +725,7 @@ LIMIT {$offset}, {$rowCount}
     if ($selected) {
       $whereClause .= ' AND pn.is_selected = 1';
     }
-    $join .= " LEFT JOIN civicrm_dedupe_exception de ON ( pn.entity_id1 = de.contact_id1 AND pn.entity_id2 = de.contact_id2 )";
+    $join .= CRM_Dedupe_Merger::getJoinOnDedupeTable();
 
     $select = array(
       'cc1.contact_type'     => 'src_contact_type',
@@ -762,35 +761,35 @@ LIMIT {$offset}, {$rowCount}
     if (!empty($columnDetails)) {
       switch ($columnDetails['data']) {
         case 'src':
-          $whereClause .= " ORDER BY cc1.display_name {$dir}";
+          $orderByClause = " ORDER BY cc1.display_name {$dir}";
           break;
 
         case 'src_email':
-          $whereClause .= " ORDER BY ce1.email {$dir}";
+          $orderByClause = " ORDER BY ce1.email {$dir}";
           break;
 
         case 'src_street':
-          $whereClause .= " ORDER BY ca1.street_address {$dir}";
+          $orderByClause = " ORDER BY ca1.street_address {$dir}";
           break;
 
         case 'src_postcode':
-          $whereClause .= " ORDER BY ca1.postal_code {$dir}";
+          $orderByClause = " ORDER BY ca1.postal_code {$dir}";
           break;
 
         case 'dst':
-          $whereClause .= " ORDER BY cc2.display_name {$dir}";
+          $orderByClause = " ORDER BY cc2.display_name {$dir}";
           break;
 
         case 'dst_email':
-          $whereClause .= " ORDER BY ce2.email {$dir}";
+          $orderByClause = " ORDER BY ce2.email {$dir}";
           break;
 
         case 'dst_street':
-          $whereClause .= " ORDER BY ca2.street_address {$dir}";
+          $orderByClause = " ORDER BY ca2.street_address {$dir}";
           break;
 
         case 'dst_postcode':
-          $whereClause .= " ORDER BY ca2.postal_code {$dir}";
+          $orderByClause = " ORDER BY ca2.postal_code {$dir}";
           break;
 
         default:
@@ -798,7 +797,7 @@ LIMIT {$offset}, {$rowCount}
       }
     }
 
-    $dupePairs = CRM_Core_BAO_PrevNextCache::retrieve($cacheKeyString, $join, $whereClause, $offset, $rowCount, $select);
+    $dupePairs = CRM_Core_BAO_PrevNextCache::retrieve($cacheKeyString, $join, $whereClause, $offset, $rowCount, $select, $orderByClause);
     $iFilteredTotal = CRM_Core_DAO::singleValueQuery("SELECT FOUND_ROWS()");
 
     $count = 0;
@@ -978,10 +977,7 @@ LIMIT {$offset}, {$rowCount}
     $pnid = $_REQUEST['pnid'];
     $isSelected = CRM_Utils_Type::escape($_REQUEST['is_selected'], 'Boolean');
 
-    $contactType = CRM_Core_DAO::getFieldValue('CRM_Dedupe_DAO_RuleGroup', $rgid, 'contact_type');
-    $cacheKeyString  = "merge $contactType";
-    $cacheKeyString .= $rgid ? "_{$rgid}" : '_0';
-    $cacheKeyString .= $gid ? "_{$gid}" : '_0';
+    $cacheKeyString = CRM_Dedupe_Merger::getMergeCacheKeyString($rgid, $gid);
 
     $params = array(
       1 => array($isSelected, 'Boolean'),
