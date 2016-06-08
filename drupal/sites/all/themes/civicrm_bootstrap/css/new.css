@@ -207,6 +207,7 @@ a.bluebutton:active{
     background: #fff none repeat scroll 0 0;
     margin-bottom: 4px;
     padding: 40px;
+    list-style: none;
 }
 .pane-news-and-events .col-md-8,
 .pane-news-and-events .col-md-4{
@@ -473,6 +474,70 @@ a.feature-box:hover{
 .region-footer-bottom .block {
     margin-bottom: 40px;
 }
+
+/* User Dashboard Page Fixes */
+.pane-user-menus .nav > li > a:hover, .nav > li > a:focus {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.page-user .pane-civi-upcoming-events .views-row {
+    background: rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
+}
+.page-user .view-civi-upcoming-events .views-field-title h3 a, .page-user .view-civi-upcoming-events a {
+    color: #fff;
+}
+.page-user .crm-download-buttons a.download-link {
+    background: #70716b url("/sites/all/modules/custom/civicrm/i/crm-button-bg.gif") repeat-x scroll left top;
+    border: 1px solid #3e3e3e;
+    border-radius: 3px;
+    color: #fff !important;
+    cursor: pointer;
+    font-size: 1em !important;
+    font-weight: normal;
+    margin-right: 6px;
+    padding: 4px 30px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 black;
+}
+.view-civi-upcoming-events ul{
+	padding-left: 0;
+}
+.page-user .view-civi-upcoming-events .view-footer p a{
+	color: #fff;
+}
+.page-user .pane-civi-upcoming-events .more-link{
+	display: none;
+}
+
+/* Logged-in Client Form Fixes */
+.logged-in .webform-client-form {
+    max-width: 770px;
+}
+.logged-in .webform-client-form .checkbox input[type="checkbox"], 
+.logged-in .webform-client-form .radio input[type="radio"] {
+    left: 0;
+    margin-left: initial;
+}
+.form-select{
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 0;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	color: #555;
+	display: block;
+	font-size: 18px;
+	height: 39px;
+	line-height: 1.42857;
+	padding: 6px 12px;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+	width: 100%;
+}
+.form-select:focus{
+	border-color: #66afe9;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+	outline: none;
+}
+
 
 
 
