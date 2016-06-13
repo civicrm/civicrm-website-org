@@ -1,3 +1,8 @@
+<div class="crm-support">
+  Before downloading CiviCRM make sure your environment meets the 
+  <a href="https://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Upgrades">minimum requirements</a> 
+  or contact one of our <a href="/hosting-providers">cloud providers</a>. 
+</div>
 <div class="crm-download-title">CiviCRM <?php echo $content['civicrm_version']; ?></div>
 <div class='crm-support'>
   <div class='crm-introduction'>
