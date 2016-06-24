@@ -537,16 +537,9 @@ a.feature-box:hover{
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
 	outline: none;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
+.logged-in .CiviPage .radio input[type="radio"], 
+.logged-in .CiviPage .radio-inline input[type="radio"], 
+.logged-in .CiviPage .checkbox input[type="checkbox"], 
+.logged-in .CiviPage .checkbox-inline input[type="checkbox"]{
+	margin-left: -20px;
+}
