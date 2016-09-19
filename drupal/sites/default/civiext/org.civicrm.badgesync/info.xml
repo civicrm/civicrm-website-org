@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<extension key="org.civicrm.badgesync" type="module">
+  <file>badgesync</file>
+  <name>CiviCRM.org: Badge Sync</name>
+  <description>Sync partner, member and sponsor badges on civicrm.org based on the civicrm group membership</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Kurund Jalmi</author>
+    <email>kurund@civicrm.org</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">https://github.com/kurund/org.civicrm.badgesync</url>
+    <url desc="Documentation">https://github.com/kurund/org.civicrm.badgesync</url>
+    <url desc="Support">https://github.com/kurund/org.civicrm.badgesync/issues</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2016-08-29</releaseDate>
+  <version>1.0</version>
+  <develStage>stable</develStage>
+  <compatibility>
+    <ver>4.7</ver>
+  </compatibility>
+  <comments>This is a new extension specific to civicrm.org setup</comments>
+  <civix>
+    <namespace>CRM/Badgesync</namespace>
+  </civix>
+</extension>
