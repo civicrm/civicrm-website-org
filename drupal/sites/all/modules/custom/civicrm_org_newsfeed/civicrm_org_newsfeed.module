@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * Implements hook_menu
+ */
+function civicrm_org_newsfeed_menu() {
+  return array(
+    'news-feed.rss' => array(
+      'page callback' => 'civicrm_org_newsfeed_rss_page',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+    )
+  );
+}
+
+/**
+ * Page callback.
+ *
+ * Aggregate multiple views/displays into a single rss feed.
+ */
+function civicrm_org_newsfeed_rss_page() {
+  drupal_add_http_header('Content-Type', 'application/rss+xml; charset=utf-8');
+  $views_we_want = array('news_widget_feed', 'event_widget_feed');
+  $output = '<?xml version="1.0" encoding="utf-8" ?><rss version="2.0">';
+  foreach ($views_we_want as $view_name) {
+    $view = views_get_view($view_name);
+    if ($view) {
+      foreach ($view->display as $display) {
+        if ($display->display_plugin == 'feed') {
+          $content = views_embed_view($view_name, $display->id);
+          // Omit the outer wrappers
+          $content = substr($content, strpos($content, '<channel'));
+          $output .= substr($content, 0, strpos($content, '</rss'));
+        }
+      }
+    }
+  }
+  $output .= '</rss>';
+  print $output;
+  drupal_exit();
+}
