@@ -9,6 +9,7 @@ base theme = bootstrap
 ;;;;;;;;;;;;;;;;;;;;;
 
 regions[navigation]     = 'Navigation'
+regions[header]         = 'Header'
 regions[help]           = 'Help'
 regions[content]        = 'Content'
 regions[footer_top]     = 'Footer Top'

@@ -1,3 +1,7 @@
+/** FONTS **/
+
+@import 'https://fonts.googleapis.com/css?family=Oswald:700&subset=latin-ext';
+
 /* NEW NAVBAR */
 #navbar{
 	background: #fff;
@@ -272,7 +276,7 @@ body.navbar-is-fixed-top.breadcrumbs.page-node-5424{
 .page-node-5424 .pane-node-body{
 	margin:0;
 }
-.navbar.fixed.scrollable {
+.navbar.fixed.scrollable,  .menu-name-menu-events-sub-menu ul {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -543,3 +547,644 @@ a.feature-box:hover{
 .logged-in .CiviPage .checkbox-inline input[type="checkbox"]{
 	margin-left: -20px;
 }
+/* MAIN EVENTS PAGE */
+.not-logged-in.civicrm-events header + section > div.container {
+    display: none;
+}
+.civicrm-events .page-header h1 {
+    display: none;
+}
+.civicrm-events .region.region-content {
+    margin-top: 10px;
+}
+.civicrm-events .row-stripe-white > *{
+	margin: 0;
+}
+
+/* menu */
+.menu-name-menu-events-sub-menu .nav > li {
+    display: inline-block;
+}
+.menu-name-menu-events-sub-menu ul {
+    text-align: center;
+}
+.menu-name-menu-events-sub-menu .nav > li a {
+    color: #635d5e;
+    font-size: 15px;
+    height: 70px;
+    line-height: 70px;
+    padding: 0 20px;
+}
+.menu-name-menu-events-sub-menu .nav > li a:hover,
+.menu-name-menu-events-sub-menu .nav > li a.active-trail {
+    color: #82c459;
+    background-color: transparent
+}
+
+/* civi events section */
+.civicrm-events #white {
+    background: #eee none repeat scroll 0 0;
+    padding: 60px 0;
+}
+a.greenbutton {
+    background-color: #82c459;
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 22px;
+    margin-bottom: 15px;
+    padding: 15px 30px;
+}
+a.greenbutton:hover, a.greenbutton:active {
+    background-color: #64a13f;
+    background-image: none;
+    text-decoration: none;
+}
+.view-conference-civicon-and-user-summit .link .greenbutton {
+    margin-right: 10px;
+}
+.view-conference-civicon-and-user-summit .view-header {
+    padding-right: 20px;
+}
+.view-conference-civicon-and-user-summit .view-header, .view-conference-civicon-and-user-summit .view-content {
+    float: left;
+    width: 100%;
+}
+.view-conference-civicon-and-user-summit h2,
+.civicrm-events h2.pane-title {
+    font-family: oswald, sans-serif;
+    font-size: 48px;
+    margin-top: 0;
+    font-weight: 700
+}
+.view-conference-civicon-and-user-summit .views-field-title {
+    color: #82c459;
+    font-family: oswald, sans-serif;
+    font-size: 28px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.view-conference-civicon-and-user-summit .views-field-title a {
+    color: #82c459;
+}
+.view-conference-civicon-and-user-summit .views-field-title a:hover,
+.view-conference-civicon-and-user-summit .views-field-title a:active {
+    color: #64a13f;
+    text-decoration: none;
+}
+.view-conference-civicon-and-user-summit .views-field-field-date-teaser-line {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 1;
+    text-transform: uppercase;
+}
+.view-conference-civicon-and-user-summit .views-row {
+    border-bottom: 2px solid #d2d1d1;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+.view-conference-civicon-and-user-summit .views-row-last {
+    border-bottom: 0 none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.civicrm-events .pane-local-events, .civicrm-events .pane-webinar {
+	width: 100%;
+}
+@media all and (min-width: 768px){
+	.civicrm-events .pane-local-events, .civicrm-events .pane-webinar {
+		width: 48%;
+	}
+	.view-conference-civicon-and-user-summit .view-header, .view-conference-civicon-and-user-summit .view-content {
+		float: left;
+		width: 50%;
+	}
+}
+.civicrm-events .pane-local-events{
+	float: left;
+}
+.civicrm-events .pane-webinar {
+    float: right;
+}
+.view-local-events .views-row, .view-webinar .views-row {
+    background: #eee none repeat scroll 0 0;
+    margin-bottom: 4px;
+    padding: 30px;
+}
+.view-local-events .views-field-title a, .view-webinar .views-field-title a {
+    font-weight: bold;
+}
+.view-local-events .view-header, .view-webinar .view-header {
+    margin-bottom: 20px;
+}
+.more-link {
+    font-weight: bold;
+    text-align: right;
+}
+.civicrm-events .panel-separator {
+    display: none;
+}
+
+/** EVENTS **/
+
+.page-webinar .page-header h1, .page-local-events .page-header h1 {
+    font-family: 'Oswald',sans-serif;
+    font-weight: 700;
+    text-align: center;
+    font-size: 46px;
+    line-height: 1.03;
+    margin-top:100px
+}
+.page-webinar .view-header > p, .page-local-events .view-header > p {
+    width: 60%;
+    margin: 0 auto 40px;
+}
+.page-webinar .view-webinar tr, .page-local-events .view-local-events tr,
+.page-webinar .view-webinar .table>tbody>tr>td.active, .page-local-events .view-local-events .table>tbody>tr>td.active {
+ 	border: 0px solid tranpsarent;
+    background: #eee;
+}
+.page-webinar .view-webinar .views-field-title, .page-local-events .view-local-events .views-field-title
+.page-webinar .view-webinar .views-field-text-link, .page-local-events .view-local-events .views-field-text-link {
+    font-weight: 600;
+    font-size: 20px;
+}
+.page-webinar .view-webinar .views-field-start-date, .page-local-events .view-local-events .views-field-start-date {
+    font-weight: 600;
+    font-size: 16px;
+    vertical-align: middle;
+}
+.page-webinar .view-webinar .table>tbody>tr>td, .page-local-events .view-local-events .table>tbody>tr>td {
+    border-top: 5px solid #fff;
+    padding: 25px;
+}
+.page-webinar .stripe-black, .civicrm-events .stripe-black, .page-local-events .stripe-black, .node-type-conference .stripe-black, .page-civicon .stripe-black {
+    display: none;
+}
+
+/** EVENTS - CiviCon **/
+
+.node-type-conference .CiviPage {
+    overflow: auto;
+    overflow: hidden;
+}
+.node-type-conference .panel-panel.top {
+    min-height: 540px;
+}
+.node-type-conference .region.region-content {
+    margin: 19px 0px -19px 0px;
+}
+.node-type-conference .field-name-field-logo {
+    width: 60%;
+    padding: 30px 0px 10px;
+}
+@media (max-width:1200px) {
+.node-type-conference .field-name-field-logo {
+    width: 40%;
+}
+}
+.node-type-conference .field-name-field-date-teaser-line .field-item {
+    text-align: center;
+    padding-top: 60px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    margin: 0px;
+}
+.node-type-conference .pane-node-title h1 {
+    margin: -8px 0px 0px 0px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #82c459;
+    font-family: 'Oswald', sans-serif;
+	font-weight: 700;
+    font-size: 60px;
+}
+.node-type-conference .field-name-field-conference-teaser-line .field-item {
+    text-align: center;
+    color: #fff;
+    font-size: 38px;
+    line-height: 38px;
+    margin: 50px auto;
+    width: 500px;
+    font-weight: 300;
+}
+.field-name-field-register-link .field-item a,
+.field-name-field-full-details-link .field-item a,
+.field-name-field-register-here .field-item a,
+.page-civicon .civicon-lead .links a {
+    background-color: #82c459;
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 22px;
+    margin-bottom: 15px;
+    padding: 15px 30px;
+}
+.field-name-field-register-link .field-item a:hover,
+.field-name-field-register-link .field-item a:active,
+.field-name-field-full-details-link .field-item a:hover,
+.field-name-field-full-details-link .field-item a:active, 
+.field-name-field-register-here .field-item a:hover,
+.field-name-field-register-here .field-item a:active, 
+.page-civicon .civicon-lead .links a:hover,
+.page-civicon .civicon-lead .links a:active  {
+    background-color: #64a13f;
+    background-image: none;
+    text-decoration: none;
+}
+
+@media (min-width: 768px) {
+.node-type-conference .bootstrap-twocol-stacked .row:nth-of-type(2) {
+    width: 770px;
+    margin: 0 auto;
+}  
+}
+@media (min-width: 992px) {
+.node-type-conference .bootstrap-twocol-stacked .row:nth-of-type(2) {
+    width: 990px;
+    margin: 0 auto;
+}  
+}
+@media (min-width: 1200px) {
+.node-type-conference .bootstrap-twocol-stacked .row:nth-of-type(2) {
+    width: 1190px;
+}
+}
+.node-type-conference .bootstrap-twocol-stacked .row:nth-of-type(2) {
+    margin: 20px auto 40px;
+}
+.pane-node-field-register-link {
+    width: 210px;
+    margin: 0 auto;  
+}
+.pane-node-field-full-details-link {
+    width: 190px;
+    margin: 0 auto;
+}
+.node-type-conference h3.pane-title {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 32px;
+}
+.node-type-conference .field-name-field-image-credit {
+ 	font-size: 14px;
+    font-style: italic;
+    margin-top: 25px;
+    color: #888;
+}
+.node-type-conference .pane-node-field-event-start-date .pane-title {
+    display: none;
+}
+.node-type-conference .pane-node-field-event-start-date {
+ 	margin-top: 15px;   
+}
+.page-civicon .civicon-lead {
+	height: 490px;
+}
+.page-civicon .civicon-lead h2 a {
+    margin: -8px 0px 0px 0px;
+    text-transform: uppercase;
+    color: #82c459;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 60px;
+}
+.page-civicon .civicon-lead h2 {
+    margin-top: -8px;
+}
+.page-civicon .civicon-date-teaser {
+    color: #fff;
+    font-size: 38px;
+    line-height: 38px;
+    margin:70px 0px 0px 0px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.page-civicon .civicon-teaser{
+    color: #fff;
+    font-size: 38px;
+    line-height: 38px;
+    width: 500px;
+    font-weight: 300;
+    margin-bottom: 30px;
+}
+.page-civicon .civicon-lead a.full-details {
+    background-color: #82c459;
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 22px;
+    margin-right: 15px;
+    padding: 15px 30px;
+}
+.page-civicon a.event-register {
+    font-size: 22px; 
+    color: #82c459;
+    padding: 15px;
+}
+.page-civicon .civicon-lead  a.full-details:hover,
+.page-civicon .civicon-lead a.full-details:active {
+    background-color: #64a13f;
+    background-image: none;
+    text-decoration: none;
+}
+.page-civicon a.event-register:hover,
+.page-civicon a.event-register:active {
+    color: #64a13f;
+}
+.page-civicon .views-bootstrap-grid-plugin-style,
+.page-civicon .views-bootstrap-grid-plugin-style .col,
+.views-bootstrap-grid-plugin-style .col .views-field {
+    padding: 0px;
+}
+.page-civicon .civicon-promo {
+ 	height: 230px; 
+    text-align: left;
+}
+.page-civicon .civicon-promo .civicon-date-teaser {
+    font-size: 24px;
+    line-height: 38px;
+    margin: 0px 0px 0px 50px;
+    padding-top: 40px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: left;
+}
+.page-civicon .civicon-promo h3 {
+ 	font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    font-size: 36px;
+    text-align: left;
+    margin: -10px 0px 0px 50px;
+}
+.page-civicon .civicon-promo h3 a {
+    color: #82c459;
+}
+.page-civicon .civicon-promo h3 a:hover,
+.page-civicon .civicon-promo h3 a:focus {
+    color: #64a13f;
+}
+.page-civicon .civicon-promo .civicon-coming-soon {
+ 	color: #fff;
+    font-size: 28px;
+    line-height: 28px;
+    text-align: left;
+    font-weight: 300;
+    margin: 20px 0px 0px 50px;
+}
+.page-civicon .civicon-promo a.full-details {
+    font-size: 22px; 
+    color: #82c459;
+    padding: 20px 0px 0px 0px;
+    margin-left: 50px;
+    padding-top: 20px;
+    float: left;
+}
+.page-civicon .civicon-promo  a.full-details:hover,
+.page-civicon .civicon-promo  a.full-details:active {
+    color: #64a13f;
+}.page-civicon .views-bootstrap-grid-plugin-style,
+.page-civicon .views-bootstrap-grid-plugin-style .col,
+.views-bootstrap-grid-plugin-style .col .views-field {
+    padding: 0px;
+}
+.page-civicon .civicon-promo {
+ 	height: 230px; 
+    text-align: left;
+}
+.page-civicon .civicon-promo .civicon-date-teaser {
+    font-size: 24px;
+    line-height: 38px;
+    margin: 0px 0px 0px 50px;
+    padding-top: 40px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: left;
+}
+.page-civicon .civicon-promo h3 {
+ 	font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    font-size: 36px;
+    text-align: left;
+    margin: -10px 0px 0px 50px;
+}
+.page-civicon .civicon-promo h3 a {
+    color: #82c459;
+}
+.page-civicon .civicon-promo h3 a:hover,
+.page-civicon .civicon-promo h3 a:focus {
+    color: #64a13f;
+}
+.page-civicon .civicon-promo .civicon-coming-soon {
+    color: #fff;
+    font-size: 28px;
+    line-height: 28px;
+    text-align: left;
+    font-weight: 300;
+    margin: 50px 0px 0px 50px;
+}
+.page-civicon .civicon-promo a.full-details {
+    font-size: 22px; 
+    color: #82c459;
+    padding: 50px 0px 0px 0px;
+    margin-left: 50px;
+    float: left;
+}
+.page-civicon .civicon-promo  a.full-details:hover,
+.page-civicon .civicon-promo  a.full-details:active {
+    color: #64a13f;
+}
+.flex-viewport .slides .views-field-nothing {
+    position: relative;
+    top: -500px;
+}
+.flex-viewport .slides li {
+    height: 525px;
+    overflow: hidden;
+}
+.flex-viewport .slides li .views-field-field-header-image {
+    height: 525px;
+    overflow: hidden;
+}
+.page-civicon .civicon-lead {
+    height: 450px;
+}
+#flexslider-1 {
+    visibility: hidden;
+}
+.flexslider {
+    border: 0px solid transparent
+}
+.flex-control-nav,
+.flex-direction-nav {
+    visibility: visible;
+}
+.flex-viewport {
+    visibility: visible;
+    top: -56px;
+    margin-bottom: -60px;
+}
+.flex-direction-nav a {
+    top: 40%;
+    height: 50px;
+}
+.flex-control-thumbs img {
+    height: 140px;
+}
+.flex-control-nav .flex-caption {
+    position: relative;
+    font-family: 'Oswald', sans-serif;
+    top: -88px;
+    text-transform: uppercase;
+    font-size: 28px;
+}
+.flex-control-nav .flex-caption a {
+    color: #fff;
+}
+.flex-control-nav .flex-caption a:hover,
+.flex-control-nav .flex-caption a:focus {
+    color: #82c459;
+    text-decoration: none;
+}
+                                            
+.flex-control-thumbs li {
+    height: 140px;
+    overflow: hidden;
+    border-right: 1px solid #fff;
+}
+/*#flexslider-1, #flexslider-1 a, #flexslider-1 a:hover, #flexslider-1 a:active, #flexslider-1 a:focus {
+    color: #fff;
+    font-size: 1px;
+}
+#flexslider-1 .flex-viewport {
+    top: -10px;
+}*/
+.page-civicon .footer-top, .page-local-events .footer-top, .page-webinar .footer-top {
+    background-color: #eee;
+    padding: 50px 0px;
+    text-align: center;
+    margin-top: 60px;
+}
+.page-civicon .footer-top p {
+    margin: 0px;
+}
+.page-civicon h3.pane-title {
+    text-transform: uppercase;
+    margin: 0px 0px 10px;
+    line-height: 32px;
+    font-size: 36px;
+}
+.page-civicon .page-header, .page-civicon .page-header h1 {
+    font-family: 'Oswald', sans-serif;
+    text-align: center;
+    color:#82c459;
+    margin-top: 0px;
+    padding-top: 0px;
+}
+.page-civicon #block-system-main p {
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+}
+.page-civicon blockquote {
+    padding: 0px;
+    border-left: 0px solid transparent;
+    font-style: italic;
+    font-size: 30px;
+    line-height: 32px;
+}
+.page-civicon .bootstrap-twocol-stacked .panel-panel.right p > img {
+    float: left;
+    border-radius: 150px;
+    margin-right: 10px;
+    margin-top: 8px;
+    width: 140px;
+    height: 140px;
+}
+
+.page-civicon .bootstrap-twocol-stacked .panel-panel.right p > strong {
+    padding-top: 35px;
+}
+.page-civicon .bootstrap-twocol-stacked .panel-panel.right .pane-content > p {
+    margin-top: 42px
+}
+.views-field-field-header-image .field-content img {
+    margin: 0 auto;
+    width: 2500px;
+    height: auto;
+}
+.views-field-field-header-image .field-content {
+    margin: 0px -200px;
+}
+#flexslider-1 {
+	margin-top: 0px;
+}
+.node-type-civicamp .field-name-field-start-date .field-item {
+    text-align: center;
+    padding-top: 60px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    margin: 0px;
+}
+.node-type-civicamp .field-name-field-teaser-line .field-item {
+    text-align: center;
+    color: #fff;
+    font-size: 38px;
+    line-height: 38px;
+    margin: 50px auto;
+    width: 500px;
+    font-weight: 300;
+} 
+.node-type-civicamp .pane-node-field-register-here {
+	margin: 0 auto;
+	display: table; 
+}
+.node-type-civicamp .field-name-field-header-image-credit {
+	font-size: 14px;
+    font-style: italic;
+    margin-top: 25px;
+    color: #888;
+}
+@media screen and (max-width: 1200px) {
+.views-field-field-header-image .field-content {
+    margin: 0px -400px;                    }
+	#flexslider-1 {			margin-top: -75px;}
+}
+@media screen and (max-width: 800px) {
+.views-field-field-header-image .field-content {
+    margin: 0px -600px;}
+	.flex-control-nav .flex-caption {top: -110px;}
+	#flexslider-1 {
+											margin-top: -225px;}
+}
+.page-civicon .civicon-lead .links a {
+	margin-right: 10px;
+}
+
+#flexslider-1 .flex-caption a {
+	pointer-events: none;
+	cursor: default;
+}
+#flexslider-1 .flex-caption a:hover, 
+#flexslider-1 .flex-caption a:focus {
+	color: #fff;
+}
+.node-type-conference .field-name-field-date-teaser-line .field-item, .node-type-conference .pane-node-title h1, .node-type-conference .field-name-field-conference-teaser-line .field-item, .page-civicon .civicon-teaser, .node-type-civicamp .field-name-field-teaser-line .field-item {
+	text-shadow: 0 0 0.5em rgba(0,0,0,0.2);
+}
+.page-civicon .civicon-lead h2 a, .page-civicon .civicon-date-teaser {
+	text-shadow: 0 0 0em #000;
+}
+.views-field-field-header-image-cc > .field-content > img {
+	opacity: 0.9;
+}
+.views-field-field-header-image-cc > .field-content {
+	background-color: #000;
+}
+
