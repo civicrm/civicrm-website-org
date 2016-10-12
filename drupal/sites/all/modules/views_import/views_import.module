@@ -1,0 +1,35 @@
+<?php
+/**
+ * @file
+ * Views Import.
+ */
+
+define('VIEWS_IMPORT_DIR', 'sites/all/imports/views');
+
+/**
+ * Implements hook_views_api().
+ */
+function views_import_views_api() {
+  return array("version" => "3.0");
+}
+
+/**
+ * Implements hook_drush_command().
+ */
+function views_import_drush_command() {
+  $items['views_import_export_views'] = array(
+    'description' => dt('Export views to views_import folder.'),
+    'aliases' => array('vie'),
+    'arguments' => array(
+      'view' => dt('The name of a view to export'),
+    ),
+    'options' => array(
+      'all' => dt('Export all active views'),
+    ),
+    'examples' => array(
+      'drush vie frontpage' => dt('Export the frontpage view to views_import folder.'),
+      'drush vie --all' => dt('Export all views to views_import folder.'),
+    ),
+  );
+  return $items;
+}
