@@ -1,0 +1,4 @@
+name = CiviCRM.org news feed
+description = Provides the rss feed to supply the news dashboard widget
+package = civicrm.org custom modules
+core = 7.x
