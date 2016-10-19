@@ -276,7 +276,7 @@ body.navbar-is-fixed-top.breadcrumbs.page-node-5424{
 .page-node-5424 .pane-node-body{
 	margin:0;
 }
-.navbar.fixed.scrollable,  .menu-name-menu-events-sub-menu ul {
+.navbar.fixed.scrollable,  .menu-name-menu-events-sub-menu ul, header#page-header ,enu-block-wrapper ul {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -562,21 +562,21 @@ a.feature-box:hover{
 }
 
 /* menu */
-.menu-name-menu-events-sub-menu .nav > li {
+header#page-header .menu-block-wrapper .nav > li {
     display: inline-block;
 }
-.menu-name-menu-events-sub-menu ul {
+header#page-header .menu-block-wrapper .nav {
     text-align: center;
 }
-.menu-name-menu-events-sub-menu .nav > li a {
+header#page-header .menu-block-wrapper .nav > li a {
     color: #635d5e;
     font-size: 15px;
     height: 70px;
     line-height: 70px;
     padding: 0 20px;
 }
-.menu-name-menu-events-sub-menu .nav > li a:hover,
-.menu-name-menu-events-sub-menu .nav > li a.active-trail {
+header#page-header .menu-block-wrapper .nav > li a:hover,
+header#page-header .menu-block-wrapper .nav > li a.active-trail {
     color: #82c459;
     background-color: transparent
 }
@@ -718,7 +718,7 @@ a.greenbutton:hover, a.greenbutton:active {
     border-top: 5px solid #fff;
     padding: 25px;
 }
-.page-webinar .stripe-black, .civicrm-events .stripe-black, .page-local-events .stripe-black, .node-type-conference .stripe-black, .page-civicon .stripe-black {
+.page-webinar .stripe-black, .civicrm-events .stripe-black, .page-local-events .stripe-black, .node-type-conference .stripe-black, .page-civicon .stripe-black, .node-type-page .stripe-black {
     display: none;
 }
 
@@ -1188,3 +1188,6 @@ a.greenbutton:hover, a.greenbutton:active {
 	background-color: #000;
 }
 
+.page-node .page-header {
+	margin-top: 80px;
+}
