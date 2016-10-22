@@ -702,7 +702,8 @@ a.greenbutton:hover, a.greenbutton:active {
 
 /** EVENTS **/
 
-.page-webinar .page-header h1, .page-local-events .page-header h1 {
+.page-webinar .page-header h1, .page-local-events .page-header h1,
+.page-strategic-initiatives .page-header h1 {
     font-family: 'Oswald',sans-serif;
     font-weight: 700;
     text-align: center;
@@ -710,7 +711,8 @@ a.greenbutton:hover, a.greenbutton:active {
     line-height: 1.03;
     margin-top:100px
 }
-.page-webinar .view-header > p, .page-local-events .view-header > p {
+.page-webinar .view-header > p, .page-local-events .view-header > p,
+.page-strategic-initiatives .view-header > p {
     width: 60%;
     margin: 0 auto 40px;
 }
@@ -733,7 +735,7 @@ a.greenbutton:hover, a.greenbutton:active {
     border-top: 5px solid #fff;
     padding: 25px;
 }
-.page-webinar .stripe-black, .civicrm-events .stripe-black, .page-local-events .stripe-black, .node-type-conference .stripe-black, .page-civicon .stripe-black, .node-type-page .stripe-black {
+.page-webinar .stripe-black, .civicrm-events .stripe-black, .page-local-events .stripe-black, .node-type-conference .stripe-black, .page-civicon .stripe-black, .node-type-page .stripe-black, .node-type-strategic-initiative .stripe-black {
     display: none;
 }
 
@@ -1080,7 +1082,8 @@ a.greenbutton:hover, a.greenbutton:active {
 #flexslider-1 .flex-viewport {
     top: -10px;
 }*/
-.page-civicon .footer-top, .page-local-events .footer-top, .page-webinar .footer-top {
+.page-civicon .footer-top, .page-local-events .footer-top,
+.page-webinar .footer-top, .page-strategic-initiatives  .footer-top  {
     background-color: #eee;
     padding: 50px 0px;
     text-align: center;
@@ -1208,4 +1211,45 @@ a.greenbutton:hover, a.greenbutton:active {
 
 .page-node .page-header {
 	margin-top: 80px;
+}
+/* STRATEGIC INITIATIVES */
+
+.node-type-strategic-initiative .bootstrap-twocol-stacked {
+	margin-right: auto;
+    margin-left: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+	width: 1190px;
+}
+@media (min-width:768px){
+	.node-type-strategic-initiative .bootstrap-twocol-stacked {width:770px}
+}
+@media (min-width:992px){
+	.node-type-strategic-initiative .bootstrap-twocol-stacked {width:990px}
+}
+@media (min-width:1200px){
+	.node-type-strategic-initiative .bootstrap-twocol-stacked {width:1190px}
+}
+.node-type-strategic-initiative .pane-node-title h1 {
+	margin-top: 0px;
+}
+.node-type-strategic-initiative .pane-1 h3 {
+	font-weight: 300;
+}
+.node-type-strategic-initiative .panel-panel.right {
+    border: 1px solid #dedede;
+    margin: 90px 0px;
+    padding-bottom: 20px;
+    background: #efefef;
+}
+.node-type-strategic-initiative .panel-panel.right .pane-entity-field {
+    margin-bottom: 10px;
+}
+.page-strategic-initiatives .view-filters {
+    width: calc(25% - 30px);
+    float: right;
+    margin: 5px 0px 0px 30px;
+}
+.page-strategic-initiatives  .footer-top {
+    padding-top: 30px;
 }
