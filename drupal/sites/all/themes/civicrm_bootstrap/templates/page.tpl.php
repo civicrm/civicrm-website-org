@@ -78,6 +78,17 @@
 <header id="navbar" role="banner" class="<?php print $navbar_classes; ?> <?php if (!empty($breadcrumb)) {
     print 'navbar-crumbs';
 }?>">
+<?php if (!empty($page['topnav'])): ?>
+  <div id ="topbar">
+ <div class="navbar-collapse collapse">
+        <nav role="navigation" id="navigation">
+        <div class="container">
+            <?php print render($page['topnav']); ?>
+	</div>
+	</nav>
+</div>
+  </div>
+<?php endif; ?>
   <div class="container">
     <div class="navbar-header">
       <?php if ($logo): ?>
@@ -100,7 +111,7 @@
     </div>
 
     <?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
-      <div class="navbar-collapse collapse">
+      <div class="navbar-collapse collapse main">
         <nav role="navigation" id="navigation">
           <?php if (!empty($page['navigation'])): ?>
             <?php print render($page['navigation']); ?>

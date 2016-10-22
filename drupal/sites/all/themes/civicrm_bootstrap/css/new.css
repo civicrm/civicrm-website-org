@@ -3,6 +3,16 @@
 @import 'https://fonts.googleapis.com/css?family=Oswald:700&subset=latin-ext';
 
 /* NEW NAVBAR */
+
+#topbar {
+	background: #eee;
+}
+.CiviPage {
+	margin-top: 38px;
+}
+section#block-menu-menu-top-navigation > ul { 
+	margin: auto; display: table; 
+}
 #navbar{
 	background: #fff;
 	border-bottom: 1px solid #e6e5e5;
@@ -28,8 +38,13 @@ header #navigation > ul.navbar-nav {
     display: none;
 }
 .navbar-collapse.collapse {
+    float: none;
+    width: auto;
+    margin-top: 0px;
+}
+.navbar-collapse.collapse.main {
+    width: calc(100% - 415px);
     float: left;
-    width: calc(100% - 215px);
     margin-top: 32px;
 }
 #navbar ul li {
@@ -65,7 +80,6 @@ header #navigation > ul.navbar-nav {
 	background-color: transparent;
 }
 .top-primary-nav {
-    float: left;
     font-size: 22px;
 }
 .top-secondary-nav {
@@ -276,7 +290,8 @@ body.navbar-is-fixed-top.breadcrumbs.page-node-5424{
 .page-node-5424 .pane-node-body{
 	margin:0;
 }
-.navbar.fixed.scrollable,  .menu-name-menu-events-sub-menu ul, header#page-header ,enu-block-wrapper ul {
+.navbar.fixed.scrollable,  .menu-name-menu-events-sub-menu ul,
+.menu-name-menu-top-navigation ul  {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -290,7 +305,7 @@ body.navbar-is-fixed-top.breadcrumbs.page-node-5424{
     position: fixed;
     text-align: center;
     width: 100%;
-    top: 121px;
+    top: 170px;
     background-color: #fff;
     z-index: 10;
 }
@@ -1026,6 +1041,9 @@ a.greenbutton:hover, a.greenbutton:active {
     visibility: visible;
     top: -56px;
     margin-bottom: -60px;
+}
+.view-civicamp-list .flex-viewport {
+	top: 0px;
 }
 .flex-direction-nav a {
     top: 40%;

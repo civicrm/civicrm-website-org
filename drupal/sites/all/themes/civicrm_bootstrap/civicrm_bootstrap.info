@@ -1,3 +1,4 @@
+
 name = CiviCRM on bootstrap
 description = CiviCRM theme based on bootstrap.
 core = 7.x
@@ -8,6 +9,7 @@ base theme = bootstrap
 ;; Regions
 ;;;;;;;;;;;;;;;;;;;;;
 
+regions[topnav]         = 'Top Navigation'
 regions[navigation]     = 'Navigation'
 regions[header]         = 'Header'
 regions[help]           = 'Help'
