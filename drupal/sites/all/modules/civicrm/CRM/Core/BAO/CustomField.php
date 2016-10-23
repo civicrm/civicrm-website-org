@@ -211,6 +211,7 @@ class CRM_Core_BAO_CustomField extends CRM_Core_DAO_CustomField {
         $optionGroup->name = "{$columnName}_" . date('YmdHis');
         $optionGroup->title = $params['label'];
         $optionGroup->is_active = 1;
+        $optionGroup->data_type = $params['data_type'];
         $optionGroup->save();
         $params['option_group_id'] = $optionGroup->id;
         if (!empty($params['option_value']) && is_array($params['option_value'])) {
@@ -864,6 +865,12 @@ class CRM_Core_BAO_CustomField extends CRM_Core_DAO_CustomField {
           $qf->add('text', $elementName . '_to', ts('To'), $field->attributes);
         }
         else {
+          if ($field->text_length) {
+            $field->attributes .= ' maxlength=' . $field->text_length;
+            if ($field->text_length < 20) {
+              $field->attributes .= ' size=' . $field->text_length;
+            }
+          }
           $element = $qf->add('text', $elementName, $label,
             $field->attributes,
             $useRequired && !$search
@@ -908,7 +915,6 @@ class CRM_Core_BAO_CustomField extends CRM_Core_DAO_CustomField {
           //CRM-18487 - max date should be the last date of the year.
           'maxDate' => isset($maxYear) ? $maxYear . '-12-31' : NULL,
           'time' => $field->time_format ? $field->time_format * 12 : FALSE,
-          'yearRange' => "{$minYear}:{$maxYear}",
         );
         if ($field->is_search_range && $search) {
           $qf->add('datepicker', $elementName . '_from', $label, $attr + array('placeholder' => ts('From')), FALSE, $params);
@@ -1024,6 +1030,10 @@ class CRM_Core_BAO_CustomField extends CRM_Core_DAO_CustomField {
           }
         }
         if ($field->data_type == 'ContactReference') {
+          // break if contact does not have permission to access ContactReference
+          if (!CRM_Core_Permission::check('access contact reference fields')) {
+            break;
+          }
           $attributes['class'] = (isset($attributes['class']) ? $attributes['class'] . ' ' : '') . 'crm-form-contact-reference huge';
           $attributes['data-api-entity'] = 'Contact';
           $element = $qf->add('text', $elementName, $label, $attributes, $useRequired && !$search);
@@ -1256,7 +1266,7 @@ class CRM_Core_BAO_CustomField extends CRM_Core_DAO_CustomField {
         if ($field['data_type'] == 'Money' && isset($value)) {
           //$value can also be an array(while using IN operator from search builder or api).
           foreach ((array) $value as $val) {
-            $disp[] = CRM_Utils_Money::format($val);
+            $disp[] = CRM_Utils_Money::format($val, NULL, NULL, TRUE);
           }
           $display = implode(', ', $disp);
         }

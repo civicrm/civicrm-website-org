@@ -1,6 +1,7 @@
 /** FONTS **/
 
 @import 'https://fonts.googleapis.com/css?family=Oswald:700&subset=latin-ext';
+@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,700i'
 
 /* NEW NAVBAR */
 
@@ -1242,6 +1243,9 @@ a.greenbutton:hover, a.greenbutton:active {
     padding-bottom: 20px;
     background: #efefef;
 }
+.node-type-strategic-initiative.node-type-page .panel-panel.right {
+    margin: 30px 0px;
+}
 .node-type-strategic-initiative .panel-panel.right .pane-entity-field {
     margin-bottom: 10px;
 }
@@ -1252,4 +1256,24 @@ a.greenbutton:hover, a.greenbutton:active {
 }
 .page-strategic-initiatives  .footer-top {
     padding-top: 30px;
+}
+.node-type-strategic-initiative.node-type-page .region.region-header {
+	min-height: 500px;
+	height: 500px;
+}
+.node-type-strategic-initiative .region.region-header h1 {
+    margin: 200px 0px 0px 0px;
+    text-transform: uppercase;
+    color: #82c459;
+    font-family: 'Oswald',sans-serif;
+    font-weight: 700;
+    font-size: 60px;
+}
+.node-type-strategic-initiative .region.region-header p {
+	color: #fff;
+	width: 60%;
+}
+.node-type-strategic-initiative .bootstrap-twocol-stacked .views-field-title h2 a {
+	color: #333;
+	font-weight: 300
 }

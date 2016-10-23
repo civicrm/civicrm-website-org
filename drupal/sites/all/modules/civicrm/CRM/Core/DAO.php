@@ -32,6 +32,10 @@
  * @copyright CiviCRM LLC (c) 2004-2016
  */
 
+if (!defined('DB_DSN_MODE')) {
+  define('DB_DSN_MODE', 'auto');
+}
+
 require_once 'PEAR.php';
 require_once 'DB/DataObject.php';
 
@@ -107,7 +111,8 @@ class CRM_Core_DAO extends DB_DataObject {
     if (defined('CIVICRM_DAO_DEBUG')) {
       self::DebugLevel(CIVICRM_DAO_DEBUG);
     }
-    CRM_Core_DAO::setFactory(new CRM_Contact_DAO_Factory());
+    $factory = new CRM_Contact_DAO_Factory();
+    CRM_Core_DAO::setFactory($factory);
     if (CRM_Utils_Constant::value('CIVICRM_MYSQL_STRICT', CRM_Utils_System::isDevelopment())) {
       CRM_Core_DAO::executeQuery('SET SESSION sql_mode = STRICT_TRANS_TABLES');
     }
@@ -462,7 +467,7 @@ class CRM_Core_DAO extends DB_DataObject {
    *
    * @param bool $hook
    *
-   * @return $this
+   * @return CRM_Core_DAO
    */
   public function save($hook = TRUE) {
     if (!empty($this->id)) {
@@ -766,48 +771,22 @@ LIKE %1
   }
 
   /**
-   * Returns the storage engine used by given table-name(optional).
-   * Otherwise scans all the tables and return an array of all the
-   * distinct storage engines being used.
-   *
-   * @param string $tableName
-   *
-   * @param int $maxTablesToCheck
-   * @param string $fieldName
+   * Scans all the tables using a slow query and table name.
    *
    * @return array
    */
-  public static function getStorageValues($tableName = NULL, $maxTablesToCheck = 10, $fieldName = 'Engine') {
-    $values = array();
-    $query = "SHOW TABLE STATUS LIKE %1";
+  public static function getTableNames() {
+    $dao = CRM_Core_DAO::executeQuery(
+      "SELECT TABLE_NAME
+       FROM information_schema.TABLES
+       WHERE TABLE_SCHEMA = '" . CRM_Core_DAO::getDatabaseName() . "'
+         AND TABLE_NAME LIKE 'civicrm_%'
+         AND TABLE_NAME NOT LIKE 'civicrm_import_job_%'
+         AND TABLE_NAME NOT LIKE '%_temp%'
+      ");
 
-    $params = array();
-
-    if (isset($tableName)) {
-      $params = array(1 => array($tableName, 'String'));
-    }
-    else {
-      $params = array(1 => array('civicrm_%', 'String'));
-    }
-
-    $dao = CRM_Core_DAO::executeQuery($query, $params);
-
-    $count = 0;
     while ($dao->fetch()) {
-      if (isset($values[$dao->$fieldName]) ||
-        // ignore import and other temp tables
-        strpos($dao->Name, 'civicrm_import_job_') !== FALSE ||
-        strpos($dao->Name, '_temp') !== FALSE
-      ) {
-        continue;
-      }
-      $values[$dao->$fieldName] = 1;
-      $count++;
-      if ($maxTablesToCheck &&
-        $count >= $maxTablesToCheck
-      ) {
-        break;
-      }
+      $values[] = $dao->TABLE_NAME;
     }
     $dao->free();
     return $values;
@@ -819,12 +798,25 @@ LIKE %1
    * @return bool
    */
   public static function isDBMyISAM($maxTablesToCheck = 10) {
-    // show error if any of the tables, use 'MyISAM' storage engine.
-    $engines = self::getStorageValues(NULL, $maxTablesToCheck);
-    if (array_key_exists('MyISAM', $engines)) {
-      return TRUE;
-    }
-    return FALSE;
+    return CRM_Core_DAO::singleValueQuery(
+      "SELECT count(*)
+       FROM information_schema.TABLES
+       WHERE ENGINE = 'MyISAM'
+         AND TABLE_SCHEMA = '" . CRM_Core_DAO::getDatabaseName() . "'
+         AND TABLE_NAME LIKE 'civicrm_%'
+         AND TABLE_NAME NOT LIKE 'civicrm_import_job_%'
+         AND TABLE_NAME NOT LIKE '%_temp%'
+      ");
+  }
+
+  /**
+   * Get the name of the CiviCRM database.
+   *
+   * @return string
+   */
+  public static function getDatabaseName() {
+    $daoObj = new CRM_Core_DAO();
+    return $daoObj->database();
   }
 
   /**
@@ -1016,6 +1008,24 @@ FROM   civicrm_domain
     $result = array();
     while ($this->fetch()) {
       $result[] = $this->toArray();
+    }
+    return $result;
+  }
+
+  /**
+   * Get all the result records as mapping between columns.
+   *
+   * @param string $keyColumn
+   *   Ex: "name"
+   * @param string $valueColumn
+   *   Ex: "label"
+   * @return array
+   *   Ex: ["foo" => "The Foo Bar", "baz" => "The Baz Qux"]
+   */
+  public function fetchMap($keyColumn, $valueColumn) {
+    $result = array();
+    while ($this->fetch()) {
+      $result[$this->{$keyColumn}] = $this->{$valueColumn};
     }
     return $result;
   }
@@ -1402,9 +1412,7 @@ FROM   civicrm_domain
 
     foreach ($ids as $id) {
       if (isset($_DB_DATAOBJECT['RESULTS'][$id])) {
-        if (is_resource($_DB_DATAOBJECT['RESULTS'][$id]->result)) {
-          mysql_free_result($_DB_DATAOBJECT['RESULTS'][$id]->result);
-        }
+        $_DB_DATAOBJECT['RESULTS'][$id]->free();
         unset($_DB_DATAOBJECT['RESULTS'][$id]);
       }
 
@@ -1644,26 +1652,21 @@ SELECT contact_id
    */
   public static function escapeString($string) {
     static $_dao = NULL;
-
     if (!$_dao) {
-      // If this is an atypical case (e.g. preparing .sql files
-      // before Civi has been installed), then we fallback to
-      // DB-less escaping helper (mysql_real_escape_string).
-      // Note: In typical usage, escapeString() will only
-      // check one conditional ("if !$_dao") rather than
-      // two conditionals ("if !defined(DSN)")
+      // If this is an atypical case (e.g. preparing .sql file before CiviCRM
+      // has been installed), then we fallback DB-less str_replace escaping, as
+      // we can't use mysqli_real_escape_string, as there is no DB connection.
+      // Note: In typical usage, escapeString() will only check one conditional
+      // ("if !$_dao") rather than two conditionals ("if !defined(DSN)")
       if (!defined('CIVICRM_DSN')) {
-        if (function_exists('mysql_real_escape_string')) {
-          return mysql_real_escape_string($string);
-        }
-        else {
-          throw new CRM_Core_Exception("Cannot generate SQL. \"mysql_real_escape_string\" is missing. Have you installed PHP \"mysql\" extension?");
-        }
+        // See http://php.net/manual/en/mysqli.real-escape-string.php for the
+        // list of characters mysqli_real_escape_string escapes.
+        $search = array("\\", "\x00", "\n", "\r", "'", '"', "\x1a");
+        $replace = array("\\\\", "\\0", "\\n", "\\r", "\'", '\"', "\\Z");
+        return str_replace($search, $replace, $string);
       }
-
       $_dao = new CRM_Core_DAO();
     }
-
     return $_dao->escape($string);
   }
 
@@ -1897,8 +1900,8 @@ SELECT contact_id
     $errorScope = CRM_Core_TemporaryErrorScope::ignoreException();
     $dao = new CRM_Core_DAO();
     if ($view) {
-      $dao->query('CREATE OR REPLACE VIEW civicrm_domain_view AS SELECT * FROM civicrm_domain');
-      if (PEAR::getStaticProperty('DB_DataObject', 'lastError')) {
+      $result = $dao->query('CREATE OR REPLACE VIEW civicrm_domain_view AS SELECT * FROM civicrm_domain');
+      if (PEAR::getStaticProperty('DB_DataObject', 'lastError') || is_a($result, 'DB_Error')) {
         return FALSE;
       }
     }
@@ -2137,6 +2140,7 @@ SELECT contact_id
 
   /**
    * Get options for the called BAO object's field.
+   *
    * This function can be overridden by each BAO to add more logic related to context.
    * The overriding function will generally call the lower-level CRM_Core_PseudoConstant::get
    *

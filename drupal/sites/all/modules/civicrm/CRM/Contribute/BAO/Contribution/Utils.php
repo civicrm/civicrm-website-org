@@ -89,9 +89,10 @@ class CRM_Contribute_BAO_Contribution_Utils {
     $form->assign('receive_date',
       CRM_Utils_Date::mysqlToIso($form->_params['receive_date'])
     );
-    if ($isPaymentTransaction) {
 
+    if ($isPaymentTransaction) {
       $contributionParams = array(
+        'id' => CRM_Utils_Array::value('contribution_id', $paymentParams),
         'contact_id' => $contactID,
         'line_item' => $lineItems,
         'is_test' => $isTest,
@@ -119,11 +120,6 @@ class CRM_Contribute_BAO_Contribution_Utils {
 
       $paymentParams['contributionTypeID'] = $contributionTypeId;
       $paymentParams['item_name'] = $form->_params['description'];
-
-      if ($contribution && $form->_values['is_recur'] && $contribution->contribution_recur_id
-      ) {
-        $form->_params['contributionRecurID'] = $contribution->contribution_recur_id;
-      }
 
       $paymentParams['qfKey'] = $form->controller->_key;
       if ($component == 'membership') {
@@ -231,11 +227,7 @@ class CRM_Contribute_BAO_Contribution_Utils {
    * @return bool
    */
   static protected function isPaymentTransaction($form) {
-    if (!empty($form->_values['is_monetary']) && $form->_amount >= 0.0) {
-      return TRUE;
-    }
-    return FALSE;
-
+    return ($form->_amount >= 0.0) ? TRUE : FALSE;
   }
 
   /**
@@ -336,7 +328,7 @@ INNER JOIN   civicrm_contact contact ON ( contact.id = contrib.contact_id )
     $created = TRUE;
 
     if (!empty($params['cms_create_account'])) {
-      $params['contactID'] = $contactID;
+      $params['contactID'] = !empty($params['onbehalf_contact_id']) ? $params['onbehalf_contact_id'] : $contactID;
       if (!CRM_Core_BAO_CMSUser::create($params, $mail)) {
         CRM_Core_Error::statusBounce(ts('Your profile is not saved and Account is not created.'));
       }

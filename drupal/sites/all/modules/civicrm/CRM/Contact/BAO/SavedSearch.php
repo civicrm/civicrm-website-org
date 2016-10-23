@@ -91,13 +91,18 @@ class CRM_Contact_BAO_SavedSearch extends CRM_Contact_DAO_SavedSearch {
    * @return array
    *   the values of the posted saved search used as default values in various Search Form
    */
-  public static function &getFormValues($id) {
+  public static function getFormValues($id) {
     $fv = CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_SavedSearch', $id, 'form_values');
     $result = NULL;
     if ($fv) {
       // make sure u unserialize - since it's stored in serialized form
       $result = unserialize($fv);
     }
+
+    //CRM-19250: fetch the default date format to format mysql value as per CRM_Core_Error::addDate()
+    $dateFormat = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_PreferencesDate', 'searchDate', 'date_format', 'name');
+    $dateFormat = empty($dateFormat) ? CRM_Core_Config::singleton()->dateInputFormat : $dateFormat;
+    $dateFormat = CRM_Utils_Array::value($dateFormat, CRM_Core_SelectValues::datePluginToPHPFormats());
 
     $specialFields = array('contact_type', 'group', 'contact_tags', 'member_membership_type_id', 'member_status_id');
     foreach ($result as $element => $value) {
@@ -107,12 +112,22 @@ class CRM_Contact_BAO_SavedSearch extends CRM_Contact_DAO_SavedSearch {
         if (is_array($value) && in_array(key($value), CRM_Core_DAO::acceptedSQLOperators(), TRUE)) {
           $value = CRM_Utils_Array::value(key($value), $value);
         }
-        $result[$id] = $value;
+        if (strpos($id, '_date_low') !== FALSE || strpos($id, '_date_high') !== FALSE) {
+          $result[$id] = date($dateFormat, strtotime($value));
+          $entityName = strstr($id, '_date', TRUE);
+          $result["{$entityName}_date_relative"] = 0;
+        }
+        else {
+          $result[$id] = $value;
+        }
         unset($result[$element]);
         continue;
       }
       if (!empty($value) && is_array($value)) {
         if (in_array($element, $specialFields)) {
+          // Remove the element to minimise support for legacy formats. It is stored in $value
+          // so will be re-set with the right name.
+          unset($result[$element]);
           $element = str_replace('member_membership_type_id', 'membership_type_id', $element);
           $element = str_replace('member_status_id', 'membership_status_id', $element);
           CRM_Contact_BAO_Query::legacyConvertFormValues($element, $value);
