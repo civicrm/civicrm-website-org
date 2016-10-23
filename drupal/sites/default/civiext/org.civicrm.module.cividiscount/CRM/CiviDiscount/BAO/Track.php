@@ -1,10 +1,9 @@
 <?php
-
 /*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.5                                                |
+ | CiviCRM version 4.6                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2014                                |
+ | Copyright CiviCRM LLC (c) 2004-2015                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -27,15 +26,8 @@
 */
 
 /**
- *
- * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2014
- * $Id$
- *
+ * @package CiviDiscount
  */
-
-require_once 'CRM/CiviDiscount/DAO/Track.php';
-
 
 class CRM_CiviDiscount_BAO_Track extends CRM_CiviDiscount_DAO_Track {
 
@@ -47,13 +39,36 @@ class CRM_CiviDiscount_BAO_Track extends CRM_CiviDiscount_DAO_Track {
   }
 
   /**
+   * Add the membership log record.
+   *
+   * @param array $params
+   *   Values to use in create.
+   *
+   * @return CRM_CiviDiscount_DAO_Track
+   */
+  public static function create($params) {
+    $hook = empty($params['id']) ? 'create' : 'edit';
+    CRM_Utils_Hook::pre($hook, 'DiscountTrack', CRM_Utils_Array::value('id', $params), $params);
+
+    $dao = new CRM_CiviDiscount_DAO_Track();
+    $dao->copyValues($params);
+    $dao->save();
+
+    if ($hook == 'create') {
+      CRM_CiviDiscount_BAO_Item::incrementUsage($dao->item_id);
+    }
+    CRM_Utils_Hook::post($hook, 'DiscountTrack', $dao->id, $dao);
+    return $dao;
+  }
+
+  /**
    * Takes a bunch of params that are needed to match certain criteria and
    * retrieves the relevant objects. Typically the valid params are only
    * contact_id. We'll tweak this function to be more full featured over a period
    * of time. This is the inverse function of create. It also stores all the retrieved
    * values in the default array
    *
-   * @param array $params   (reference) an assoc array of name/value pairs
+   * @param array $params (reference) an assoc array of name/value pairs
    * @param array $defaults (reference) an assoc array to hold the flattened values
    *
    * @return object CRM_CiviDiscount_BAO_Item object on success, null otherwise
@@ -63,11 +78,11 @@ class CRM_CiviDiscount_BAO_Track extends CRM_CiviDiscount_DAO_Track {
   static function retrieve(&$params, &$defaults) {
     $item = new CRM_CiviDiscount_DAO_Track();
     $item->copyValues($params);
-    if ($item->find(true)) {
+    if ($item->find(TRUE)) {
       CRM_Core_DAO::storeValues($item, $defaults);
       return $item;
     }
-    return null;
+    return NULL;
   }
 
   static function getUsageByContact($id) {
@@ -79,7 +94,7 @@ class CRM_CiviDiscount_BAO_Track extends CRM_CiviDiscount_DAO_Track {
   }
 
   static function getUsageByCode($id) {
-      return CRM_CiviDiscount_BAO_Track::getUsage($id, NULL, NULL);
+    return CRM_CiviDiscount_BAO_Track::getUsage($id, NULL, NULL);
   }
 
   static function getUsage($id = NULL, $cid = NULL, $orgid = NULL) {
@@ -105,11 +120,15 @@ SELECT    t.item_id as item_id,
       $where = " LEFT JOIN cividiscount_item AS i ON (i.id = t.item_id) ";
       $where .= " WHERE i.organization_id = " . CRM_Utils_Type::escape($orgid, 'Integer');
     }
-    else if ($cid) {
-      $where = " WHERE t.contact_id = " . CRM_Utils_Type::escape($cid, 'Integer');
-    }
     else {
-      $where = " WHERE t.item_id = " . CRM_Utils_Type::escape($id, 'Integer');
+      if ($cid) {
+        $sql .= ", i.code ";
+        $where = " LEFT JOIN cividiscount_item AS i ON (i.id = t.item_id) ";
+        $where .= " WHERE t.contact_id = " . CRM_Utils_Type::escape($cid, 'Integer');
+      }
+      else {
+        $where = " WHERE t.item_id = " . CRM_Utils_Type::escape($id, 'Integer');
+      }
     }
 
     $orderby = " ORDER BY t.item_id, t.used_date ";
@@ -138,11 +157,13 @@ SELECT    t.item_id as item_id,
           $row['event_title'] = $events[$event_id];
         }
       }
-      else if ($row['entity_table'] == 'civicrm_membership') {
-        $result = CRM_Member_BAO_Membership::getStatusANDTypeValues($dao->entity_id);
-        if (array_key_exists($dao->entity_id, $result)) {
-          if (array_key_exists('membership_type', $result[$dao->entity_id])) {
-            $row['membership_title'] = $result[$dao->entity_id]['membership_type'];
+      else {
+        if ($row['entity_table'] == 'civicrm_membership') {
+          $result = CRM_Member_BAO_Membership::getStatusANDTypeValues($dao->entity_id);
+          if (array_key_exists($dao->entity_id, $result)) {
+            if (array_key_exists('membership_type', $result[$dao->entity_id])) {
+              $row['membership_title'] = $result[$dao->entity_id]['membership_type'];
+            }
           }
         }
       }
@@ -168,22 +189,21 @@ SELECT    t.item_id as item_id,
   /**
    * Function to delete discount codes track
    *
-   * @param  int  $trackID     ID of the discount code track to be deleted.
+   * @param  int $trackID ID of the discount code track to be deleted.
    *
    * @access public
    * @static
    * @return true on success else false
    */
   static function del($trackID) {
-    if (! CRM_Utils_Rule::positiveInteger($trackID)) {
-      return false;
+    if (!CRM_Utils_Rule::positiveInteger($trackID)) {
+      return FALSE;
     }
 
-    require_once 'CRM/CiviDiscount/DAO/Track.php';
     $item = new CRM_CiviDiscount_DAO_Track();
     $item->id = $trackID;
     $item->delete();
 
-    return true;
+    return TRUE;
   }
 }

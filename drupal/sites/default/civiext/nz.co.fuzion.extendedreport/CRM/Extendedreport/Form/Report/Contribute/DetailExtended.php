@@ -33,7 +33,7 @@
  *
  * Like contribution detail but with more custom fields.
  */
-class CRM_Extendedreport_Form_Report_Contribute_DetailExtended extends CRM_Report_Form {
+class CRM_Extendedreport_Form_Report_Contribute_DetailExtended extends CRM_Extendedreport_Form_Report_ExtendedReport {
   protected $_addressField = FALSE;
 
   protected $_emailField = FALSE;
@@ -207,12 +207,14 @@ class CRM_Extendedreport_Form_Report_Contribute_DetailExtended extends CRM_Repor
           'title' => ts('Soft Credit For'),
           'dbAlias' => "NULL"
         ),
-        'financial_type_id' => array(
+        'contribution_financial_type_id' => array(
           'title' => ts('Financial Type'),
           'default' => TRUE,
+          'name' => 'financial_type_id',
         ),
-        'contribution_status_id' => array(
+        'contribution_contribution_status_id' => array(
           'title' => ts('Contribution Status'),
+          'name' => 'contribution_status_id',
         ),
         'contribution_page_id' => array(
           'title' => ts('Contribution Page'),
@@ -261,11 +263,12 @@ class CRM_Extendedreport_Form_Report_Contribute_DetailExtended extends CRM_Repor
           'default' => NULL,
           'type' => CRM_Utils_Type::T_STRING,
         ),
-        'financial_type_id' => array(
+        'contribution_financial_type_id' => array(
           'title' => ts('Financial Type'),
           'operatorType' => CRM_Report_Form::OP_MULTISELECT,
           'options' => CRM_Contribute_PseudoConstant::financialType(),
           'type' => CRM_Utils_Type::T_INT,
+          'name' => 'financial_type_id',
         ),
         'contribution_page_id' => array(
           'title' => ts('Contribution Page'),
@@ -284,12 +287,13 @@ class CRM_Extendedreport_Form_Report_Contribute_DetailExtended extends CRM_Repor
           'name' => 'source',
           'type' => CRM_Utils_Type::T_STRING,
         ),
-        'contribution_status_id' => array(
+        'contribution_contribution_status_id' => array(
           'title' => ts('Contribution Status'),
           'operatorType' => CRM_Report_Form::OP_MULTISELECT,
           'options' => CRM_Contribute_PseudoConstant::contributionStatus(),
           'default' => array(1),
           'type' => CRM_Utils_Type::T_INT,
+          'name' => 'contribution_status_id',
         ),
         'total_amount' => array('title' => ts('Contribution Amount')),
       ),
@@ -610,9 +614,10 @@ GROUP BY {$this->_aliases['civicrm_contribution']}.currency";
 
     // 2. customize main contribution query for soft credit, and build temp table 2 with soft credit contributions only
     $this->from(TRUE);
+
     // also include custom group from if included
     // since this might be included in select
-    $this->customDataFrom();
+    $this->extendedCustomDataFrom();
 
     $select = str_ireplace('contribution_civireport.total_amount', 'contribution_soft_civireport.amount', $this->_select);
     $select = str_ireplace("'Contribution' as", "'Soft Credit' as", $select);
@@ -630,10 +635,6 @@ GROUP BY {$this->_aliases['civicrm_contribution']}.currency";
 
     // simple reset of ->_from
     $this->from();
-
-    // also include custom group from if included
-    // since this might be included in select
-    $this->customDataFrom();
 
     // 3. Decide where to populate temp3 table from
     if (CRM_Utils_Array::value('contribution_or_soft_value', $this->_params) == 'contributions_only') {

@@ -3,28 +3,28 @@
 require_once 'cividiscount.civix.php';
 
 /**
- * Implementation of hook_civicrm_install()
+ * Implements hook_civicrm_install().
  */
 function cividiscount_civicrm_install() {
   return _cividiscount_civix_civicrm_install();
 }
 
 /**
- * Implementation of hook_civicrm_uninstall()
+ * Implements hook_civicrm_uninstall().
  */
 function cividiscount_civicrm_uninstall() {
   return _cividiscount_civix_civicrm_uninstall();
 }
 
 /**
- * Implementation of hook_civicrm_config()
+ * Implements hook_civicrm_config().
  */
 function cividiscount_civicrm_config(&$config) {
   _cividiscount_civix_civicrm_config($config);
 }
 
 /**
- * Implementation of hook_civicrm_perm()
+ * Implements hook_civicrm_perm().
  *
  * Module extensions dont implement this hook as yet, will need to add for 4.2
  */
@@ -33,31 +33,31 @@ function cividiscount_civicrm_perm() {
 }
 
 /**
- * Implementation of hook_civicrm_xmlMenu
+ * Implements hook_civicrm_xmlMenu().
  */
 function cividiscount_civicrm_xmlMenu(&$files) {
   _cividiscount_civix_civicrm_xmlMenu($files);
 }
 
 /**
- * Implementation of hook_civicrm_enable
+ * Implements hook_civicrm_enable().
  */
 function cividiscount_civicrm_enable() {
   return _cividiscount_civix_civicrm_enable();
 }
 
 /**
- * Implementation of hook_civicrm_disable
+ * Implements hook_civicrm_disable().
  */
 function cividiscount_civicrm_disable() {
   return _cividiscount_civix_civicrm_disable();
 }
 
 /**
- * Implementation of hook_civicrm_upgrade
+ * Implements hook_civicrm_upgrade().
  *
  * @param $op string, the type of operation being performed; 'check' or 'enqueue'
- * @param $queue CRM_Queue_Queue, (for 'enqueue') the modifiable list of pending up upgrade tasks
+ * @param CRM_Queue_Queue $queue  (for 'enqueue') the modifiable list of pending up upgrade tasks
  *
  * @return mixed  based on op. for 'check', returns array(boolean) (TRUE if upgrades are pending)
  *                for 'enqueue', returns void
@@ -67,10 +67,12 @@ function cividiscount_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
 }
 
 /**
- * Implementation of hook_civicrm_managed
+ * Implements hook_civicrm_managed().
  *
  * Generate a list of entities to create/deactivate/delete when this module
  * is installed, disabled, uninstalled.
+ *
+ * @param array $entities
  */
 function cividiscount_civicrm_managed(&$entities) {
   return _cividiscount_civix_civicrm_managed($entities);
@@ -104,13 +106,16 @@ function cividiscount_civicrm_tabs(&$tabs, $cid) {
 }
 
 /**
- * Implementation of hook_civicrm_buildForm()
+ * Implements hook_civicrm_buildForm().
  *
  * If the event id of the form being loaded has a discount code, modify
  * the form to include the textfield. Only display the textfield on the
  * initial registration screen.
  *
  * Works for events and membership.
+ *
+ * @param string $fname
+ * @param CRM_Contribute_Form_Contribution_Main|CRM_Core_Form $form
  */
 function cividiscount_civicrm_buildForm($fname, &$form) {
   // skip for delete action
@@ -132,7 +137,7 @@ function cividiscount_civicrm_buildForm($fname, &$form) {
 
     if ($form->getVar('_single') == 1 || in_array($form->getVar('_context'), array('membership', 'standalone'))) {
       _cividiscount_add_discount_textfield($form);
-      $code = CRM_Utils_Request::retrieve('discountcode', 'String', $form, false, null, 'REQUEST');
+      $code = trim(CRM_Utils_Request::retrieve('discountcode', 'String', $form, false, null, 'REQUEST'));
       if ($code) {
         $defaults = array('discountcode' => $code);
         $form->setDefaults($defaults);
@@ -159,9 +164,10 @@ function cividiscount_civicrm_buildForm($fname, &$form) {
       $contact_id = _cividiscount_get_form_contact_id($form);
       $discountCalculator = new CRM_CiviDiscount_DiscountCalculator('event', $form->getVar('_eventId'), $contact_id, NULL, TRUE);
       $addDiscountField = $discountCalculator->isShowDiscountCodeField();
-
     }
     elseif ($fname == 'CRM_Contribute_Form_Contribution_Main') {
+      CRM_Core_Resources::singleton()
+        ->addScriptFile('org.civicrm.module.cividiscount', 'js/main.js');
       $ids = _cividiscount_get_discounted_membership_ids();
       if(!empty($form->_membershipBlock['membership_types'])){
         $memtypes = explode(',', $form->_membershipBlock['membership_types']);
@@ -201,9 +207,15 @@ function cividiscount_civicrm_buildForm($fname, &$form) {
 }
 
 /**
- * Implementation of hook_civicrm_validateForm()
+ * Implements hook_civicrm_validateForm().
  *
  * Used in the initial event registration screen.
+ *
+ * @param string $name
+ * @param array $fields reference
+ * @param array $files
+ * @param CRM_Core_Form $form
+ * @param $errors
  */
 function cividiscount_civicrm_validateForm($name, &$fields, &$files, &$form, &$errors) {
   if (!in_array($name, array(
@@ -254,17 +266,21 @@ function cividiscount_civicrm_validateForm($name, &$fields, &$files, &$form, &$e
  * based on a users membership.
  *
  * Check all priceset items and only apply the discount to the discounted items.
+ *
+ * @param string $pageType
+ * @param CRM_Core_Form $form
+ * @param $amounts
  */
-function cividiscount_civicrm_buildAmount($pagetype, &$form, &$amounts) {
+function cividiscount_civicrm_buildAmount($pageType, &$form, &$amounts) {
   if (( !$form->getVar('_action')
         || ($form->getVar('_action') & CRM_Core_Action::PREVIEW)
         || ($form->getVar('_action') & CRM_Core_Action::ADD)
         || ($form->getVar('_action') & CRM_Core_Action::UPDATE)
       )
     && !empty($amounts) && is_array($amounts) &&
-      ($pagetype == 'event' || $pagetype == 'membership')) {
+      ($pageType == 'event' || $pageType == 'membership')) {
 
-    if (!$pagetype == 'membership' && in_array(get_class($form), array(
+    if (!$pageType == 'membership' && in_array(get_class($form), array(
       'CRM_Contribute_Form_Contribution',
       'CRM_Contribute_Form_Contribution_Main',
     ))) {
@@ -318,25 +334,13 @@ function cividiscount_civicrm_buildAmount($pagetype, &$form, &$amounts) {
     }
 
     $form->set('_discountInfo', NULL);
-    $dicountCalculater = new CRM_CiviDiscount_DiscountCalculator($pagetype, $eid, $contact_id, $code, FALSE);
-    $discounts = $dicountCalculater->getDiscounts();
+    $discountEntity = ($pageType == 'membership') ? 'membership_type' : 'event';
+    $discountCalculator = new CRM_CiviDiscount_DiscountCalculator($discountEntity, $eid, $contact_id, $code, FALSE);
+
+    $discounts = $discountCalculator->getDiscounts();
+
      if (!empty($code) && empty($discounts)) {
        $form->set( 'discountCodeErrorMsg', ts('The discount code you entered is invalid.'));
-    }
-
-    if (empty($discounts)) {
-      // Check if a discount is available
-      if ($pagetype == 'event') {
-        $discounts = _cividiscount_get_discounts();
-        foreach ($discounts as $code => $discount) {
-          if (isset($discount['events']) && array_key_exists($eid, $discount['events']) &&
-                $discount['discount_msg_enabled']) {
-            // Display discount available message
-            CRM_Core_Session::setStatus(html_entity_decode($discount['discount_msg']), '', 'no-popup');
-          }
-        }
-      }
-      return;
     }
 
     // here we check if discount is configured for events or for membership types.
@@ -345,9 +349,6 @@ function cividiscount_civicrm_buildAmount($pagetype, &$form, &$amounts) {
     //    if default fee / membership type is configured. ( i.e price set with quick config true )
     // 2. Discount is configure at price field level, in this case discount should be applied only for
     //    that particular price set field.
-
-    // here we need to check if selected price set is quick config
-    $isQuickConfigPriceSet = CRM_CiviDiscount_Utils::checkForQuickConfigPriceSet($psid);
 
     $keys = array_keys($discounts);
     $key = array_shift($keys);
@@ -359,18 +360,17 @@ function cividiscount_civicrm_buildAmount($pagetype, &$form, &$amounts) {
     //retrieve price set field associated with this priceset
     $priceSetInfo = CRM_CiviDiscount_Utils::getPriceSetsInfo($psid);
     $originalAmounts = $amounts;
-    //$discount = array_shift($discounts);
-    foreach ($discounts as $done_care => $discount) {
-      if (!empty($dicountCalculater->autoDiscounts) && array_key_exists($done_care, $dicountCalculater->autoDiscounts)) {
+    foreach ($discounts as $discountID => $discount) {
+      if (!empty($discountCalculator->autoDiscounts) && array_key_exists($discountID, $discountCalculator->autoDiscounts)) {
         $autodiscount = TRUE;
       }
       else {
         $autodiscount = FALSE;
       }
       $priceFields = isset($discount['pricesets']) ? $discount['pricesets'] : array();
-      if (empty($priceFields) && !empty($code)) {
-        // apply discount to all the price fields for quickconfig pricesets
-        if ($pagetype == 'event' && $isQuickConfigPriceSet) {
+      if (empty($priceFields) && (!empty($code) || $autodiscount)) {
+        // apply discount to all the price fields if no price set set
+        if ($pageType == 'event') {
           $applyToAllLineItems = TRUE;
           if (!empty($key)) {
             $discounts[$key]['pricesets'] = array_keys($priceSetInfo);
@@ -386,7 +386,16 @@ function cividiscount_civicrm_buildAmount($pagetype, &$form, &$amounts) {
           }
         }
       }
-      $apcount = _cividiscount_checkEventDiscountMultipleParticipants($pagetype, $form, $discount);
+      // we should check for MultParticipant AND set Error Messages only if
+      // this $discount is autodiscount or used discount
+      if ($autodiscount || (!empty($code) && strcasecmp($code, $discount['code']) == 0)){
+        $apcount = _cividiscount_checkEventDiscountMultipleParticipants($pageType, $form, $discount);
+      }
+      else {
+        // silently set FALSE
+        $apcount = FALSE;
+      }
+
       if (empty($apcount)) {
         //this was set to return but that doesn't make sense as there might be another discount
         continue;
@@ -402,7 +411,7 @@ function cividiscount_civicrm_buildAmount($pagetype, &$form, &$amounts) {
           foreach ($fee['options'] as $option_id => &$option) {
             if (!empty($applyToAllLineItems) || CRM_Utils_Array::value($option['id'], $priceFields)) {
               $originalLabel = $originalAmounts[$fee_id]['options'][$option_id]['label'];
-              $originalAmount = (integer) $originalAmounts[$fee_id]['options'][$option_id]['amount'];
+              $originalAmount = CRM_Utils_Rule::cleanMoney($originalAmounts[$fee_id]['options'][$option_id]['amount']);
               list($amount, $label) =
                 _cividiscount_calc_discount($originalAmount, $originalLabel, $discount, $autodiscount, $currency);
               $discountAmount = $originalAmounts[$fee_id]['options'][$option_id]['amount'] - $amount;
@@ -410,6 +419,18 @@ function cividiscount_civicrm_buildAmount($pagetype, &$form, &$amounts) {
                 $option['amount'] = $amount;
                 $option['label'] = $label;
                 $option['discount_applied'] = $discountAmount;
+                /*
+                * Priyanka Karan @ Veda NFP Consulting Ltd
+                * Re-calculate VAT/Sales TAX on discounted amount.
+                */
+                $recalculateTaxAmount = array();
+                if (array_key_exists('tax_amount', $originalAmounts[$fee_id]['options'][$option_id]) &&
+                    array_key_exists('tax_rate', $originalAmounts[$fee_id]['options'][$option_id])) {
+                  $recalculateTaxAmount = CRM_Contribute_BAO_Contribution_Utils::calculateTaxAmount($amount, $originalAmounts[$fee_id]['options'][$option_id]['tax_rate']);
+                  if (!empty($recalculateTaxAmount)) {
+                    $option['tax_amount'] = round($recalculateTaxAmount['tax_amount'], 2);
+                  }
+                }
               }
               $discountApplied = TRUE;
             }
@@ -418,8 +439,18 @@ function cividiscount_civicrm_buildAmount($pagetype, &$form, &$amounts) {
       }
     }
 
+    // Display discount message if one is available
+    if ($pageType == 'event') {
+      foreach ($discounts as $code => $discount) {
+        if (isset($discount['events']) && array_key_exists($eid, $discount['events']) &&
+          $discount['discount_msg_enabled'] && (!isset($discountApplied) || !$discountApplied) && !empty($discount['autodiscount'])) {
+          CRM_Core_Session::setStatus(html_entity_decode($discount['discount_msg']), '', 'no-popup');
+        }
+      }
+    }
+
     // this seems to incorrectly set to only the last discount but it seems not to matter in the way it is used
-    if ($discountApplied) {
+    if (isset($discountApplied) && $discountApplied) {
       if (!empty($ps['fields'])) {
         $ps['fields'] = $amounts;
         $form->setVar('_priceSet', $ps);
@@ -454,9 +485,9 @@ function cividiscount_civicrm_buildAmount($pagetype, &$form, &$amounts) {
  * @param form
  * @param array $discount
  */
-function _cividiscount_checkEventDiscountMultipleParticipants($pagetype, &$form, $discount) {
+function _cividiscount_checkEventDiscountMultipleParticipants($pageType, &$form, $discount) {
   $apcount = 1;
-  if ($pagetype == 'event' && _cividiscount_allow_multiple()) {
+  if ($pageType == 'event' && _cividiscount_allow_multiple()) {
     if ($discount['count_max'] > 0) {
       // Initially 1 for person registering.
       $apcount = 1;
@@ -548,9 +579,10 @@ function cividiscount_civicrm_membershipTypeValues(&$form, &$membershipTypeValue
 
   $form->set('_discountInfo', NULL);
   $code = CRM_Utils_Request::retrieve('discountcode', 'String', $form, false, null, 'REQUEST');
-  $discountCalculator = new CRM_CiviDiscount_DiscountCalculator('membership', NULL, $contact_id, $code, FALSE);
-
-  $discounts = $discountCalculator->getDiscounts();
+  $discountCalculator = new CRM_CiviDiscount_DiscountCalculator('membership_type', NULL, $contact_id, $code, FALSE);
+  if (!empty($code)) {
+    $discounts = $discountCalculator->getDiscounts();
+  }
   if(!empty($code) && empty($discounts)) {
     $form->set( 'discountCodeErrorMsg', ts('The discount code you entered is invalid.'));
   }
@@ -595,95 +627,45 @@ function cividiscount_civicrm_postProcess($class, &$form) {
     return;
   }
 
-  $ts = CRM_Utils_Time::getTime();
   $discount = $discountInfo['discount'];
   $params = $form->getVar('_params');
-  $description = CRM_Utils_Array::value('amount_level', $params);
-
+  $discountParams = array(
+    'item_id' => $discount['id'],
+    'description' => CRM_Utils_Array::value('amount_level', $params) . " " . CRM_Utils_Array::value('description', $params),
+    'contribution_id' => CRM_Utils_Array::value('contributionID', $params),
+  );
   // Online event registration.
   // Note that CRM_Event_Form_Registration_Register is an intermediate form.
   // CRM_Event_Form_Registration_Confirm completes the transaction.
   if ($class == 'CRM_Event_Form_Registration_Confirm') {
-    $pids = $form->getVar('_participantIDS');
-
-    // if multiple participant discount is not enabled then only use primary participant info for discount
-    // and ignore additional participants
-    if (!_cividiscount_allow_multiple()) {
-      $pids = array($pids[0]);
-    }
-
-    foreach ($pids as $pid) {
-      $participant = _cividiscount_get_participant($pid);
-      $contact_id = $participant['contact_id'];
-      $participant_payment = _cividiscount_get_participant_payment($pid);
-      $contribution_id = $participant_payment['contribution_id'];
-
-      CRM_CiviDiscount_BAO_Item::incrementUsage($discount['id']);
-      $track = new CRM_CiviDiscount_DAO_Track();
-      $track->item_id = $discount['id'];
-      $track->contact_id = $contact_id;
-      $track->contribution_id = $contribution_id;
-      $track->entity_table = 'civicrm_participant';
-      $track->entity_id = $pid;
-      $track->used_date = $ts;
-      $track->description = $description;
-      $track->save();
-    }
-
-  // Online membership.
-  // Note that CRM_Contribute_Form_Contribution_Main is an intermediate
-  // form - CRM_Contribute_Form_Contribution_Confirm completes the
-  // transaction.
-  } else if ($class == 'CRM_Contribute_Form_Contribution_Confirm') {
-    $membership_type = $params['selectMembership'];
-    $membershipId = $params['membershipID'];
-
-    if (!is_array($membership_type)) {
-      $membership_type = array($membership_type);
-    }
-    $discount_membership_matches = array_intersect($membership_type, $discount['memberships']);
-    // check to make sure the discount actually applied to this membership.
-    if ( empty($discount_membership_matches) || !$membershipId) {
-      return;
-    }
-
-    $description = CRM_Utils_Array::value('description', $params);
-
-    $membership = _cividiscount_get_membership($membershipId);
-    $contact_id = $membership['contact_id'];
-    $membership_payment = _cividiscount_get_membership_payment($membershipId);
-    $contribution_id = $membership_payment['contribution_id'];
-
-    CRM_CiviDiscount_BAO_Item::incrementUsage($discount['id']);
-    $track = new CRM_CiviDiscount_DAO_Track();
-    $track->item_id = $discount['id'];
-    $track->contact_id = $contact_id;
-    $track->contribution_id = $contribution_id;
-    $track->entity_table = 'civicrm_membership';
-    $track->entity_id = $membershipId;
-    $track->used_date = $ts;
-    $track->description = $description;
-    $track->save();
+    _cividiscount_consume_discount_code_for_online_event($form->getVar('_participantIDS'), $discountParams);
+  }
+  elseif ($class == 'CRM_Contribute_Form_Contribution_Confirm') {
+    // Note that CRM_Contribute_Form_Contribution_Main is an intermediate form.
+    // CRM_Contribute_Form_Contribution_Confirm completes the transaction.
+    _cividiscount_consume_discount_code_for_online_contribution($params, $discountParams, $discount['memberships']);
   }
   else {
     $contribution_id = NULL;
     // Offline event registration.
     if (in_array($class, array('CRM_Event_Form_Participant', 'CRM_Event_Form_ParticipantFeeSelection'))) {
       if ($class == 'CRM_Event_Form_ParticipantFeeSelection') {
-        $entity_id = $form->getVar('_participantId');
+        $discountParams['entity_id'] = $entity_id = $form->getVar('_participantId');
       }
       else {
-        $entity_id = $form->getVar('_id');
+        $discountParams['entity_id'] = $entity_id = $form->getVar('_id');
       }
       $participant_payment = _cividiscount_get_participant_payment($entity_id);
-      $contribution_id = $participant_payment['contribution_id'];
-      $entity_table = 'civicrm_participant';
+      $discountParams['contribution_id'] = $participant_payment['contribution_id'];
+      $discountParams['entity_table'] = 'civicrm_participant';
 
       $participant = _cividiscount_get_participant($entity_id);
-      $contact_id = $participant['contact_id'];
+      $discountParams['contact_id'] = $participant['contact_id'];
     }
     // Offline membership.
     elseif ( in_array($class, array('CRM_Member_Form_Membership','CRM_Member_Form_MembershipRenewal') ) ) {
+      // @todo check whether this uses price sets in submit & hence can use same
+      // code as the online section and test whether code is decremented when a price set is used.
       $membership_types = $form->getVar('_memTypeSelected');
       $membership_type = isset($membership_types[0]) ? $membership_types[0] : NULL;
 
@@ -696,31 +678,122 @@ function cividiscount_civicrm_postProcess($class, &$form) {
         return;
       }
 
-      $entity_table = 'civicrm_membership';
-      $entity_id = $form->getVar('_id');
+      $discountParams['entity_table'] = 'civicrm_membership';
+      $discountParams['entity_id'] = $entity_id = $form->getVar('_id');
 
       $membership_payment = _cividiscount_get_membership_payment($entity_id);
-      $contribution_id = $membership_payment['contribution_id'];
-      $description = CRM_Utils_Array::value('description', $params);
+      $discountParams['contribution_id'] = $membership_payment['contribution_id'];
 
       $membership = _cividiscount_get_membership($entity_id);
-      $contact_id = $membership['contact_id'];
+      $discountParams['contact_id'] = $membership['contact_id'];
     }
     else {
-      $entity_table = 'civicrm_contribution';
-      $entity_id = $contribution_id;
+      $discountParams['entity_table'] = 'civicrm_contribution';
+      $discountParams['entity_id'] = $contribution_id;
     }
+    civicrm_api3('DiscountTrack', 'create', $discountParams);
+  }
 
-    CRM_CiviDiscount_BAO_Item::incrementUsage($discount['id']);
-    $track = new CRM_CiviDiscount_DAO_Track();
-    $track->item_id = $discount['id'];
-    $track->contact_id = $contact_id;
-    $track->contribution_id = $contribution_id;
-    $track->entity_table = $entity_table;
-    $track->entity_id = $entity_id;
-    $track->used_date = $ts;
-    $track->description = $description;
-    $track->save();
+}
+
+/**
+ * Record discount code usage from online contribution page.
+ *
+ * Currently (for historical reasons) only membership line items are supported
+ * for discounts.
+ *
+ * @param array $params
+ *   Form Parameters. Only the price_x fields are relevant
+ * @param array $discountParams
+ *   Already determined discount parameters for recording tracking code.
+ * @param array $discountedMemberships
+ *   Membership types eligible for discount.
+ *
+ * @throws \CiviCRM_API3_Exception
+ */
+function _cividiscount_consume_discount_code_for_online_contribution($params, $discountParams, $discountedMemberships) {
+  $membership_types = _cividiscount_extract_memberships_from_line_items($params);
+  $membershipId = $params['membershipID'];
+
+  $discount_membership_matches = array_intersect($membership_types, $discountedMemberships);
+  // Check to make sure the discount actually applied to this membership.
+  if (empty($discount_membership_matches) || !$membershipId) {
+    return;
+  }
+  $membership = _cividiscount_get_membership($membershipId);
+
+  $discountParams['contact_id'] = $membership['contact_id'];
+  $discountParams['entity_table'] = 'civicrm_membership';
+  $discountParams['entity_id'] =  $membershipId;
+
+  civicrm_api3('DiscountTrack', 'create', $discountParams);
+}
+
+/**
+ * Determine which membership(s) are purchased in this transaction.
+ *
+ * Note that independent of whether a price set is configured through the UI
+ * the post hook will receive price set lines so we only worry about what is
+ * presented via the price set.
+ *
+ * @param array $params
+ *   Parameters from form. We are only interested in price_x fields
+ *
+ * @return array
+ *   Membership types that have been purchased.
+ */
+function _cividiscount_extract_memberships_from_line_items($params) {
+  $membershipTypes = array();
+  foreach ($params as $key => $value) {
+    // We are looking for fields like 'price_4'. The is_numeric is to eliminate the
+    // possibility of fields like 'price_set' being caught.
+    if (substr($key, 0, 6) == 'price_' && is_numeric(substr($key, 6, 1))) {
+      $priceFieldID = substr($key, 6);
+      $priceFieldType = civicrm_api3('price_field', 'getvalue', array(
+        'id' => $priceFieldID,
+        'return' => 'html_type',
+      ));
+
+      if ($priceFieldType == 'Text') {
+        // As of 4.6 membership text fields are not supported.
+        continue;
+      }
+      $values = civicrm_api3('price_field_value', 'get', array(
+        'price_field_id' => $priceFieldID,
+        'return' => 'membership_type_id',
+      ));
+      $membershipTypes[] = $values['values'][$params['price_' . $priceFieldID]]['membership_type_id'];
+    }
+  }
+  return $membershipTypes;
+}
+
+/**
+ * Record discount code usage for online event.
+ *
+ * This is different to other related functions in that there can be more than 1.
+ *
+ * @param array $participant_ids
+ * @param array $discountParams
+ *
+ * @throws \CiviCRM_API3_Exception
+ */
+function _cividiscount_consume_discount_code_for_online_event($participant_ids, $discountParams) {
+
+  // if multiple participant discount is not enabled then only use primary participant info for discount
+  // and ignore additional participants
+  if (!_cividiscount_allow_multiple()) {
+    $participant_ids = array($participant_ids[0]);
+  }
+
+  foreach ($participant_ids as $participant_id) {
+    $participant = _cividiscount_get_participant($participant_id);
+    $participant_payment = _cividiscount_get_participant_payment($participant_id);
+    $discountParams['contact_id'] = $participant['contact_id'];
+    $discountParams['contribution_id'] = $participant_payment['contribution_id'];
+    $discountParams['entity_table'] = 'civicrm_participant';
+    $discountParams['entity_id'] = $participant_id;
+    civicrm_api3('DiscountTrack', 'create', $discountParams);
   }
 }
 
@@ -820,7 +893,7 @@ function _cividiscount_filter_membership_discounts($discounts, $membershipTypeVa
  * Calculate either a monetary or percentage discount.
  */
 function _cividiscount_calc_discount($amount, $label, $discount, $autodiscount, $currency = 'USD') {
-  $title = $autodiscount ? 'Member Discount' : "Discount {$discount['code']}";
+  $title = $autodiscount ? ts('Includes automatic member discount of') : ts('Includes applied discount code %1', array(1 => $discount['code']));
   if ($discount['amount_type'] == '2') {
     $newamount = CRM_Utils_Rule::cleanMoney($amount) - CRM_Utils_Rule::cleanMoney($discount['amount']);
     $fmt_discount = CRM_Utils_Money::format($discount['amount'], $currency);
@@ -920,6 +993,13 @@ function _cividiscount_get_membership($mid = 0) {
   return FALSE;
 }
 
+/**
+ * Get Membership Payment record.
+ *
+ * @param int $mid
+ *
+ * @return bool|mixed
+ */
 function _cividiscount_get_membership_payment($mid = 0) {
   $result = civicrm_api('MembershipPayment', 'get', array('version' => '3', 'membership_id' => $mid));
   if ($result['is_error'] == 0) {
@@ -953,10 +1033,16 @@ function _cividiscount_get_participant_payment($pid = 0) {
 }
 
 /**
- * Add the discount textfield to a form
+ * Add the discount textfield to a form.
+ *
+ * @param CRM_Core_Form $form
  */
 function _cividiscount_add_discount_textfield(&$form) {
-  $element = $form->addElement('text', 'discountcode', ts('If you have a discount code, enter it here'));
+  if (_cividiscount_form_is_eligible_for_pretty_placement($form)) {
+    _cividiscount_add_button_before_priceSet($form);
+    return;
+  }
+  $form->addElement('text', 'discountcode', ts('If you have a discount code, enter it here'));
   $errorMessage = $form->get('discountCodeErrorMsg');
   if ($errorMessage) {
     $form->setElementError('discountcode', $errorMessage);
@@ -964,7 +1050,7 @@ function _cividiscount_add_discount_textfield(&$form) {
   $form->set('discountCodeErrorMsg', null);
   $buttonName = $form->getButtonName('reload');
   $form->addElement('submit', $buttonName, ts('Apply'), array('formnovalidate' => 1));
-  $template =& CRM_Core_Smarty::singleton();
+  $template = CRM_Core_Smarty::singleton();
   $bhfe = $template->get_template_vars('beginHookFormElements');
   if (!$bhfe) {
     $bhfe = array();
@@ -972,6 +1058,75 @@ function _cividiscount_add_discount_textfield(&$form) {
   $bhfe[] = 'discountcode';
   $bhfe[] = $buttonName;
   $form->assign('beginHookFormElements', $bhfe);
+}
+
+/**
+ * Can we put the discount block somewhere better than the top of the page.
+ *
+ * If we are in 4.6.3+ and we are working with a price set then the best place
+ * to put it is in the new price-set-1 region - just before it.
+ *
+ * This is only tested / implemented on contribution forms at this stage.
+ *
+ * @param CRM_Core_Form $form
+ *
+ * @return bool
+ *   Should we put the discount block somewhere better than just at the top.
+ */
+function _cividiscount_form_is_eligible_for_pretty_placement($form) {
+  $formClass = get_class($form);
+  if (($formClass != 'CRM_Contribute_Form_Contribution_Main'
+      && $formClass != 'CRM_Event_Form_Registration_Register')
+      || !_cividiscount_version_at_least('4.6.4')
+  ) {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * Add the discount button immediately before the price set.
+ *
+ * @param CRM_Contribute_Form_Contribution_Main $form
+ */
+function _cividiscount_add_button_before_priceSet(&$form) {
+  CRM_Core_Region::instance('price-set-1')->add(array(
+    'template' => 'CRM/CiviDiscount/discountButton.tpl',
+    'weight' => -1,
+    'type' => 'template',
+    'name' => 'discount_code',
+  ));
+
+  $form->add(
+    'text',
+    'discountcode',
+    ts('If you have a discount code, enter it here'),
+    array('class' => 'description')
+  );
+  $errorMessage = $form->get('discountCodeErrorMsg');
+  if ($errorMessage) {
+    $form->setElementError('discountcode', $errorMessage);
+  }
+  $form->set('discountCodeErrorMsg', null);
+  $buttonName = $form->getButtonName('reload');
+  $form->addElement('submit', $buttonName, ts('Apply'), array('formnovalidate' => 1));
+  $form->assign('discountElements', array(
+    'discountcode',
+    $buttonName
+  ));
+}
+/**
+ * Check version is at least as high as the one passed.
+ *
+ * @param string $version
+ *
+ * @return bool
+ */
+function _cividiscount_version_at_least($version) {
+  if (version_compare(CRM_Utils_System::version(), $version) >= 0) {
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /**
@@ -991,7 +1146,7 @@ function cividiscount_civicrm_navigationMenu( &$params ) {
       'attributes' => array (
         'label'      => 'CiviDiscount',
         'name'       => 'CiviDiscount',
-        'url'        => 'civicrm/cividiscount?reset=1',
+        'url'        => 'civicrm/cividiscount',
         'permission' => 'administer CiviCRM',
         'operator'   => NULL,
         'separator'  => TRUE,
@@ -1012,4 +1167,10 @@ function cividiscount_civicrm_entityTypes(&$entityTypes) {
     'class' => 'CRM_CiviDiscount_DAO_Item',
     'table' => 'cividiscount_item'
   );
+  $entityTypes['CRM_CiviDiscount_DAO_Track'] = array(
+    'name' => 'DiscountTrack',
+    'class' => 'CRM_CiviDiscount_DAO_Track',
+    'table' => 'cividiscount_track'
+  );
+
 }

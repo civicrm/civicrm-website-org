@@ -22,6 +22,7 @@ class CRM_Extendedreport_Form_Report_Event_ParticipantExtended extends CRM_Exten
   );
 
   public $_drilldownReport = array('event/income' => 'Link to Detail Report');
+  protected $_participantTable = 'civicrm_participant';
 
   /**
    * Class constructor.
@@ -148,7 +149,10 @@ class CRM_Extendedreport_Form_Report_Event_ParticipantExtended extends CRM_Exten
       'civicrm_participant' => array(
         'dao' => 'CRM_Event_DAO_Participant',
         'fields' => array(
-          'participant_id' => array('title' => 'Participant ID'),
+          'participant_id' => array(
+            'title' => 'Participant ID',
+            'default' => TRUE,
+          ),
           'participant_record' => array(
             'name' => 'id',
             'no_display' => TRUE,
@@ -166,6 +170,14 @@ class CRM_Extendedreport_Form_Report_Event_ParticipantExtended extends CRM_Exten
             'title' => ts('Role'),
             'default' => TRUE,
           ),
+          'registered_by_id' => array(
+            'title' => ts('Registered by'),
+            'default' => TRUE,
+          ),
+          'source' => array(
+            'title' => ts('Source'),
+            'default' => TRUE,
+          ),
           'fee_currency' => array(
             'required' => TRUE,
             'no_display' => TRUE,
@@ -181,6 +193,11 @@ class CRM_Extendedreport_Form_Report_Event_ParticipantExtended extends CRM_Exten
             'title' => ts('Event'),
             'operatorType' => CRM_Report_Form::OP_MULTISELECT,
             'options' => $this->getEventFilterOptions(),
+          ),
+          'source' => array(
+            'name' => 'source',
+            'title' => ts('Source'),
+            'operator' => 'like',
           ),
           'sid' => array(
             'name' => 'status_id',
@@ -210,6 +227,16 @@ class CRM_Extendedreport_Form_Report_Event_ParticipantExtended extends CRM_Exten
         'order_bys' => array(
           'event_id' => array(
             'title' => ts('Event'),
+            'default_weight' => '1',
+            'default_order' => 'ASC',
+          ),
+          'registered_by_id' => array(
+            'title' => ts('Registered by ID/Name'),
+            'default_weight' => '1',
+            'default_order' => 'ASC',
+          ),
+          'source' => array(
+            'title' => ts('Source'),
             'default_weight' => '1',
             'default_order' => 'ASC',
           ),
@@ -563,6 +590,39 @@ GROUP BY  cv.label
           $rows[$rowNum]['civicrm_participant_role_id'] = implode(', ', $value);
         }
         $entryFound = TRUE;
+      }
+
+      // handle registered_by_id -> replace ID with the Name of the Contact instead
+      if (array_key_exists('civicrm_participant_registered_by_id', $row)) {
+        if ($value = $row['civicrm_participant_registered_by_id']) {
+          // find the contact ID of this participant ID
+
+          $our_participant_id = $row['civicrm_participant_registered_by_id'];
+
+          $result = civicrm_api3('Participant', 'get', array(
+            'sequential' => 1,
+            'return' => "contact_id",
+            'id' => $our_participant_id,
+          ));
+          $our_contact_id = $result['values']['0']['contact_id'];
+
+          $result = civicrm_api3('Contact', 'get', array(
+            'sequential' => 1,
+            'return' => "sort_name",
+            'id' => $our_contact_id,
+          ));
+          $our_sort_name = $result['values']['0']['sort_name'];
+
+          $rows[$rowNum]['civicrm_participant_registered_by_id'] = $our_sort_name;
+
+          $viewUrl = CRM_Utils_System::url("civicrm/contact/view/participant",
+            "reset=1&id=$our_participant_id&cid=$our_contact_id&action=view&context=participant"
+          );
+          $Title = ts('View Participant Details');
+          $rows[$rowNum]['civicrm_participant_registered_by_id'] = "<a title='$Title' href=$viewUrl>$our_sort_name</a>";
+
+        }
+          $entryFound = TRUE;
       }
 
       // Handle value separator in Fee Level
