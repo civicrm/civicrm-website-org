@@ -703,7 +703,7 @@ a.greenbutton:hover, a.greenbutton:active {
 
 /** EVENTS **/
 
-.page-webinar .page-header h1, .page-local-events .page-header h1,
+.page-webinars .page-header h1, .page-local-events .page-header h1,
 .page-strategic-initiatives .page-header h1 {
     font-family: 'Oswald',sans-serif;
     font-weight: 700;
@@ -712,31 +712,40 @@ a.greenbutton:hover, a.greenbutton:active {
     line-height: 1.03;
     margin-top:100px
 }
-.page-webinar .view-header > p, .page-local-events .view-header > p,
+.page-webinars .view-header > p, .page-local-events .view-header > p,
 .page-strategic-initiatives .view-header > p {
     width: 60%;
     margin: 0 auto 40px;
 }
-.page-webinar .view-webinar tr, .page-local-events .view-local-events tr,
-.page-webinar .view-webinar .table>tbody>tr>td.active, .page-local-events .view-local-events .table>tbody>tr>td.active {
+.view-webinar tr, .page-local-events .view-local-events tr,
+.view-webinar .table>tbody>tr>td.active, .page-local-events .view-local-events .table>tbody>tr>td.active {
  	border: 0px solid tranpsarent;
     background: #eee;
 }
-.page-webinar .view-webinar .views-field-title, .page-local-events .view-local-events .views-field-title
-.page-webinar .view-webinar .views-field-text-link, .page-local-events .view-local-events .views-field-text-link {
+.view-webinar .views-field-title, .page-local-events .view-local-events .views-field-title
+.view-webinar .views-field-text-link, .page-local-events .view-local-events .views-field-text-link {
     font-weight: 600;
     font-size: 20px;
 }
-.page-webinar .view-webinar .views-field-start-date, .page-local-events .view-local-events .views-field-start-date {
+.view-webinar .views-field-start-date, .page-local-events .view-local-events .views-field-start-date {
     font-weight: 600;
     font-size: 16px;
     vertical-align: middle;
 }
-.page-webinar .view-webinar .table>tbody>tr>td, .page-local-events .view-local-events .table>tbody>tr>td {
+.view-webinar .table>tbody>tr>td, .page-local-events .view-local-events .table>tbody>tr>td {
     border-top: 5px solid #fff;
     padding: 25px;
 }
-.page-webinar .stripe-black, .civicrm-events .stripe-black, .page-local-events .stripe-black, .node-type-conference .stripe-black, .page-civicon .stripe-black, .node-type-page .stripe-black, .node-type-strategic-initiative .stripe-black {
+.page-webinars .stripe-black, page-webinar .stripe-black,
+.civicrm-events .stripe-black,
+.page-local-events .stripe-black,
+.node-type-conference .stripe-black,
+.page-civicon .stripe-black,
+.node-type-page .stripe-black,
+.node-type-strategic-initiative .stripe-black,
+.page-partners-contributors .stripe-black,
+.page-hosting-providers .stripe-black,
+.page-project-sponsors .stripe-black {
     display: none;
 }
 
