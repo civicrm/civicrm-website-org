@@ -47,10 +47,17 @@ function civicrm_org_providers_update_provider($contact_id){
     $params = array('version' => 3, 'contact_id' => $contact_id);
     $groups=civicrm_api('GroupContact', 'get', $params);
     foreach($groups['values'] as $group){
-        if($group['group_id']==131){
-            $badges[]='contributor-empowering';
-            break;
-        }
+      switch ($group['group_id']) {
+      case 488:
+        $badges[] = 'contributor-supporting';
+        break;
+      case 489:
+        $badges[] = 'contributor-empowering';
+        break;
+      case 490:
+        $badges[] = 'contributor-sustaining';
+        break;
+      }
     }
     
     //find out if they are in the technology partners group
