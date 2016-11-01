@@ -121,14 +121,6 @@
     <?php endif; ?>
   </div>
 
-  <?php if (!empty($breadcrumb)): ?>
-  <div class="stripe-black">
-    <div class="container">
-      <?php print $breadcrumb; ?>
-    </div>
-  </div>
-  <?php endif;?>
-  
 </header>
 
 
@@ -139,8 +131,15 @@
   </header> <!-- /#page-header -->
 
 
-    <section>
-        <div class="container">
+<section>
+ <div class="container">
+ <?php if (!empty($breadcrumb)): ?>
+   <div class="stripe-black">
+      <?php print $breadcrumb; ?>
+   </div>
+ <?php endif;?>
+
+
       <a id="main-content"></a>
       <?php print render($title_prefix); ?>
       <?php if (!empty($title)): ?>

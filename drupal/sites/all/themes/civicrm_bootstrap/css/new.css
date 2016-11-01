@@ -3,6 +3,29 @@
 @import 'https://fonts.googleapis.com/css?family=Oswald:700&subset=latin-ext';
 @import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700,700i';
 
+/* BREADCRUMBS */
+
+.stripe-black, .breadcrumb {
+	background-color: transparent;
+	color: #777;
+}
+.stripe-black .breadcrumb li {
+	text-transform: none;
+	font-weight: 300;
+}
+.breadcrumb li a, .breadcrumb>li+li:before {
+	color: #777;
+}
+.page-header h1, .page-node .page-header, .page-header {
+	margin-top: 0px !important;
+}
+.stripe-black {
+	display: inherit;
+	margin-top: 100px;
+}
+.stripe-black .crumbs-current-page {
+        display: none;
+}
 /* NEW NAVBAR */
 
 #topbar {
@@ -740,12 +763,7 @@ a.greenbutton:hover, a.greenbutton:active {
 .civicrm-events .stripe-black,
 .page-local-events .stripe-black,
 .node-type-conference .stripe-black,
-.page-civicon .stripe-black,
-.node-type-page .stripe-black,
-.node-type-strategic-initiative .stripe-black,
-.page-partners-contributors .stripe-black,
-.page-hosting-providers .stripe-black,
-.page-project-sponsors .stripe-black {
+.page-civicon .stripe-black {
     display: none;
 }
 
@@ -1225,11 +1243,12 @@ a.greenbutton:hover, a.greenbutton:active {
 /* STRATEGIC INITIATIVES */
 
 .node-type-strategic-initiative .bootstrap-twocol-stacked {
-	margin-right: auto;
+    margin-right: auto;
     margin-left: auto;
     padding-left: 25px;
     padding-right: 25px;
-	width: 1190px;
+    width: 1190px;
+    margin-bottom: 25px;
 }
 @media (min-width:768px){
 	.node-type-strategic-initiative .bootstrap-twocol-stacked {width:770px}
@@ -1284,5 +1303,8 @@ a.greenbutton:hover, a.greenbutton:active {
 }
 .node-type-strategic-initiative .bootstrap-twocol-stacked .views-field-title h2 a {
 	color: #333;
-	font-weight: 300
+	font-weight: 700;
+}
+.view-strategic-initiatives .views-field-body {
+    margin-bottom: 10px;
 }
