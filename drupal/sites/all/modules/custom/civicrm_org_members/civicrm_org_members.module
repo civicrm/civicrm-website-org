@@ -41,7 +41,7 @@ function civicrm_org_members_civicrm_sumfields_definitions(&$custom) {
         ON soft.contribution_id = cont1.id
       WHERE (cont1.contact_id = NEW.contact_id OR soft.contact_id = NEW.contact_id)
         AND CAST(cont1.receive_date AS DATE) BETWEEN DATE_SUB(NOW(), INTERVAL 12 MONTH) AND NOW()
-        AND cont1.contribution_status_id = 1 AND cont1.financial_type_id IN (1,10,12,19,11,13,5,6,18)
+        AND cont1.contribution_status_id = 1 AND cont1.financial_type_id IN (1,2,10,12,19,11,13,5,6,18)
       )',
     'trigger_table' => 'civicrm_contribution',
     'optgroup' => 'civi',
