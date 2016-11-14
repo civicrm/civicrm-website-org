@@ -1482,3 +1482,68 @@ a.greenbutton:hover, a.greenbutton:active {
 	color: #fff;
 	display: none;
 }
+.node-type-feature .panel-panel.right .pane-menu-block {
+	margin-bottom: 40px;
+}
+
+.node-type-feature .field-name-field-documentation-link .field-item,
+.node-type-feature .field-name-field-youtube .field-item,
+.node-type-feature .field-name-field-mattermost .field-item {
+	margin: 20px 0px 10px 50px;
+	left: 10px;
+}
+.node-type-feature .field-name-field-documentation-link .field-item a,
+.node-type-feature .field-name-field-youtube .field-item a,
+.node-type-feature .field-name-field-mattermost .field-item a {
+	color: #333;
+}
+.node-type-feature .field-name-field-documentation-link .field-item a::before,
+.node-type-feature .field-name-field-youtube .field-item a::before,
+.node-type-feature .field-name-field-mattermost .field-item a::before {
+	content:"\f02d";
+	font-family: fontawesome;
+    left: 30px;
+    position: absolute;
+    color: #056186;
+	font-size: 32px;
+    margin-top: -8px;
+}
+.node-type-feature .field-name-field-documentation-link .field-item a:hover::before,
+.node-type-feature .field-name-field-documentation-link .field-item a:focus::before,
+.node-type-feature .field-name-field-youtube .field-item a:hover::before,
+.node-type-feature .field-name-field-youtube .field-item a:focus::before,
+.node-type-feature .field-name-field-mattermost .field-item a:hover::before,
+.node-type-feature .field-name-field-mattermost .field-item a:focus::before {
+    color: #333;
+}
+.node-type-feature .field-name-field-documentation-link .field-item a::before {
+	content:"\f02d";
+}
+.node-type-feature .field-name-field-youtube .field-item a::before {
+	content:"\f16a";
+}
+.node-type-feature .field-name-field-mattermost .field-item a::before {
+	content:"\f0e6";
+}
+.node-type-feature .pane-node-field-case-studies h2 {
+	margin: 0px 0px 8px 0px;
+	font-size: 24px;
+	font-weight: 300;
+}
+.node-type-feature .pane-node-field-case-studies img {
+	float: right;    
+	padding-left: 10px;
+    padding-top: 10px;
+    width: 130px;
+}
+.node-type-feature .pane-node-field-case-studies .statistics_counter {
+	display: none;
+}
+.node-type-feature .pane-node-field-case-studies .node-readmore {
+	float: right;
+    padding: 0px 0px 25px 0px;
+    margin: 0px;
+}
+.node-type-feature .pane-2 h3 {
+	padding-top: 25px;
+}
