@@ -161,6 +161,13 @@ header #navigation > ul.navbar-nav {
         .navbar.fixed.scrollable, .menu-name-menu-events-sub-menu ul, .menu-name-menu-top-navigation ul {
 	top: 140px;
         }
+        .navbar-collapse.collapse.main {
+	width: 100% !important;
+	margin-top: 0px;
+	}
+	section#block-menu-menu-top-navigation > ul {
+	margin: 0px;
+}
 }
 /* HOME HERO SECTION */
 #banner .pane-1 {
