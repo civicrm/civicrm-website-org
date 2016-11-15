@@ -171,8 +171,6 @@
       
       
   </section>
-
-  
 <section class="footer-top">
              <?php print render($page['footer_top']);?>
 </section>

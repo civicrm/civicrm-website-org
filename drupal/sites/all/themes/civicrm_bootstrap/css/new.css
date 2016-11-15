@@ -158,6 +158,9 @@ header #navigation > ul.navbar-nav {
 	.open > .dropdown-menu li a {
 		line-height: 30px !important;
 	}
+        .navbar.fixed.scrollable, .menu-name-menu-events-sub-menu ul, .menu-name-menu-top-navigation ul {
+	top: 140px;
+        }
 }
 /* HOME HERO SECTION */
 #banner .pane-1 {
@@ -1549,4 +1552,45 @@ a.greenbutton:hover, a.greenbutton:active {
 .page-node-5734 tr#wf-crm-billing-total td + td::first-letter {
 	color: #fff;
 	display: none;
+}
+/* BLOG */
+
+.node-type-blog .pane-node-created span.pane-title,
+.node-type-blog .pane-node-author span.pane-title {
+	float: left;
+	font-weight: 700;
+	width: 100px;
+}
+.node-type-blog .field-name-body {
+	margin-top: 20px;
+	color: #231f20;
+}
+.node-type-blog .pane-blog-news h4 a {
+    margin: 8px 0px 8px 0px;
+    font-size: 24px;
+    font-weight: 300;
+	color: #231f20;
+}
+.view-blog-taxonomy .view-content > div.views-row {
+	float: left;
+	padding-right: 5px;
+}
+.view-blog-taxonomy .view-content > div.views-row-last {
+	float: none;
+	clear: both;
+}
+div.pane-blog-taxonomy {
+    border: 1px solid #dedede;
+    background: #efefef;
+    border-radius: 3px;
+	padding: 10px;
+	margin-bottom: 20px;
+}
+.pane-blog-news  h2.pane-title,
+.pane-blog-taxonomy h2.pane-title {
+    font-weight: 300;
+    padding: 0px 0px 0px 0px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+	text-transform: capitalize;
 }
