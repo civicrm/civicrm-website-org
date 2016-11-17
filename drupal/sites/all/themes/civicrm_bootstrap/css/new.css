@@ -13,16 +13,15 @@
     width: 1190px;
     margin-bottom: 25px;
 } /* provides bootstrap container to panels or pages without a container */
-@media (min-width:768px){
-        .bootstrapcon .bootstrap-twocol-stacked {width:770px}
-}
-@media (min-width:992px){
+@media (max-width:1200px){
         .bootstrapcon .bootstrap-twocol-stacked {width:990px}
 }
-@media (min-width:1200px){
-        .bootstrapcon .bootstrap-twocol-stacked {width:1190px}
+@media (max-width:992px){
+        .bootstrapcon .bootstrap-twocol-stacked {width:770px}
 }
-
+@media (max-width:768px){
+        .bootstrapcon .bootstrap-twocol-stacked {width:100%}
+}
 
 /* BREADCRUMBS */
 
@@ -1737,6 +1736,10 @@ background-color: #82c459;
 .view-blog-taxonomy .view-content > div.views-row {
 	float: left;
 	padding-right: 5px;
+}
+.blog-listing .pane-node-body p {
+	font-size: 24px;
+	line-height: 36px;
 }
 .view-blog-taxonomy .view-content > div.views-row-last {
 	float: none;
