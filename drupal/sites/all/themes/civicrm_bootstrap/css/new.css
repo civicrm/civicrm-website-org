@@ -1585,8 +1585,11 @@ a.greenbutton:hover, a.greenbutton:active {
 	color: #fff;
 	display: none;
 }
-.page-working-groups .stripe-black {
-    margin-top: 10px !important;
+.page-working-groups .stripe-black,
+.blog-listing .stripe-black,
+.page-taxonomy-term .stripe-black,
+.node-type-blog .stripe-black {
+    margin-top: 30px !important;
 }
 @media (max-width: 999px) {
 .page-working-groups .region.region-header {
