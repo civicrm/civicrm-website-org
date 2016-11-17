@@ -1,0 +1,702 @@
+<?php
+
+/**
+ * @file
+ * Contains tests for the Reference option limit module.
+ */
+
+/**
+ * Test use of the module with term reference fields.
+ */
+class ReferenceOptionLimitTaxonomyTestCase extends DrupalWebTestCase {
+
+  /**
+   * Implements getInfo().
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('Reference Option Limit taxonomy term'),
+      'description' => t('Tests behaviour with taxonomy term reference fields.'),
+      'group' => t('Reference Option Limit'),
+    );
+  }
+
+  /**
+   * Implements setUp().
+   */
+  function setUp() {
+    parent::setUp(array('reference_option_limit', 'reference_option_limit_test_taxonomy'));
+
+    // Create our creator user.
+    $this->user = $this->drupalCreateUser(array(
+      'administer nodes',
+      'create test_rol_node_taxo content',
+      'edit any test_rol_node_taxo content',
+    ));
+    $this->drupalLogin($this->user);
+  }
+
+  /**
+   * Test the module's functionality.
+   */
+  function testNodeCreateForm() {
+    $this->drupalGet('node/add/test-rol-node-taxo');
+
+    // Get a country term.
+    $terms = taxonomy_get_term_by_name('France', 'countries');
+    $country_term = array_pop($terms);
+
+    $edit = array(
+      'test_rol_country[und]' => $country_term->tid,
+    );
+
+    $this->drupalPostAJAX(NULL, $edit, 'test_rol_country[und]');
+
+    // The AJAX post updates the content our assertions test against.
+    // Check each term: all the cities in France should be present; all the
+    // others should not.
+    foreach (reference_option_limit_test_taxonomy_cities() as $city_name => $country_name) {
+      if ($country_name == 'France') {
+        $this->assertText($city_name, "The $city_name term was found in the form.");
+      }
+      else {
+        $this->assertNoText($city_name, "The $city_name term was not found in the form.");
+      }
+    }
+
+    // Get a country term.
+    $terms = taxonomy_get_term_by_name('Italy', 'countries');
+    $country_term = array_pop($terms);
+
+    $edit = array(
+      'test_rol_country[und]' => $country_term->tid,
+    );
+
+    // Change the country we have selected.
+    $this->drupalPostAJAX(NULL, $edit, 'test_rol_country[und]');
+
+    foreach (reference_option_limit_test_taxonomy_cities() as $city_name => $country_name) {
+      if ($country_name == 'Italy') {
+        $this->assertText($city_name, "The $city_name term was found in the form.");
+      }
+      else {
+        $this->assertNoText($city_name, "The $city_name term was not found in the form.");
+      }
+    }
+
+    // Save the node.
+    $terms = taxonomy_get_term_by_name('Firenze', 'cities');
+    $city_term = array_pop($terms);
+
+    $edit = array(
+      'title' => $this->randomName(),
+      // Use the most recent country term.
+      'test_rol_country[und]' => $country_term->tid,
+      "test_rol_city[und][{$city_term->tid}]" => 1,
+    );
+
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    // The URL is of the form http://example.com/node/NID.
+    $url = $this->getUrl();
+    $pieces = explode('/', $url);
+    $nid = array_pop($pieces);
+
+    $node = node_load($nid);
+
+    $this->assertEqual($node->test_rol_country[LANGUAGE_NONE][0]['tid'], $country_term->tid, "The node has its country field value set.");
+    $this->assertEqual($node->test_rol_city[LANGUAGE_NONE][0]['tid'], $city_term->tid, "The node has its city field value set.");
+  }
+
+  /**
+   * Test the node edit form.
+   */
+  function testNodeEditForm() {
+    // Get country and city terms.
+    $terms = taxonomy_get_term_by_name('Italy', 'countries');
+    $country_term = array_pop($terms);
+    $terms = taxonomy_get_term_by_name('Firenze', 'cities');
+    $city_term = array_pop($terms);
+
+    // Create a node: Italy, Firenze.
+    $edit = array(
+      'uid'      => $this->user->uid,
+      'name'     => $this->user->name,
+      'type'     => 'test_rol_node_taxo',
+      'language' => LANGUAGE_NONE,
+      'title'    => $this->randomName(),
+    );
+
+    $edit['test_rol_country'][LANGUAGE_NONE][0]['tid'] = $country_term->tid;
+    $edit['test_rol_city'][LANGUAGE_NONE][0]['tid'] = $city_term->tid;
+
+    $node = (object) $edit;
+
+    node_save($node);
+
+    // Edit the node.
+    $this->drupalGet("node/{$node->nid}/edit");
+
+    foreach (reference_option_limit_test_taxonomy_cities() as $city_name => $country_name) {
+      if ($country_name == 'Italy') {
+        $this->assertText($city_name, "The $city_name term was found in the form.");
+      }
+      else {
+        $this->assertNoText($city_name, "The $city_name term was not found in the form.");
+      }
+    }
+
+    // Get a country term.
+    $terms = taxonomy_get_term_by_name('France', 'countries');
+    $country_term = array_pop($terms);
+
+    $edit = array(
+      'test_rol_country[und]' => $country_term->tid,
+    );
+
+    // Change the country we have selected in the form: France.
+    $this->drupalPostAJAX(NULL, $edit, 'test_rol_country[und]');
+
+    foreach (reference_option_limit_test_taxonomy_cities() as $city_name => $country_name) {
+      if ($country_name == 'France') {
+        $this->assertText($city_name, "The $city_name term was found in the form.");
+      }
+      else {
+        $this->assertNoText($city_name, "The $city_name term was not found in the form.");
+      }
+    }
+
+    $terms = taxonomy_get_term_by_name('Paris', 'cities');
+    $city_term = array_pop($terms);
+
+    // Save the form with France, Paris.
+    $edit = array(
+      'test_rol_country[und]' => $country_term->tid,
+      "test_rol_city[und][{$city_term->tid}]" => 1,
+    );
+
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    entity_get_controller('node')->resetCache();
+
+    $node = node_load($node->nid);
+
+    $this->assertEqual($node->test_rol_country[LANGUAGE_NONE][0]['tid'], $country_term->tid, "The node's country was updated.");
+    $this->assertEqual($node->test_rol_city[LANGUAGE_NONE][0]['tid'], $city_term->tid, "The node's city was updated.");
+  }
+
+}
+
+/**
+ * Common base class for test cases that use entityreference fields.
+ */
+abstract class ReferenceOptionLimitEntityreferenceTestCaseBase extends DrupalWebTestCase {
+
+  /**
+   * Helper for getting a node by title.
+   *
+   * This works for retrieving both country and city nodes.
+   *
+   * @param $node_title
+   *  The title of the node to get.
+   *
+   * @return
+   *  A node entity.
+   */
+  protected function getNodeByTitle($title) {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node');
+    $query->propertyCondition('title', $title);
+    $result = $query->execute();
+    // We expect only one node to satisfy this query.
+    $nids = array_keys($result['node']);
+    $node = node_load(array_pop($nids));
+
+    $this->assertTrue($node, format_string("Node id !nid with the given title %title was found.", array(
+      '!nid' => $node->nid,
+      '%title' => $title,
+    )));
+
+    return $node;
+  }
+
+}
+
+/**
+ * Test use of the module with entityreference fields.
+ */
+class ReferenceOptionLimitEntityreferenceTestCase extends ReferenceOptionLimitEntityreferenceTestCaseBase {
+
+  /**
+   * Implements getInfo().
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('Reference Option Limit entityreference'),
+      'description' => t('Tests behaviour with entityreference fields.'),
+      'group' => t('Reference Option Limit'),
+    );
+  }
+
+  /**
+   * Implements setUp().
+   */
+  function setUp() {
+    parent::setUp(array('reference_option_limit', 'reference_option_limit_test_entityreference'));
+
+    // Create our creator user.
+    $this->user = $this->drupalCreateUser(array(
+      'administer nodes',
+      'create test_rol_node_article content',
+      'edit any test_rol_node_article content',
+    ));
+    $this->drupalLogin($this->user);
+  }
+
+  /**
+   * Test the functionality on a node create form.
+   */
+  function testNodeCreateForm() {
+    // In order to test every combination of settings, we define the different
+    // orthogonal settings and their ranges.
+    $ranges = array(
+      // The field cardinality for the matching field.
+      'cardinality' => array(
+        1,
+        FIELD_CARDINALITY_UNLIMITED,
+      ),
+      // The field widget for the matching field.
+      'widget' => array(
+        'options_buttons',
+        'options_select',
+      ),
+      // The default value for the matching field, as an entity label.
+      'default' => array(
+        array(),
+        array('Britain'),
+      ),
+      // If TRUE, a limited field shows no options if the matching field is
+      // initially empty.
+      'empty_behaviour' => array(
+        FALSE,
+        TRUE,
+      ),
+    );
+
+    // Work over all the combinations of settings.
+    foreach ($ranges['cardinality'] as $cardinality) {
+      foreach ($ranges['widget'] as $widget) {
+        foreach ($ranges['default'] as $default) {
+          foreach ($ranges['empty_behaviour'] as $empty_behaviour) {
+            // Make the settings changes to the field and instance.
+            $this->changeFieldSettings(array(
+              'cardinality'     => $cardinality,
+              'widget'          => $widget,
+              'default'         => $default,
+              'empty_behaviour' => $empty_behaviour,
+            ));
+
+            // Test the functionality.
+            $this->helperTestNodeCreateForm(array(
+              'cardinality'     => $cardinality,
+              'widget'          => $widget,
+              'default'         => $default,
+              'empty_behaviour' => $empty_behaviour,
+            ));
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Helper to change the field settings.
+   *
+   * @param $settings
+   *  An array of settings to apply, with the following properties:
+   *    - 'widget': The widget type to set on the matching field instance.
+   *    - 'cardinality': The cardinality to set on the matching field.
+   *    - 'default': The default value to set on the matching field instance.
+   *    - 'empty_behaviour': Whether the limited field shows all options or none
+   *      when the matching field is initially empty.
+   */
+  function changeFieldSettings($settings) {
+    $country_field_info = field_info_field('test_rol_er_country');
+    $country_instance_info = field_info_instance('node', 'test_rol_er_country', 'test_rol_node_article');
+    $city_instance_info = field_info_instance('node', 'test_rol_er_city', 'test_rol_node_article');
+
+    // Set the cardinality on the field.
+    $country_field_info['cardinality'] = $settings['cardinality'];
+
+    // Set the widget type on the instance.
+    $country_instance_info['widget']['type'] = $settings['widget'];
+
+    // Set the empty default behaviour on the instance of the limited field,
+    // i.e., the city.
+    $city_instance_info['options_limit_empty_behaviour'] = $settings['empty_behaviour'];
+
+    // Set the default value on the instance.
+    if (empty($settings['default'])) {
+      $default = NULL;
+    }
+    else {
+      $default = array();
+      foreach ($settings['default'] as $entity_label) {
+        $node = $this->getNodeByTitle($entity_label);
+        $default[]['target_id'] = $node->nid;
+      }
+    }
+    $country_instance_info['default_value'] = $default;
+
+    field_update_field($country_field_info);
+    field_update_instance($country_instance_info);
+    field_update_instance($city_instance_info);
+  }
+
+  /**
+   * Helper to run tests.
+   *
+   * This allows us to run the same tests with different field settings.
+   *
+   * @param $settings
+   *  An array of key settings for the field and instance, with the following
+   *  properties:
+   *    - 'widget': The widget type used by the the field instance. One of
+   *      either 'options_select' or 'options_buttons'.
+   *    - 'cardinality': The cardinality on the field. One of either 1 or
+   *      FIELD_CARDINALITY_UNLIMITED.
+   *    - 'default': The default value on the field instance. An array of values
+   *      (without the FieldAPI nesting for language and delta). For no default
+   *      value, an empty array.
+   *    - 'empty_behaviour': Whether the limited field shows all options (FALSE)
+   *      or none (TRUE) when the matching field is initially empty.
+   */
+  function helperTestNodeCreateForm($settings) {
+    // Sanity check that the field settings are what we expect then to be.
+    // This also helps make the test result more readable, as it marks the start
+    // of a new round.
+    $country_field_info = field_info_field('test_rol_er_country');
+    $country_instance_info = field_info_instance('node', 'test_rol_er_country', 'test_rol_node_article');
+    $city_instance_info = field_info_instance('node', 'test_rol_er_city', 'test_rol_node_article');
+    $this->assertTrue(
+      $country_instance_info['widget']['type'] == $settings['widget']
+      &&
+      $country_field_info['cardinality'] == $settings['cardinality']
+      &&
+      $city_instance_info['options_limit_empty_behaviour'] == $settings['empty_behaviour'],
+      format_string("The field settings are correctly set: widget type !widget, cardinality !card, default value !default, default value behaviour: !empty-default.", array(
+        '!widget'         => $settings['widget'],
+        '!card'           => ($settings['cardinality'] == FIELD_CARDINALITY_UNLIMITED) ? 'unlimited' : $settings['cardinality'],
+        '!default'        => empty($settings['default']) ? 'none' : implode(', ', $settings['default']),
+        '!empty-default'  => $settings['empty_behaviour'] ? 'hide options for an empty default' : "don't hide options for an empty default",
+      ))
+    );
+
+    $this->drupalGet('node/add/test-rol-node-article');
+
+    // Check that the city field is limited by the default value of the country
+    // field. (We can assume that FieldAPI works properly and that the default
+    // value is set!)
+
+    // The the empty behaviour determines what should happen to the city field
+    // when the country field default is empty:
+    //  - empty_behaviour TRUE: no city options shown.
+    //  - empty_behaviour FALSE: all city options shown.
+    $expect_no_cities = $expect_all_cities = FALSE;
+    if (empty($settings['default'])) {
+      if ($settings['empty_behaviour']) {
+        $expect_no_cities = TRUE;
+      }
+      else {
+        $expect_all_cities = TRUE;
+      }
+    }
+
+    foreach (reference_option_limit_test_entityreference_cities() as $city_name => $country_name) {
+      // We expect to find the city listed if one of the following holds:
+      //  - its country is in the default
+      //  - the default is empty, and the empty behaviour is not to limit
+      //    options.
+      if ($expect_no_cities) {
+        $this->assertNoText($city_name, "The $city_name node was not found in the initial node add form.");
+        continue;
+      }
+
+      if ($expect_all_cities) {
+        $this->assertText($city_name, "The $city_name node was found in the initial node add form.");
+        continue;
+      }
+
+      $country_of_city_in_default = in_array($country_name, $settings['default']);
+      if ($country_of_city_in_default) {
+        $this->assertText($city_name, "The $city_name node was found in the initial node add form.");
+      }
+      else {
+        $this->assertNoText($city_name, "The $city_name node was not found in the initial node add form.");
+      }
+    }
+
+    // Change the country we have selected.
+    $this->rolPostAJAXCountryField('France', $settings);
+
+    // The AJAX post updates the content our assertions test against.
+    // Check each term: all the cities in France should be present; all the
+    // others should not.
+    foreach (reference_option_limit_test_entityreference_cities() as $city_name => $country_name) {
+      if ($country_name == 'France') {
+        $this->assertText($city_name, "The $city_name node was found in the form.");
+      }
+      else {
+        $this->assertNoText($city_name, "The $city_name node was not found in the form.");
+      }
+    }
+
+    // Change the country we have selected.
+    $this->rolPostAJAXCountryField('Italy', $settings);
+
+    foreach (reference_option_limit_test_entityreference_cities() as $city_name => $country_name) {
+      if ($country_name == 'Italy') {
+        $this->assertText($city_name, "The $city_name node was found in the form.");
+      }
+      else {
+        $this->assertNoText($city_name, "The $city_name node was not found in the form.");
+      }
+    }
+
+    // Save the node.
+    $city_node = $this->getNodeByTitle('Firenze');
+    $country_node = $this->getNodeByTitle('Italy');
+
+    $post_data = $this->getEditArray('Italy', $settings);
+    $post_data['edit']['title'] = $this->randomName();
+    $post_data['edit']["test_rol_er_city[und][{$city_node->nid}]"] = 1;
+
+    $this->drupalPost(NULL, $post_data['edit'], t('Save'));
+
+    // The URL is of the form http://example.com/node/NID.
+    $url = $this->getUrl();
+    $pieces = explode('/', $url);
+    $nid = array_pop($pieces);
+
+    $node = node_load($nid);
+
+    $this->assertEqual($node->test_rol_er_country[LANGUAGE_NONE][0]['target_id'], $country_node->nid, "The node has its country field value set.");
+    $this->assertEqual($node->test_rol_er_city[LANGUAGE_NONE][0]['target_id'], $city_node->nid, "The node has its city field value set.");
+  }
+
+  /**
+   * Wrapper around drupalPostAJAX() for updating the country field.
+   *
+   * This allows for the differing structures required in the POST data array
+   * for different form elements.
+   *
+   * @param $country_node_title
+   *  The title of the country node to set on the country field.
+   * @param $settings
+   *  The array of field settings passed to helperTestNodeCreateForm().
+   */
+  function rolPostAJAXCountryField($country_node_title, $settings) {
+    if ($settings['widget'] . '-' . $settings['cardinality'] == 'options_buttons-' . FIELD_CARDINALITY_UNLIMITED) {
+      // Special case for checkboxes: because each checkbox is a separate form
+      // element, we have to unselect all the other values first.
+      $cities = reference_option_limit_test_entityreference_cities();
+      foreach (array_unique($cities) as $country_name) {
+        if ($country_name != $country_node_title) {
+          $excluded_node = $this->getNodeByTitle($country_name);
+          $edit = array();
+          // Checkboxes must use FALSE -- see handleForm().
+          $edit["test_rol_er_country[und][{$excluded_node->nid}]"] = FALSE;
+
+          $this->drupalPostAJAX(NULL, $edit, "test_rol_er_country[und][{$excluded_node->nid}]");
+        }
+      }
+    }
+
+    $post_data = $this->getEditArray($country_node_title, $settings);
+
+    $this->drupalPostAJAX(NULL, $post_data['edit'], $post_data['triggering_element']);
+  }
+
+  /**
+   * Helper to get the values for POST and AJAX operations.
+   *
+   * The structure of this varies according to the widgets in use.
+   *
+   * @param $country_node_title
+   *  The title of the country node that should be present in the POST array.
+   * @param $settings
+   *  The array of field settings passed to helperTestNodeCreateForm().
+   *
+   * @return
+   *  An array containing the following properties:
+   *  - 'edit': The $edit array suitable for drupalPostAJAX() or drupalPost().
+   *  - 'triggering_element': The name of the triggering element suitable for
+   *    drupalPostAJAX().
+   */
+  function getEditArray($country_node_title, $settings) {
+    $node = $this->getNodeByTitle($country_node_title);
+
+    $return = array();
+
+    // The structure of the $edit array we pass to to a post depends on the
+    // form element, and thus on the field widget and cardinality. Set the key
+    // to use in the $edit array accordingly.
+    switch ($settings['widget'] . '-' . $settings['cardinality']) {
+      case 'options_select-1':
+        // Single select list.
+        $return['edit'] = array(
+          'test_rol_er_country[und]' => $node->nid,
+        );
+        $return['triggering_element'] = 'test_rol_er_country[und]';
+        break;
+      case 'options_select-' . FIELD_CARDINALITY_UNLIMITED:
+        // Multi-select.
+        $return['edit'] = array(
+          'test_rol_er_country[und][]' => $node->nid,
+        );
+        $return['triggering_element'] = 'test_rol_er_country[und][]';
+        break;
+      case 'options_buttons-1':
+        // Radios.
+        $return['edit'] = array(
+          'test_rol_er_country[und]' => $node->nid,
+        );
+        $return['triggering_element'] = 'test_rol_er_country[und]';
+        break;
+      case 'options_buttons-' . FIELD_CARDINALITY_UNLIMITED:
+        // Checkboxes.
+        $return['edit'] = array(
+          "test_rol_er_country[und][{$node->nid}]" => $node->nid,
+        );
+
+        // Checkboxes have a special problem when there is a default value on
+        // one of them. Because they are all separate elements, drupalPost()
+        // tries to preserve their individual values when it fills out the $edit
+        // array. And because drupalPostAJAX() doesn't update the internal
+        // browser's HTML with the change (i.e., it doesn't change the
+        // checkbox's state), a checkbox that is checked by default will keep
+        // getting added to the $edit array as being checked in drupalPost().
+        // So we have to explicitly uncheck it here every time.
+        // This is (I believe) a bug in Drupal core: see
+        // https://www.drupal.org/node/2423159
+        foreach ($settings['default'] as $default_node_title) {
+          if ($country_node_title == $default_node_title) {
+            // Obviously if it happens that the default checkbox is one we now
+            // want to set, leave it.
+            continue;
+          }
+
+          $default_node = $this->getNodeByTitle($default_node_title);
+          $return['edit']["test_rol_er_country[und][{$default_node->nid}]"] = FALSE;
+        }
+
+        $return['triggering_element'] =  "test_rol_er_country[und][{$node->nid}]";
+        break;
+    }
+
+    return $return;
+  }
+
+}
+
+/**
+ * Test use of the module on a Profile2 entity.
+ */
+class ReferenceOptionLimitProfile2TestCase extends ReferenceOptionLimitEntityreferenceTestCaseBase {
+
+  /**
+   * Implements getInfo().
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('Profile2 entity form'),
+      'description' => t('Tests behaviour on Profile2 entities with entityreference fields.'),
+      'group' => t('Reference Option Limit'),
+    );
+  }
+
+  /**
+   * Implements setUp().
+   */
+  function setUp() {
+    parent::setUp(array(
+      'reference_option_limit',
+      'reference_option_limit_test_entityreference',
+      'profile2',
+      'reference_option_limit_test_profile2',
+    ));
+
+    // Create our creator user.
+    $this->user = $this->drupalCreateUser(array(
+      'edit own test_rol profile',
+    ));
+    $this->drupalLogin($this->user);
+  }
+
+  /**
+   * Test the functionality of Profile2 fields on a user edit form.
+   */
+  function testProfile2Form() {
+    $user_id = $this->user->uid;
+
+    $this->drupalGet("user/$user_id/edit/test_rol");
+
+    // Get a country node.
+    $country_node = $this->getNodeByTitle('France');
+
+    $edit = array(
+      'profile_test_rol[test_rol_er_country][und]' => $country_node->nid,
+    );
+
+    $this->drupalPostAJAX(NULL, $edit, 'profile_test_rol[test_rol_er_country][und]');
+
+    // The AJAX post updates the content our assertions test against.
+    // Check each term: all the cities in France should be present; all the
+    // others should not.
+    foreach (reference_option_limit_test_entityreference_cities() as $city_name => $country_name) {
+      if ($country_name == 'France') {
+        $this->assertText($city_name, "The $city_name node was found in the form.");
+      }
+      else {
+        $this->assertNoText($city_name, "The $city_name node was not found in the form.");
+      }
+    }
+
+    // Get a country node.
+    $country_node = $this->getNodeByTitle('Italy');
+
+    $edit = array(
+      'profile_test_rol[test_rol_er_country][und]' => $country_node->nid,
+    );
+
+    // Change the country we have selected.
+    $this->drupalPostAJAX(NULL, $edit, 'profile_test_rol[test_rol_er_country][und]');
+
+    foreach (reference_option_limit_test_entityreference_cities() as $city_name => $country_name) {
+      if ($country_name == 'Italy') {
+        $this->assertText($city_name, "The $city_name node was found in the form.");
+      }
+      else {
+        $this->assertNoText($city_name, "The $city_name node was not found in the form.");
+      }
+    }
+
+    // Pick a city and save the entity.
+    $city_node = $this->getNodeByTitle('Firenze');
+
+    $edit = array(
+      // Use the most recent country node.
+      'profile_test_rol[test_rol_er_country][und]' => $country_node->nid,
+      "profile_test_rol[test_rol_er_city][und][{$city_node->nid}]" => 1,
+    );
+
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    // Load the profile.
+    $profile = profile2_load_by_user($this->user, 'test_rol');
+
+    $this->assertEqual($profile->test_rol_er_country[LANGUAGE_NONE][0]['target_id'], $country_node->nid, "The node has its country field value set.");
+    $this->assertEqual($profile->test_rol_er_city[LANGUAGE_NONE][0]['target_id'], $city_node->nid, "The node has its city field value set.");
+  }
+
+}

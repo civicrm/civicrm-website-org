@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file reference_option_limit_test_taxonomy.module
+ */
+
+/**
+ * Helper for hook_install() and tests.
+ *
+ * @return
+ *  An array of city names to be created as terms, with as values the names of
+ *  the country term names they should refer to.
+ */
+function reference_option_limit_test_taxonomy_cities() {
+  return array(
+    'London' => 'Britain',
+    'Edinburgh' => 'Britain',
+    'Bristol' => 'Britain',
+    'Paris' => 'France',
+    'Lyon' => 'France',
+    'Tours' => 'France',
+    'Rouen' => 'France',
+    'Roma' => 'Italy',
+    'Napoli' => 'Italy',
+    'Firenze' => 'Italy',
+  );
+}

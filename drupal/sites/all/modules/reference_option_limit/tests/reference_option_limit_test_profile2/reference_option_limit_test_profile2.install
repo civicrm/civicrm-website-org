@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file reference_option_limit_test_profile2.install
+ * Contains install hooks.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function reference_option_limit_test_profile2_install() {
+  // Create a new Profile2 type.
+  profile2_type_save(new ProfileType(array(
+    'type' => 'test_rol',
+    'label' => 'Test ROL',
+    'weight' => 0,
+  )));
+
+  // Add both fields on the test_rol Profile2 type.
+  $instance = array(
+    'field_name'  => 'test_rol_er_country',
+    'entity_type' => 'profile2',
+    'bundle'      => 'test_rol',
+    'label'       => 'Country',
+    'widget'      => array(
+      'type'      => 'options_select',
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'type' => 'entityreference_entity_id',
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  $instance = array(
+    'field_name'  => 'test_rol_er_city',
+    'entity_type' => 'profile2',
+    'bundle'      => 'test_rol',
+    'label'       => 'Cities',
+    'options_limit' => TRUE,
+    'options_limit_fields' => array(
+      'test_rol_er_country' => 'test_rol_er_country',
+    ),
+    'widget'      => array(
+      'type'      => 'options_buttons',
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'type' => 'entityreference_entity_id',
+      ),
+    ),
+  );
+  field_create_instance($instance);
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * This is not necessary for tests, but it makes development of tests easier by
+ * allowing use of Devel module's reinstall tool to obtain a clean slate.
+ */
+function reference_option_limit_test_profile2_uninstall() {
+  profile2_type_delete(profile2_get_types('test_rol'));
+}

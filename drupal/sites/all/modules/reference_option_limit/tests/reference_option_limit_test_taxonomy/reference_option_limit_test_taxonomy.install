@@ -1,0 +1,195 @@
+<?php
+
+/**
+ * @file reference_option_limit_test_taxonomy.install
+ * Contains install hooks.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function reference_option_limit_test_taxonomy_install() {
+  // Create a node type.
+  // We don't use hook_node_info() because that requires us to implement
+  // hook_form(), and also we want to add fields here.
+  $types = array(
+    array(
+      'type' => 'test_rol_node_taxo',
+      'name' => st('Test ROL node'),
+      'base' => 'node_content',
+      'description' => t('Test node type for Reference Option Limit module tests.'),
+      'custom' => 1,
+      'modified' => 1,
+      'locked' => 0,
+    ),
+  );
+
+  foreach ($types as $type) {
+    $type = node_type_set_defaults($type);
+    node_type_save($type);
+    node_add_body_field($type);
+  }
+
+  // Create vocabularies.
+  $vocabularies = array(
+    'countries' => NULL,
+    'cities'    => NULL,
+  );
+  foreach ($vocabularies as $machine_name => $null) {
+    $vocabulary = (object) array(
+      'name' => ucfirst($machine_name),
+      'description' => ucfirst($machine_name),
+      'machine_name' => $machine_name,
+    );
+    taxonomy_vocabulary_save($vocabulary);
+
+    $vocabularies[$machine_name] = $vocabulary;
+  }
+
+  // Create FieldAPI fields and instances.
+  // Country reference field...
+  $field = array(
+    'field_name'  => 'test_rol_country',
+    'type'        => 'taxonomy_term_reference',
+    'cardinality' => 1,
+    'settings'    => array(
+      'allowed_values' => array(
+        array(
+          'vocabulary' => 'countries',
+          'parent' => 0,
+        ),
+      ),
+    ),
+  );
+  field_create_field($field);
+
+  // ... on the node...
+  $instance = array(
+    'field_name'  => 'test_rol_country',
+    'entity_type' => 'node',
+    'bundle'      => 'test_rol_node_taxo',
+    'label'       => 'Country',
+    'widget'      => array(
+      'type'      => 'options_select',
+      // To be higher than body (for manual testing) we need to be lighter than
+      // -4, which puts us above the title probably.
+      'weight'    => -6,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'type' => 'taxonomy_term_reference_plain',
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  // ...and on the city term.
+  $instance = array(
+    'field_name'  => 'test_rol_country',
+    'entity_type' => 'taxonomy_term',
+    'bundle'      => 'cities',
+    'label'       => 'Country',
+    'widget'      => array(
+      'type'      => 'options_select',
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'type' => 'taxonomy_term_reference_plain',
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  // City reference field.
+  $field = array(
+    'field_name'  => 'test_rol_city',
+    'type'        => 'taxonomy_term_reference',
+    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+    'settings'    => array(
+      'allowed_values' => array(
+        array(
+          'vocabulary' => 'cities',
+          'parent' => 0,
+        ),
+      ),
+    ),
+  );
+  field_create_field($field);
+
+  $instance = array(
+    'field_name'  => 'test_rol_city',
+    'entity_type' => 'node',
+    'bundle'      => 'test_rol_node_taxo',
+    'label'       => 'Cities',
+    'options_limit' => TRUE,
+    'options_limit_fields' => array(
+      'test_rol_country' => 'test_rol_country',
+    ),
+    'widget'      => array(
+      'type'      => 'options_buttons',
+      'weight'    => -5,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'type' => 'taxonomy_term_reference_plain',
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  // Get our definition of cities and countries.
+  $cities = reference_option_limit_test_taxonomy_cities();
+
+  // Create country terms.
+  $country_tids = array();
+  foreach (array_unique($cities) as $country_name) {
+    $term = (object) array(
+      'vid' => $vocabularies['countries']->vid,
+      'name' => $country_name,
+    );
+    taxonomy_term_save($term);
+    $country_tids[$country_name] = $term->tid;
+  }
+
+  // Create city terms.
+  foreach ($cities as $city_name => $country_name) {
+    $term = (object) array(
+      'vid' => $vocabularies['cities']->vid,
+      'name' => $city_name,
+      'test_rol_country' => array(
+        LANGUAGE_NONE => array(
+          0 => array(
+            'tid' => $country_tids[$country_name],
+          ),
+        ),
+      ),
+    );
+    taxonomy_term_save($term);
+  }
+
+
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * This is not necessary for tests, but it makes development of tests easier by
+ * allowing use of Devel module's reinstall tool to obtain a clean slate.
+ */
+function reference_option_limit_test_taxonomy_uninstall() {
+  // Delete fields.
+  // Note that taxonomy_vocabulary_delete() takes care of deleting term
+  // reference fields that point to that vocabulary.
+
+  // Delete vocabularies.
+  foreach (array('countries', 'cities') as $vocabulary_name) {
+    $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name);
+    taxonomy_vocabulary_delete($vocabulary->vid);
+  }
+
+  // Delete node type.
+  node_type_delete('test_rol_node_taxo');
+}

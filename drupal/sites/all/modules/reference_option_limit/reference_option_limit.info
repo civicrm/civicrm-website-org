@@ -1,0 +1,18 @@
+name = Reference option limit
+description = Allows reference fields to have their available options limited by the values of other fields in the current entity.
+core = 7.x
+dependencies[] = options (>=7.15)
+files[] = reference_option_limit.module
+files[] = reference_option_limit.views.inc
+files[] = reference_option_limit_handler_filter_limited_options_term_reference.inc
+files[] = tests/reference_option_limit.test
+
+test_dependencies[] = entityreference
+test_dependencies[] = profile2
+
+; Information added by Drupal.org packaging script on 2015-03-06
+version = "7.x-1.6"
+core = "7.x"
+project = "reference_option_limit"
+datestamp = "1425657182"
+

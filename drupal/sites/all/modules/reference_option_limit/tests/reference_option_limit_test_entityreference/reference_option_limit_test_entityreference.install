@@ -1,0 +1,233 @@
+<?php
+
+/**
+ * @file reference_option_limit_test_entityreference.install
+ * Contains install hooks.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function reference_option_limit_test_entityreference_install() {
+  // Create node types.
+  // We don't use hook_node_info() because that requires us to implement
+  // hook_form(), and also we want to add fields here.
+  $types = array(
+    array(
+      'type' => 'test_rol_node_article',
+      'name' => st('Test ROL node article'),
+      'base' => 'node_content',
+      'description' => t('Test node type for Reference Option Limit module tests.'),
+      'custom' => 1,
+      'modified' => 1,
+      'locked' => 0,
+    ),
+    array(
+      'type' => 'test_rol_node_country',
+      'name' => st('Test ROL node country'),
+      'base' => 'node_content',
+      'description' => t('Test node type for Reference Option Limit module tests.'),
+      'custom' => 1,
+      'modified' => 1,
+      'locked' => 0,
+    ),
+    array(
+      'type' => 'test_rol_node_city',
+      'name' => st('Test ROL node city'),
+      'base' => 'node_content',
+      'description' => t('Test node type for Reference Option Limit module tests.'),
+      'custom' => 1,
+      'modified' => 1,
+      'locked' => 0,
+    ),
+  );
+
+  foreach ($types as $type) {
+    $type = node_type_set_defaults($type);
+    node_type_save($type);
+    node_add_body_field($type);
+  }
+
+  // Create FieldAPI fields and instances.
+  // Country reference field...
+  $field = array(
+    'field_name'  => 'test_rol_er_country',
+    'type'        => 'entityreference',
+    'cardinality' => 1,
+    'settings'    => array(
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'test_rol_node_country',
+        ),
+      ),
+      'target_type' => 'node',
+    ),
+  );
+  field_create_field($field);
+
+  // ... on the article...
+  $instance = array(
+    'field_name'  => 'test_rol_er_country',
+    'entity_type' => 'node',
+    'bundle'      => 'test_rol_node_article',
+    'label'       => 'Country',
+    'widget'      => array(
+      'type'      => 'options_select',
+      // To be higher than body (for manual testing) we need to be lighter than
+      // -4, which puts us above the title probably.
+      'weight'    => -6,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'type' => 'entityreference_label',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  // ...and on the city.
+  $instance = array(
+    'field_name'  => 'test_rol_er_country',
+    'entity_type' => 'node',
+    'bundle'      => 'test_rol_node_city',
+    'label'       => 'Country',
+    'widget'      => array(
+      'type'      => 'options_buttons',
+      'weight'    => -6,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'type' => 'entityreference_label',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  // City reference field.
+  $field = array(
+    'field_name'  => 'test_rol_er_city',
+    'type'        => 'entityreference',
+    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+    'settings'    => array(
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'test_rol_node_city',
+        ),
+      ),
+      'target_type' => 'node',
+    ),
+  );
+  field_create_field($field);
+
+  $instance = array(
+    'field_name'  => 'test_rol_er_city',
+    'entity_type' => 'node',
+    'bundle'      => 'test_rol_node_article',
+    'label'       => 'Cities',
+    'options_limit' => TRUE,
+    'options_limit_fields' => array(
+      'test_rol_er_country' => 'test_rol_er_country',
+    ),
+    'widget'      => array(
+      'type'      => 'options_buttons',
+      'weight'    => -5,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'type' => 'entityreference_label',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  // Get our definition of cities and countries.
+  $cities = reference_option_limit_test_entityreference_cities();
+
+  // Create country nodes.
+  $country_nids = array();
+  foreach (array_unique($cities) as $country_name) {
+    $node = (object) array(
+      'type' => 'test_rol_node_country',
+      'title' => $country_name,
+      'uid' => 1,
+    );
+    node_save($node);
+    $country_nids[$country_name] = $node->nid;
+  }
+
+  // Create city nodes.
+  foreach ($cities as $city_name => $country_name) {
+    $node = (object) array(
+      'type' => 'test_rol_node_city',
+      'title' => $city_name,
+      'uid' => 1,
+      'test_rol_er_country' => array(
+        LANGUAGE_NONE => array(
+          0 => array(
+            'target_id' => $country_nids[$country_name],
+          ),
+        ),
+      ),
+    );
+    node_save($node);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * This is not necessary for tests, but it makes development of tests easier by
+ * allowing use of Devel module's reinstall tool to obtain a clean slate.
+ */
+function reference_option_limit_test_entityreference_uninstall() {
+  // Delete nodes.
+  foreach (array('test_rol_node_country') as $bundle_name) {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node');
+    $query->entityCondition('bundle', $bundle_name);
+
+    $result = $query->execute();
+    if (!empty($result['node'])) {
+      node_delete_multiple((array_keys($result['node'])));
+    }
+  }
+
+  // Delete fields.
+  field_delete_field('test_rol_er_country');
+  field_delete_field('test_rol_er_city');
+
+  // Delete node types.
+  node_type_delete('test_rol_node_article');
+  node_type_delete('test_rol_node_country');
+  node_type_delete('test_rol_node_city');
+}

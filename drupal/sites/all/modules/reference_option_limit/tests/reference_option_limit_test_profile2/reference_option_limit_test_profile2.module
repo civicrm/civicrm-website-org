@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file reference_option_limit_test_profile2.module
+ * Test module for Reference Option Limit tests with Profile2.
+ */
+
+// Drupal needs this blank file.

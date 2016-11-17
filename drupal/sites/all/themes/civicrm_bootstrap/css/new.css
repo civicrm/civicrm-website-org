@@ -159,7 +159,7 @@ header #navigation > ul.navbar-nav {
 		line-height: 30px !important;
 	}
         .navbar.fixed.scrollable, .menu-name-menu-events-sub-menu ul, .menu-name-menu-top-navigation ul {
-	top: 140px;
+	top: 120px !important;
         }
         .navbar-collapse.collapse.main {
 	width: 100% !important;
@@ -167,6 +167,13 @@ header #navigation > ul.navbar-nav {
 	}
 	section#block-menu-menu-top-navigation > ul {
 	margin: 0px;
+}
+    header#page-header .menu-block-wrapper .nav > li a {
+    color: #635d5e;
+    font-size: 15px;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 6px;
 }
 }
 /* HOME HERO SECTION */
@@ -798,7 +805,14 @@ a.greenbutton:hover, a.greenbutton:active {
 .page-node-5424 .stripe-black {
     display: none;
 }
-
+.civicrm-events #white {
+    padding-top: 80px;
+}
+@media screen and (max-width: 1000px) {
+.civicrm-events .region.region-content {
+    margin-top: -40px;
+}
+}
 /** EVENTS - CiviCon **/
 
 .node-type-conference .CiviPage {
@@ -1091,6 +1105,17 @@ a.greenbutton:hover, a.greenbutton:active {
 }
 #flexslider-1 {
     visibility: hidden;
+    margin-top: -20px;
+}
+@media screen and (max-width: 800px) {
+#flexslider-1 {
+    margin-top: -324px;
+}
+}
+@media screen and (max-width: 1200px) {
+#flexslider-1 {
+    margin-top: -175px;
+}
 }
 .flexslider {
     border: 0px solid transparent
@@ -1537,10 +1562,10 @@ a.greenbutton:hover, a.greenbutton:active {
     background-repeat: no-repeat !important;
     background-attachment: fixed !important;
     background-position: center center !important;
-    background-size: 100% 500px !important;
-    -webkit-background-size: 100% 500px !important;
-    -moz-background-size: 100% 500px !important;
-    -o-background-size: 100% 500px !important;
+    background-size: auto 500px !important;
+    -webkit-background-size: auto 500px !important;
+    -moz-background-size: auto 500px !important;
+    -o-background-size: auto 500px !important;
     height: 450px;
     margin: -20px 0px 20px;
 }
@@ -1553,12 +1578,40 @@ a.greenbutton:hover, a.greenbutton:active {
     margin-bottom: 10px;
 }
 .page-working-groups .views-field-field-team {
-    float: right;    margin-top: -50px;
+    float: right;
+    margin-top: -50px;
 }
 .page-node-5734 tr.civicrm_1_contribution_1 td:nth-child(2)::first-letter,
 .page-node-5734 tr#wf-crm-billing-total td + td::first-letter {
 	color: #fff;
 	display: none;
+}
+.page-working-groups .stripe-black {
+    margin-top: 10px !important;
+}
+@media (max-width: 999px) {
+.page-working-groups .region.region-header {
+    background-size: auto 500px !important;
+    -webkit-background-size: auto 500px !important;
+    -moz-background-size: auto 500px !important;
+    -o-background-size: auto 500px !important;
+    margin-top: -40px;
+    background-attachment: inherit !important;
+    height: 470px;
+}
+.page-working-groups .region.region-header h1 {
+    margin-top: 90px;
+    font-size: 48px;
+}
+.page-working-groups .region.region-header p {
+    width: 100%;
+    line-height:22px;
+}
+.page-working-groups .views-field-field-team {
+    float: none;
+    margin-top: 0px;
+    margin-bottom: 13px;
+}
 }
 /* BLOG */
 
@@ -1568,15 +1621,118 @@ a.greenbutton:hover, a.greenbutton:active {
 	font-weight: 700;
 	width: 100px;
 }
+.node-type-blog .page-header h1, .blog-listing .page-header h1 {
+	font-family: oswald,sans-serif;
+    font-size: 48px;
+    margin-top: 0;
+    font-weight: 700;
+}
+.node-type-blog .field-type-taxonomy-term-reference .field-item {
+	float: left;
+}	
+.node-type-blog .field-type-taxonomy-term-reference .field-item a {
+background-color: #82c459;
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 20px;
+    margin: 0px 10px 15px 0px;
+    padding: 5px 18px;
+}
+.node-type-blog .field-type-taxonomy-term-reference .field-item a:hover, .node-type-blog .field-type-taxonomy-term-reference .field-item a:active {
+    background-color: #64a13f;
+    background-image: none;
+    text-decoration: none;
+}
 .node-type-blog .field-name-body {
 	margin-top: 20px;
 	color: #231f20;
+}
+.view-blog-news .views-row {
+	border-top: 0px solid transparent;
+}
+.pane-blog-news h3.pane-title {
+	text-transform: uppercase;
+	font-weight: 300;
+}
+.pane-blog-news h4 {
+	margin-top: 5px;
+}
+.pane-blog-news h4 a {
+    font-family: oswald,sans-serif;
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0px 0px 8px 0px;
+}
+.node-type-blog .pane-blog-news h4 a {
+	color: #82c459;
+}
+.pane-blog-news .views-field-created,
+.view-blog-news .views-field-created {
+	font-size: 18px;
+    font-weight: bold;
+    line-height: 1;
+    text-transform: uppercase;
+}
+.pane-blog-news-panel-pane-1 .view-blog-news .views-field-created {
+	padding-top: 80px;
+	border-top: 1px solid #dedede;
+	margin-top: -10px;
+}
+.pane-blog-news-panel-pane-1 .view-blog-news .views-row-first .views-field-created {
+	padding-top: 40px;
+	border-top: 0px solid transparent;
+}
+.view-blog-news h2 a {
+	color: #82c459 !important;
+    font-family: oswald,sans-serif;
+}
+.view-blog-news h2 {
+	margin: 10px 0px 5px;
+}
+.view-blog-news .views-field-body  {
+	clear: both;
+	padding-bottom: 0px;
+}
+.view-blog-news .views-field-body p {
+	color: #231f20;
+}
+.view-blog-news .views-field-body .views-more-link {
+	float: left;
+    border-right: 1px solid #ccc;
+    padding-right: 10px;
+    margin-right: 10px;
+}
+.view-blog-news .links.list-inline li {
+	border-left: 0px solid transparent;
+	padding: 0px;
+}
+.view-blog-news .links.list-inline li {
+	border-right: 1px solid #ccc;
+    padding-right: 10px;
+    margin-right: 10px;
+}
+.view-blog-news .links.list-inline {
+	margin-top: 0px;
+}
+.view-blog-news .links.list-inline li.last {
+	border-right: 0px solid transparent;
+}
+.view-blog-news .views-field-name {
+	margin: 0px 10px 20px 0px;
+	float: left;
+	border-right: 1px solid #ccc;
+    padding-right: 10px;
+}
+.view-blog-news .views-field-term-node-tid, .view-blog-news .views-field-name  {
+	color: #231f20;
+	font-size: 16px;
 }
 .node-type-blog .pane-blog-news h4 a {
     margin: 8px 0px 8px 0px;
     font-size: 24px;
     font-weight: 300;
-	color: #231f20;
 }
 .view-blog-taxonomy .view-content > div.views-row {
 	float: left;
@@ -1599,5 +1755,17 @@ div.pane-blog-taxonomy {
     padding: 0px 0px 0px 0px;
     margin-bottom: 15px;
     margin-top: 5px;
-	text-transform: capitalize;
+    font-size: 31px;
+    text-transform: uppercase;
+}
+.node-type-blog .comment-wrapper {
+	border-top: 0px solid transparent;
+}
+/* Comments */
+#comments h2 {
+	font-weight: 300;
+	margin: 100px 0px 10px 0px;
+}
+#comments h3 a {
+	color: #635d5e;
 }
