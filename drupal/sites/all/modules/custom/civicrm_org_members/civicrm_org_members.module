@@ -35,7 +35,7 @@ function civicrm_org_members_civicrm_sumfields_definitions(&$custom) {
     'text_length' => '32',
     // Tally all financial contributions, code contributions (type 18) get multiplied
     'trigger_sql' => '(
-      SELECT COALESCE(SUM(IF(cont1.financial_type_id = 18, cont1.total_amount*10, cont1.total_amount)),0)
+      SELECT COALESCE(SUM(IF(cont1.financial_type_id = 18, cont1.total_amount*60, cont1.total_amount)),0)
       FROM civicrm_contribution cont1
       LEFT JOIN civicrm_contribution_soft soft
         ON soft.contribution_id = cont1.id
