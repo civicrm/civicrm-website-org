@@ -42,7 +42,7 @@ function civicrm_org_providers_update_provider($contact_id){
             break;
         }
     }
-    
+
     //find out if they are in the active contributors group
     $params = array('version' => 3, 'contact_id' => $contact_id);
     $groups=civicrm_api('GroupContact', 'get', $params);
@@ -59,30 +59,34 @@ function civicrm_org_providers_update_provider($contact_id){
         break;
       }
     }
-    
+
     //find out if they are in the technology partners group
-    $params = array('version' => 3, 'contact_id' => $contact_id);
-    $groups=civicrm_api('GroupContact', 'get', $params);
-    foreach($groups['values'] as $group){
-        if($group['group_id']==267){
-            $badges[]='technology-sponsor';
-            break;
-        }
-    }
+    // $params = array('version' => 3, 'contact_id' => $contact_id);
+    // $groups=civicrm_api('GroupContact', 'get', $params);
+    // foreach($groups['values'] as $group){
+    //     if($group['group_id']==267){
+    //         $badges[]='technology-sponsor';
+    //         break;
+    //     }
+    // }
     //find out if they members and what type of members they are
     $memberships = CRM_Core_DAO::executeQuery("SELECT id FROM civicrm_membership WHERE contact_id = %1 ORDER BY start_date DESC LIMIT 1", array(1 => array($contact_id, 'Integer')));
     $memberships->fetch();
     $params = array('version' => 3, 'membership_id' => $memberships->id);
     $membership=civicrm_api('Membership', 'getsingle', $params);
-    if(in_array($membership['status_id'], array(1,2,3,5)) AND in_array($membership['membership_type_id'], array(1,2,3,12,13,14))){ //1=new, 2=current, 3=grace, 5=pending 
-        $membershipTypeBadgeTranslate=array(
-            1 => 'partner-supporting',
-            2 => 'partner-empowering',
-            3 => 'partner-sustaining',
-            12 => 'partner-sustaining',
-            13 => 'partner-empowering',
-            14 => 'partner-supporting'
-        );
+    $membershipTypeBadgeTranslate=array(
+      1 => 'partner-supporting',
+      2 => 'partner-empowering',
+      3 => 'partner-sustaining',
+      12 => 'partner-sustaining',
+      13 => 'partner-empowering',
+      14 => 'partner-supporting',
+      11 => 'sponsor-sustaining',
+      10 => 'sponsor-empowering',
+      18 => 'sponsor-supporting',
+    );
+    if(in_array($membership['status_id'], array(1,2,3,5)) AND in_array($membership['membership_type_id'], array_keys($membershipTypeBadgeTranslate))){ //1=new, 2=current, 3=grace, 5=pending
+
         // print_r($membershipTypeBadgeTranslate[$membership['membership_type_id']]);exit;
         $partnerText = $membershipTypeBadgeTranslate[$membership['membership_type_id']];
         if($founder){
@@ -162,13 +166,13 @@ function civicrm_org_providers_block_view($block_name){
                 );
                 $pName = civicrm_api('Contact', 'getvalue', $params);
                 $pLink = CRM_Utils_System::url("civicrm/profile/edit", "gid=48&reset=1&id={$rel['contact_id_b']}");
-                $content .= '<div class="bold"><a href="' . $pLink . '">Edit listing for ' . $pName . '</a></li></div>';              
+                $content .= '<div class="bold"><a href="' . $pLink . '">Edit listing for ' . $pName . '</a></li></div>';
             }
         }
         if(!$thereAreLinks){
             return;
         }
-        $content .= '</div>';      
+        $content .= '</div>';
         $output = array(
             'subject' => 'Partner / active contributor listing(s)',
             'content' => $content
@@ -183,6 +187,6 @@ function civicrm_org_providers_batch_update($contact_ids=array()){
         $contacts = CRM_Core_DAO::executeQuery("SELECT contact_id FROM civicrm_group_contact WHERE group_id IN (131,140,267) UNION SELECT contact_id FROM civicrm_membership");
         while($contacts->fetch()){
             civicrm_org_providers_update_provider($contacts->contact_id);
-        }        
+        }
     }
 }
