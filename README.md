@@ -1,4 +1,10 @@
-#Development workflow
+# MIGRATION NOTICE
+
+The content has been migrated to:
+ * https://github.com/civicrm/civicrm-org-platform
+ * https://github.com/civicrm/civicrm-org-site
+
+# Development workflow
 
 All new code, etc. should be developed locally, commited to this repository, tested on https://www-test.civicrm.org, and the deployed on production. www-test should NOT be used for code based development.
 
