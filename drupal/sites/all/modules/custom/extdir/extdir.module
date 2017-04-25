@@ -59,6 +59,13 @@ function extdir_node_insert($node) {
       break;
     default:
   }
+
+  // Update the compatibility tag to match the newly created release.
+  if ($node->type == 'extension_release_civicrm') {
+    $extension = node_load($node->field_extension_nr_crm[LANGUAGE_NONE][0]['nid']);
+    $extension->field_extension_release_civicrm[LANGUAGE_NONE] = $node->field_extension_release_civicrm[LANGUAGE_NONE];
+    node_save($extension);
+  }
 }
 
 /**
@@ -71,6 +78,13 @@ function extdir_node_update($node) {
       _extdir_flush();
       break;
     default:
+  }
+
+  // Update the compatibility tag to match the updated release.
+  if ($node->type == 'extension_release_civicrm') {
+    $extension = node_load($node->field_extension_nr_crm[LANGUAGE_NONE][0]['nid']);
+    $extension->field_extension_release_civicrm[LANGUAGE_NONE] = $node->field_extension_release_civicrm[LANGUAGE_NONE];
+    node_save($extension);
   }
 }
 
